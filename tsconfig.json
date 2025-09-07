@@ -3,11 +3,8 @@
     "extends": ["@tsconfig/node22/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
 
     "compilerOptions": {
-        "declaration": true,
-        "skipLibCheck": true,
-        "esModuleInterop": true,
-        "lib": ["es2022", "dom"]
+        "outDir": "./dist"
     },
-
+    "include": ["src/**/*.ts*"],
     "exclude": ["dist"]
 }
