@@ -1,38 +1,13 @@
 {
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": ["@tsconfig/node22/tsconfig.json", "@tsconfig/strictest/tsconfig.json"],
+
     "compilerOptions": {
-        "rootDir": "./src",
-        "outDir": "./dist",
-
-        "module": "nodenext",
-        "target": "esnext",
-        "moduleResolution": "nodenext",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-
-        "lib": ["esnext"],
-        "types": ["@types/node"],
-
-        "sourceMap": true,
         "declaration": true,
-        "declarationMap": true,
-
-        "noUncheckedIndexedAccess": true,
-        "exactOptionalPropertyTypes": true,
-
-        "noImplicitReturns": true,
-        "noImplicitOverride": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
-        "noPropertyAccessFromIndexSignature": true,
-
-        "strict": true,
-        "verbatimModuleSyntax": false,
-        "isolatedModules": true,
-        "noUncheckedSideEffectImports": true,
-        "moduleDetection": "force",
         "skipLibCheck": true,
-        "resolveJsonModule": true
+        "esModuleInterop": true,
+        "lib": ["es2022", "dom"]
     },
-    "exclude": ["node_modules", "vitest.config.ts", "dist", "test"]
+
+    "exclude": ["dist"]
 }
