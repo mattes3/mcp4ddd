@@ -4,6 +4,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { generateDomainService } from './generateDomainService.js';
 import { generateEntity } from './generateEntity.js';
 import { generateRepository } from './generateRepository.js';
+import { generateValueObject } from './generateValueObject.js';
 
 async function main() {
     const server = new McpServer({
@@ -12,11 +13,19 @@ async function main() {
     });
 
     server.registerTool(generateEntity.name, generateEntity.config, generateEntity.execute);
+
+    server.registerTool(
+        generateValueObject.name,
+        generateValueObject.config,
+        generateValueObject.execute,
+    );
+
     server.registerTool(
         generateRepository.name,
         generateRepository.config,
         generateRepository.execute,
     );
+
     server.registerTool(
         generateDomainService.name,
         generateDomainService.config,
