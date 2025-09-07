@@ -27,7 +27,7 @@ describe('Entity generator', () => {
         // Validate output with Zod (like MCP would do)
         const result = z
             .object(generateEntity.config.outputSchema)
-            .parse(JSON.parse(resultAsText.content[0].text));
+            .parse(resultAsText.structuredContent);
 
         // Assert that we should have usable data, now!
 

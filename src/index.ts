@@ -3,7 +3,6 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 
 import { generateDomainService } from './generateDomainService.js';
 import { generateEntity } from './generateEntity.js';
-import { generateModule } from './generateModule.js';
 import { generateRepository } from './generateRepository.js';
 
 async function main() {
@@ -13,7 +12,6 @@ async function main() {
     });
 
     server.registerTool(generateEntity.name, generateEntity.config, generateEntity.execute);
-    server.registerTool(generateModule.name, generateModule.config, generateModule.execute);
     server.registerTool(
         generateRepository.name,
         generateRepository.config,

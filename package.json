@@ -1,32 +1,33 @@
 {
-  "name": "mcp4ddd",
-  "version": "1.0.0",
-  "description": "An MCP server that generates code based on the Domain-Driven Design methodology.",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "dev": "tsc && tsx src/index.ts",
-    "test": "vitest",
-    "test:ui": "vitest --ui"
-  },
-  "keywords": [],
-  "author": "Matthias Bohlen",
-  "license": "MIT",
-  "packageManager": "pnpm@10.15.1",
-  "devDependencies": {
-    "@tsconfig/node22": "^22.0.2",
-    "@tsconfig/strictest": "^2.0.5",
-    "@types/node": "^24.3.1",
-    "@vitest/ui": "^3.2.4",
-    "esbuild": "^0.25.9",
-    "prettier": "^3.6.2",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
-  },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.17.5",
-    "mustache": "^4.2.0",
-    "zod": "^3.25.76"
-  }
+    "name": "mcp4ddd",
+    "version": "1.0.0",
+    "description": "An MCP server that generates code based on the Domain-Driven Design methodology.",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "dev": "pnpm build && pnpm node dist/index.js",
+        "test": "vitest",
+        "test:ui": "vitest --ui"
+    },
+    "keywords": [],
+    "author": "Matthias Bohlen",
+    "license": "MIT",
+    "packageManager": "pnpm@10.15.1",
+    "devDependencies": {
+        "@tsconfig/node22": "^22.0.2",
+        "@tsconfig/strictest": "^2.0.5",
+        "@types/node": "^24.3.1",
+        "@vitest/ui": "^3.2.4",
+        "esbuild": "^0.25.9",
+        "prettier": "^3.6.2",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2",
+        "vitest": "^3.2.4"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.17.5",
+        "mustache": "^4.2.0",
+        "zod": "^3.25.76"
+    }
 }

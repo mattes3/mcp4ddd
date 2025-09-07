@@ -15,7 +15,16 @@ export const generateEntity = {
         description: 'Generate a DDD entity, optionally as an aggregate root.',
         inputSchema: inputSchema.shape,
         outputSchema: {
-            files: z.array(z.object({ path: z.string(), content: z.string() })),
+            files: z.array(
+                z.object({
+                    path: z
+                        .string()
+                        .describe(
+                            'the path where the generated source file output should be written',
+                        ),
+                    content: z.string().describe('the content to write into the source file'),
+                }),
+            ),
         },
     },
     async execute(params: z.infer<typeof inputSchema>): Promise<{
@@ -23,6 +32,12 @@ export const generateEntity = {
             type: 'text';
             text: string;
         }[];
+        structuredContent: {
+            files: {
+                path: string;
+                content: string;
+            }[];
+        };
     }> {
         const { entityName, aggregateRoot, fields } = params;
 
@@ -38,7 +53,10 @@ export const generateEntity = {
         ];
 
         return {
-            content: [{ type: 'text', text: JSON.stringify({ files }) }],
+            content: [
+                { type: 'text', text: `Generated ${files.length} files for entity ${entityName}` },
+            ],
+            structuredContent: { files },
         };
     },
 };

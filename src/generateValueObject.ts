@@ -12,10 +12,22 @@ export function registerGenerateValueObject(server: McpServer) {
             inputSchema: {
                 valueObjectName: z.string(),
                 fields: z.array(FieldSchema),
-                validations: z.array(z.string()).optional(),
+                validations: z
+                    .array(z.string())
+                    .optional()
+                    .describe('optional validation rules for the fields in the value object'),
             },
             outputSchema: {
-                files: z.array(z.object({ path: z.string(), content: z.string() })),
+                files: z.array(
+                    z.object({
+                        path: z
+                            .string()
+                            .describe(
+                                'the path where the generated source file output should be written',
+                            ),
+                        content: z.string().describe('the content to write into the source file'),
+                    }),
+                ),
             },
         },
         async (params) => {
@@ -29,7 +41,13 @@ export function registerGenerateValueObject(server: McpServer) {
             ];
 
             return {
-                content: [{ type: 'text', text: JSON.stringify({ files }) }],
+                content: [
+                    {
+                        type: 'text',
+                        text: `Generated ${files.length} files for value object ${valueObjectName}`,
+                    },
+                ],
+                structuredContent: { files },
             };
         },
     );
