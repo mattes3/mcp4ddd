@@ -1,10 +1,10 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
-import { registerGenerateDomainService } from './generateDomainService.js';
-import { registerGenerateEntity } from './generateEntity.js';
-import { registerGenerateModule } from './generateModule.js';
-import { registerGenerateRepository } from './generateRepository.js';
+import { generateDomainService } from './generateDomainService.js';
+import { generateEntity } from './generateEntity.js';
+import { generateModule } from './generateModule.js';
+import { generateRepository } from './generateRepository.js';
 
 async function main() {
     const server = new McpServer({
@@ -12,10 +12,18 @@ async function main() {
         version: '1.0.0',
     });
 
-    registerGenerateEntity(server);
-    registerGenerateModule(server);
-    registerGenerateRepository(server);
-    registerGenerateDomainService(server);
+    server.registerTool(generateEntity.name, generateEntity.config, generateEntity.execute);
+    server.registerTool(generateModule.name, generateModule.config, generateModule.execute);
+    server.registerTool(
+        generateRepository.name,
+        generateRepository.config,
+        generateRepository.execute,
+    );
+    server.registerTool(
+        generateDomainService.name,
+        generateDomainService.config,
+        generateDomainService.execute,
+    );
 
     const transport = new StdioServerTransport();
 
