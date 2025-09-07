@@ -25,6 +25,8 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
-    "mustache": "^4.2.0"
+    "@modelcontextprotocol/sdk": "^1.17.5",
+    "mustache": "^4.2.0",
+    "zod": "^3.25.76"
   }
 }
