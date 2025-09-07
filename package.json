@@ -1,0 +1,28 @@
+{
+  "name": "mcp4ddd",
+  "version": "1.0.0",
+  "description": "An MCP server that generates code based on the Domain-Driven Design methodology.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc && tsx src/index.ts",
+    "test": "vitest",
+    "test:ui": "vitest --ui"
+  },
+  "keywords": [],
+  "author": "Matthias Bohlen",
+  "license": "MIT",
+  "packageManager": "pnpm@10.15.1",
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "@vitest/ui": "^3.2.4",
+    "esbuild": "^0.25.9",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "mustache": "^4.2.0"
+  }
+}
