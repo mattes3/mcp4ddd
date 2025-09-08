@@ -2,7 +2,7 @@ import Mustache from 'mustache';
 import { z } from 'zod';
 
 import entityTemplate from './templates/entity.mustache';
-import testTemplate from './templates/test.mustache';
+import testTemplate from './templates/entityTests.mustache';
 
 import { fieldSchema } from './FieldSchema.js';
 
