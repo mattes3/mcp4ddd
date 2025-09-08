@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "ddd-scaffolder": {
+            "command": "node",
+            "args": ["./dist/index.js"],
+            "env": {
+                "DUMMY_ENV_VARIABLE": "hugo"
+            }
+        }
+    }
+}
