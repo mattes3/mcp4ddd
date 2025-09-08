@@ -5,7 +5,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "build": "tsc && esbuild src/index.ts --bundle --outfile=dist/index.js --format=esm --platform=node --loader:.mustache=text",
+        "build": "tsc && esbuild src/index.ts --bundle --outfile=dist/index.js --format=esm --platform=node --loader:.hbs=text",
         "dev": "pnpm build && pnpm node dist/index.js",
         "test": "vitest",
         "test:ui": "vitest --ui"
@@ -17,7 +17,6 @@
     "devDependencies": {
         "@tsconfig/node22": "^22.0.2",
         "@tsconfig/strictest": "^2.0.5",
-        "@types/mustache": "^4.2.6",
         "@types/node": "^24.3.1",
         "@vitest/ui": "^3.2.4",
         "esbuild": "^0.25.9",
@@ -28,7 +27,8 @@
     },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.17.5",
-        "mustache": "^4.2.0",
+        "@types/handlebars": "^4.1.0",
+        "handlebars": "^4.7.8",
         "zod": "^3.25.76"
     }
 }

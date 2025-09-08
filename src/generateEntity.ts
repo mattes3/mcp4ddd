@@ -1,8 +1,8 @@
-import Mustache from 'mustache';
+import * as Handlebars from 'handlebars';
 import { z } from 'zod';
 
-import entityTemplate from './templates/entity.mustache';
-import testTemplate from './templates/entityTests.mustache';
+import entityTemplate from './templates/entity.hbs';
+import testTemplate from './templates/entityTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
 
@@ -73,8 +73,8 @@ export const generateEntity = {
             attributes,
             methods: processedMethods,
         };
-        const entityContent = Mustache.render(entityTemplate, dataForPlaceholders);
-        const testContent = Mustache.render(testTemplate, dataForPlaceholders);
+        const entityContent = Handlebars.compile(entityTemplate)(dataForPlaceholders);
+        const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
         const files = [
             {

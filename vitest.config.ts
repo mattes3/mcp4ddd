@@ -9,10 +9,10 @@ export default defineConfig({
     },
     plugins: [
         {
-            name: 'mustache-loader',
+            name: 'hbs-loader',
             enforce: 'pre',
             load(id) {
-                if (id.endsWith('.mustache')) {
+                if (id.endsWith('.hbs')) {
                     // Read the file contents as a string
                     const source = readFileSync(id, 'utf-8');
                     // Return a JS module exporting the string
