@@ -1,4 +1,8 @@
+import Mustache from 'mustache';
 import { z } from 'zod';
+
+import entityTemplate from './templates/entity.mustache';
+import testTemplate from './templates/test.mustache';
 
 import { fieldSchema } from './FieldSchema.js';
 
@@ -58,14 +62,28 @@ export const generateEntity = {
     }> {
         const { entityName, aggregateRoot, attributes, methods } = params;
 
+        const processedMethods = methods.map((method) => ({
+            ...method,
+            formattedParameters: method.parameters.map((p) => `${p.name}: ${p.type}`).join(', '),
+        }));
+
+        const dataForPlaceholders = {
+            entityName,
+            aggregateRoot,
+            attributes,
+            methods: processedMethods,
+        };
+        const entityContent = Mustache.render(entityTemplate, dataForPlaceholders);
+        const testContent = Mustache.render(testTemplate, dataForPlaceholders);
+
         const files = [
             {
                 path: `src/domain/${entityName.toLowerCase()}s/${entityName}.ts`,
-                content: `// Entity ${entityName}${aggregateRoot ? ' (Aggregate Root)' : ''}\nexport class ${entityName} { /* attributes: ${JSON.stringify(attributes)} */ }`,
+                content: entityContent,
             },
             {
                 path: `test/${entityName.toLowerCase()}s/${entityName}.spec.ts`,
-                content: `// vitest test stub for ${entityName}`,
+                content: testContent,
             },
         ];
 

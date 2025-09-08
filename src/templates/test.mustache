@@ -1,0 +1,15 @@
+import { describe, it } from 'vitest';
+
+describe('{{entityName}}', () => {
+    it('should create an instance', () => {
+        // TODO: test
+    });
+
+{{#methods}}
+    // Test {{name}}({{formattedParameters}}){{#resultType}}: {{resultType}}{{/resultType}}
+    it('should test {{name}}', () => {
+        // TODO: test the method called {{name}}
+    });
+
+{{/methods}}
+});

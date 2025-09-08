@@ -68,7 +68,8 @@ setTimeout(() => {
         arguments: {
             entityName: 'Invoice',
             aggregateRoot: true,
-            fields: [{ name: 'id', type: 'UUID', valueObject: false }],
+            attributes: [{ name: 'id', type: 'UUID', valueObject: false }],
+            methods: [{ name: 'close', parameters: [{ name: 'absolute', type: 'boolean' }] }],
         },
     });
     child.stdin.write(toolMessage);
