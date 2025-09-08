@@ -8,10 +8,11 @@ describe('Entity generator', () => {
         const params = {
             entityName: 'Order',
             aggregateRoot: true,
-            fields: [
+            attributes: [
                 { name: 'id', type: 'UUID', valueObject: false },
                 { name: 'items', type: 'OrderItem[]', valueObject: true },
             ],
+            methods: [{ name: 'close', parameters: [{ name: 'absolute', type: 'boolean' }] }],
         };
 
         // Validate input with Zod (like MCP would do)
@@ -33,9 +34,9 @@ describe('Entity generator', () => {
 
         expect(result.files).toHaveLength(2);
         expect(result.files[0].path).toMatch(/Order\.ts$/);
-        expect(result.files[0].content).toContain('class Order');
+        expect(result.files[0].content).toContain('type Order =');
 
         expect(result.files[1].path).toMatch(/Order\.spec\.ts$/);
-        expect(result.files[1].content).toContain('// vitest test stub for Order');
+        expect(result.files[1].content).toContain('test the method close(absolute: boolean)');
     });
 });

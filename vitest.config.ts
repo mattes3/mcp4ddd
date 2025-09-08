@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import { readFileSync } from 'node:fs';
 
 export default defineConfig({
     test: {
@@ -6,4 +7,18 @@ export default defineConfig({
         environment: 'node', // default test environment
         include: ['test/**/*.spec.ts'], // look for test files
     },
+    plugins: [
+        {
+            name: 'mustache-loader',
+            enforce: 'pre',
+            load(id) {
+                if (id.endsWith('.mustache')) {
+                    // Read the file contents as a string
+                    const source = readFileSync(id, 'utf-8');
+                    // Return a JS module exporting the string
+                    return `export default ${JSON.stringify(source)};`;
+                }
+            },
+        },
+    ],
 });
