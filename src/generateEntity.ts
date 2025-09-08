@@ -1,11 +1,25 @@
 import { z } from 'zod';
 
-import { FieldSchema } from './FieldSchema.js';
+import { fieldSchema } from './FieldSchema.js';
 
 const inputSchema = z.object({
     entityName: z.string().describe('Name of the entity'),
     aggregateRoot: z.boolean().default(false).describe('is this an aggregate root, true/false'),
-    fields: z.array(FieldSchema).describe('the fields inside the entity'),
+    attributes: z.array(fieldSchema).describe('the fields inside the entity'),
+    methods: z.array(
+        z
+            .object({
+                name: z.string().describe('the name of the method'),
+                parameters: z
+                    .array(fieldSchema)
+                    .describe('the names and types of the parameters of the method'),
+                resultType: z
+                    .string()
+                    .optional()
+                    .describe('the optional name of the result type of the method'),
+            })
+            .describe('the method signatures of the entity'),
+    ),
 });
 
 const outputSchema = z.object({
@@ -42,12 +56,12 @@ export const generateEntity = {
         }[];
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { entityName, aggregateRoot, fields } = params;
+        const { entityName, aggregateRoot, attributes, methods } = params;
 
         const files = [
             {
                 path: `src/domain/${entityName.toLowerCase()}s/${entityName}.ts`,
-                content: `// Entity ${entityName}${aggregateRoot ? ' (Aggregate Root)' : ''}\nexport class ${entityName} { /* fields: ${JSON.stringify(fields)} */ }`,
+                content: `// Entity ${entityName}${aggregateRoot ? ' (Aggregate Root)' : ''}\nexport class ${entityName} { /* attributes: ${JSON.stringify(attributes)} */ }`,
             },
             {
                 path: `test/${entityName.toLowerCase()}s/${entityName}.spec.ts`,

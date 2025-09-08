@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-import { FieldSchema } from './FieldSchema.js';
+import { fieldSchema } from './FieldSchema.js';
 
 const inputSchema = z.object({
     valueObjectName: z.string(),
-    fields: z.array(FieldSchema),
+    fields: z.array(fieldSchema),
     validations: z
         .array(z.string())
         .optional()
