@@ -7,8 +7,8 @@
     "scripts": {
         "build": "tsc && esbuild src/index.ts --bundle --outfile=dist/index.js --format=esm --platform=node --loader:.hbs=text",
         "dev": "pnpm build && pnpm node dist/index.js",
-        "test": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec test/*.spec.ts",
-        "test:watch": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec --watch test/*.spec.ts"
+        "test": "vitest run test/*.spec.ts",
+        "test:watch": "vitest watch test/*.spec.ts"
     },
     "keywords": [],
     "author": "Matthias Bohlen",
@@ -19,10 +19,10 @@
         "@tsconfig/strictest": "^2.0.5",
         "@types/node": "^24.3.1",
         "esbuild": "^0.25.9",
-        "expect": "^30.1.2",
         "prettier": "^3.6.2",
         "tsx": "^4.20.5",
-        "typescript": "^5.9.2"
+        "typescript": "^5.9.2",
+        "vitest": "^3.2.4"
     },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.17.5",
