@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
 import { z } from 'zod';
 
 import { generateEntity } from '../src/generateEntity.js';
@@ -22,8 +23,8 @@ describe('Entity generator', () => {
         const resultAsText = await generateEntity.execute(parsed);
 
         // assert that it has generated text output
-        expect(resultAsText.content[0].type).toEqual('text');
-        expect(resultAsText.content[0].text.length).toBeGreaterThan(0);
+        expect(resultAsText.content[0]?.type).toEqual('text');
+        expect(resultAsText.content[0]?.text.length).toBeGreaterThan(0);
 
         // Validate output with Zod (like MCP would do)
         const result = z
@@ -33,10 +34,10 @@ describe('Entity generator', () => {
         // Assert that we should have usable data, now!
 
         expect(result.files).toHaveLength(2);
-        expect(result.files[0].path).toMatch(/Order\.ts$/);
-        expect(result.files[0].content).toContain('type Order =');
+        expect(result.files[0]?.path).toMatch(/Order\.ts$/);
+        expect(result.files[0]?.content).toContain('type Order =');
 
-        expect(result.files[1].path).toMatch(/Order\.spec\.ts$/);
-        expect(result.files[1].content).toContain('test the method close(absolute: boolean)');
+        expect(result.files[1]?.path).toMatch(/Order\.spec\.ts$/);
+        expect(result.files[1]?.content).toContain('test the method close(absolute: boolean)');
     });
 });

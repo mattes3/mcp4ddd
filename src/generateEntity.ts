@@ -1,4 +1,4 @@
-import * as Handlebars from 'handlebars';
+import Handlebars from 'handlebars';
 import { z } from 'zod';
 
 import entityTemplate from './templates/entity.hbs';
