@@ -1,4 +1,4 @@
-type {{valueObjectName}}Data = {
+export type {{valueObjectName}}Data = {
 {{#attributes}}
     {{name}}: {{type}};
 {{/attributes}}
@@ -10,7 +10,7 @@ type {{valueObjectName}}Methods = {
 {{/methods}}
 };
 
-type {{valueObjectName}} = {{valueObjectName}}Data & {{valueObjectName}}Methods;
+export type {{valueObjectName}} = {{valueObjectName}}Data & {{valueObjectName}}Methods;
 
 export const create{{valueObjectName}} = (data: {{valueObjectName}}Data): {{valueObjectName}} => ({
     ...data,
