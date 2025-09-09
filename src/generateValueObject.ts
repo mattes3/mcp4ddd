@@ -1,64 +1,100 @@
+import Handlebars from 'handlebars';
 import { z } from 'zod';
+
+import valueObjectTemplate from './templates/valueObject.hbs';
+import testTemplate from './templates/valueObjectTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
 
 const inputSchema = z.object({
-    valueObjectName: z.string(),
-    fields: z.array(fieldSchema),
-    validations: z
-        .array(z.string())
-        .optional()
-        .describe('optional validation rules for the fields in the value object'),
+    valueObjectName: z.string().describe('Name of the value object'),
+    attributes: z.array(fieldSchema).describe('the attributes inside the value object'),
+    methods: z.array(
+        z
+            .object({
+                name: z.string().describe('the name of the method'),
+                parameters: z
+                    .array(fieldSchema)
+                    .describe('the names and types of the parameters of the method'),
+                resultType: z
+                    .string()
+                    .optional()
+                    .describe('the optional name of the result type of the method'),
+            })
+            .describe('the method signatures of the value object'),
+    ),
+});
+
+const outputSchema = z.object({
+    contentSummary: z
+        .string()
+        .describe(
+            [
+                'a short summary of what the value object generator produced,',
+                'with an instruction for the AI assistant about how to proceed',
+            ].join(' '),
+        ),
+    files: z.array(
+        z.object({
+            path: z
+                .string()
+                .describe('the path where the generated source file output should be written'),
+            content: z.string().describe('the content to write into the source file'),
+        }),
+    ),
 });
 
 export const generateValueObject = {
     name: 'generateValueObject',
     config: {
-        title: 'Value Object generator',
-        description: 'Generate a DDD value object with validations and immutability.',
+        title: 'Value object generator',
+        description: 'Generate a DDD value object.',
         inputSchema: inputSchema.shape,
-        outputSchema: {
-            files: z.array(
-                z.object({
-                    path: z
-                        .string()
-                        .describe(
-                            'the path where the generated source file output should be written',
-                        ),
-                    content: z.string().describe('the content to write into the source file'),
-                }),
-            ),
-        },
+        outputSchema: outputSchema.shape,
     },
     async execute(params: z.infer<typeof inputSchema>): Promise<{
         content: {
             type: 'text';
             text: string;
         }[];
-        structuredContent: {
-            files: {
-                path: string;
-                content: string;
-            }[];
-        };
+        structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { valueObjectName, fields, validations } = params;
+        const { valueObjectName, attributes, methods } = params;
+
+        const processedMethods = methods.map((method) => ({
+            ...method,
+            formattedParameters: method.parameters.map((p) => `${p.name}: ${p.type}`).join(', '),
+        }));
+
+        const dataForPlaceholders = {
+            valueObjectName,
+            attributes,
+            methods: processedMethods,
+        };
+        const valueObjectContent = Handlebars.compile(valueObjectTemplate)(dataForPlaceholders);
+        const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
         const files = [
             {
-                path: `src/domain/shared/${valueObjectName}.ts`,
-                content: `// Value Object ${valueObjectName}\n// fields: ${JSON.stringify(fields)}\n// validations: ${validations?.join(', ')}`,
+                path: `src/domain/${valueObjectName.toLowerCase()}s/${valueObjectName}.ts`,
+                content: valueObjectContent,
+            },
+            {
+                path: `test/${valueObjectName.toLowerCase()}s/${valueObjectName}.spec.ts`,
+                content: testContent,
             },
         ];
 
+        const contentSummary = [
+            `Prepared ${files.length} files for value object ${valueObjectName}.`,
+            `Write the files with the exact content provided.`,
+        ].join(' ');
+
+        const structuredContent = { contentSummary, files };
+
         return {
-            content: [
-                {
-                    type: 'text',
-                    text: `Generated ${files.length} files for value object ${valueObjectName}`,
-                },
-            ],
-            structuredContent: { files },
+            content: [{ type: 'text', text: JSON.stringify(structuredContent) }],
+            structuredContent,
         };
     },
 };

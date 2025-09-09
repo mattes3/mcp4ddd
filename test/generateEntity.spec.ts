@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
 import { z } from 'zod';
 
 import { generateEntity } from '../src/generateEntity.js';

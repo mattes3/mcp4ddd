@@ -1,18 +1,18 @@
-type {{entityName}}Data = {
+type {{valueObjectName}}Data = {
 {{#attributes}}
     {{name}}: {{type}};
 {{/attributes}}
 };
 
-type {{entityName}}Methods = {
+type {{valueObjectName}}Methods = {
 {{#methods}}
     {{name}}({{formattedParameters}}){{#resultType}}: {{resultType}}{{/resultType}};
 {{/methods}}
 };
 
-type {{entityName}} = {{entityName}}Data & {{entityName}}Methods;{{#aggregateRoot}} // @AggregateRoot{{/aggregateRoot}}
+type {{valueObjectName}} = {{valueObjectName}}Data & {{valueObjectName}}Methods;
 
-export const create{{entityName}} = (data: {{entityName}}Data): {{entityName}} => ({
+export const create{{valueObjectName}} = (data: {{valueObjectName}}Data): {{valueObjectName}} => ({
     ...data,
 {{#methods}}
     {{name}}({{formattedParameters}}){{#resultType}}: {{resultType}}{{/resultType}} {
