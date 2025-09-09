@@ -1,21 +1,29 @@
+import Handlebars from 'handlebars';
 import { z } from 'zod';
 
+import { fieldSchema } from './FieldSchema.js';
+import domainServiceTemplate from './templates/domainService.hbs';
+import testTemplate from './templates/domainServiceTests.hbs';
+
 const inputSchema = z.object({
-    serviceName: z.string(),
-    operations: z.array(
-        z.object({
-            name: z.string().describe('the name of the domain service'),
-            parameters: z.array(z.string()).describe('the parameters of the domain service'),
-            returns: z.string().describe('the result that the domain service returns'),
-        }),
-    ),
+    serviceName: z.string().describe('the name of the domain service'),
+    parameters: z.array(fieldSchema).describe('the parameters of the domain service'),
+    returns: z.string().describe('the result type of what the domain service returns'),
+    injectedDependencies: z
+        .array(fieldSchema)
+        .describe(
+            [
+                'the one-time injected dependencies that the service needs internally',
+                'but which do not belong in its parameter list',
+            ].join(' '),
+        ),
 });
 
 export const generateDomainService = {
     name: 'generateDomainService',
     config: {
         title: 'Domain Service generator',
-        description: 'Generate a domain service with operations.',
+        description: 'Generate a domain service as a function with optional injected dependencies',
         inputSchema: inputSchema.shape,
         outputSchema: {
             files: z.array(
@@ -42,25 +50,44 @@ export const generateDomainService = {
             }[];
         };
     }> {
-        const { serviceName, operations } = params;
+        const { serviceName, injectedDependencies, parameters, returns } = params;
+
+        const formattedParameters = parameters.map((p) => `${p.name}: ${p.type}`).join(', ');
+        const formattedInjectedDependencies = injectedDependencies
+            .map((p) => `${p.name}: ${p.type}`)
+            .join(', ');
+
+        const dataForPlaceholders = {
+            serviceName,
+            formattedParameters,
+            formattedInjectedDependencies,
+            returns,
+        };
+
+        const serviceContent = Handlebars.compile(domainServiceTemplate)(dataForPlaceholders);
+        const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
         const files = [
             {
-                path: `src/domain/${serviceName.replace(/Service$/, '').toLowerCase()}s/${serviceName}.ts`,
-                content: `// Service ${serviceName}\nexport class ${serviceName} { ${operations
-                    .map((op) => `${op.name}(${op.parameters.join(', ')}): ${op.returns} {}`)
-                    .join('\n')} }`,
+                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.ts`,
+                content: serviceContent,
+            },
+            {
+                path: `test/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.spec.ts`,
+                content: testContent,
             },
         ];
 
+        const contentSummary = [
+            `Prepared ${files.length} files for the domain service "${serviceName}".`,
+            `Write the files with the exact content provided.`,
+        ].join(' ');
+
+        const structuredContent = { contentSummary, files };
+
         return {
-            content: [
-                {
-                    type: 'text',
-                    text: `Generated ${files.length} files for domain service ${serviceName}`,
-                },
-            ],
-            structuredContent: { files },
+            content: [{ type: 'text', text: JSON.stringify(structuredContent) }],
+            structuredContent,
         };
     },
 };
