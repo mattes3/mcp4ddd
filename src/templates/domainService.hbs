@@ -1,4 +1,4 @@
-import type { AsyncResult, Ok, Err } from 'ts-results-es';
+import { type AsyncResult, type Result, Ok, Err } from 'ts-results-es';
 
 import {
     type SingleError, singleError,
@@ -10,12 +10,12 @@ export type {{serviceErrorType}} = SingleError<'{{serviceErrorType}}'> | TechErr
 export const create{{serviceErrorType}} = (yourErrorInformation: string): {{serviceErrorType}} =>
     singleError('{{serviceErrorType}}', `{{serviceName}} failed: ${yourErrorInformation}`);
 
-export type {{serviceType}} = ({{formattedParameters}}) => {{{asyncResultType}}};
+export type {{serviceType}} = (params: { {{formattedParameters}} }) => {{{asyncResultType}}};
 
 // @DomainService
 export const {{serviceName}}Impl =
     ({{formattedInjectedDependencies}}): {{serviceType}} =>
-    ({{formattedParameterNames}}) => {
+    ({ {{formattedParameterNames}} }) => {
         return new AsyncResult(domainLogic().catch((e: Error) => Err(techError(e.message))));
         async function domainLogic(): {{{promiseOfResultType}}} {
             //human dev: implement this domain logic here and return a {{{wrappedResultType}}} as in Rust.
