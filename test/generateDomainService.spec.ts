@@ -35,11 +35,9 @@ describe('domain service generator', () => {
         // Assert that we should have usable data, now!
         expect(result.files).toHaveLength(2);
         expect(result.files[0]?.path).toMatch(/transferMoney\.ts$/);
-        expect(result.files[0]?.content).toContain('export const transferMoney =');
-        expect(result.files[0]?.content).toContain('(repo: AccountRepository) =>');
-        expect(result.files[0]?.content).toContain(
-            '(fromAccount: Account, toAccount: Account, amount: Money): AsyncResult<void, TransferMoneyError> => {',
-        );
+        expect(result.files[0]?.content).toContain('export const transferMoneyImpl =');
+        expect(result.files[0]?.content).toContain('(repo: AccountRepository): TransferMoney =>');
+        expect(result.files[0]?.content).toContain('(fromAccount, toAccount, amount) => {');
 
         expect(result.files[1]?.path).toMatch(/transferMoney.spec.ts$/);
         expect(result.files[1]?.content).toContain(

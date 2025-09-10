@@ -45,6 +45,7 @@ export const generateDomainService = {
         const { serviceName, injectedDependencies, parameters, returns } = params;
 
         const formattedParameters = parameters.map((p) => `${p.name}: ${p.type}`).join(', ');
+        const formattedParameterNames = parameters.map((p) => p.name).join(', ');
         const formattedInjectedDependencies = injectedDependencies
             .map((p) => `${p.name}: ${p.type}`)
             .join(', ');
@@ -53,7 +54,8 @@ export const generateDomainService = {
             return str.charAt(0).toUpperCase() + str.slice(1);
         };
 
-        const serviceErrorType = capitalize(`${serviceName}Error`);
+        const serviceType = capitalize(serviceName);
+        const serviceErrorType = `${serviceType}Error`;
         const wrappedResultType = `Result<${returns ?? 'void'}, ${serviceErrorType}>`;
         const asyncResultType = `Async${wrappedResultType}`;
         const promiseOfResultType = `Promise<${wrappedResultType}>`;
@@ -61,8 +63,10 @@ export const generateDomainService = {
         const dataForPlaceholders = {
             serviceName,
             formattedParameters,
+            formattedParameterNames,
             formattedInjectedDependencies,
             returns,
+            serviceType,
             serviceErrorType,
             wrappedResultType,
             asyncResultType,

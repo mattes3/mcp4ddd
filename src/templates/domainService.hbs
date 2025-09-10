@@ -5,19 +5,21 @@ import {
     type TechError, techError
 } from '@yourproject/your-main-model';  //TODO: replace the module that contains you main model
 
-export type {{serviceErrorType}} = SingleError<'{{serviceErrorType}}'>;
+export type {{serviceErrorType}} = SingleError<'{{serviceErrorType}}'> | TechError;
 
 export const create{{serviceErrorType}} = (yourErrorInformation: string): {{serviceErrorType}} =>
-    singleError('{{serviceErrorType}}', `{{serviceName}} failed because of ${yourErrorInformation}`);
+    singleError('{{serviceErrorType}}', `{{serviceName}} failed: ${yourErrorInformation}`);
+
+export type {{serviceType}} = ({{formattedParameters}}) => {{{asyncResultType}}};
 
 // @DomainService
-export const {{serviceName}} =
-    ({{formattedInjectedDependencies}}) =>
-    ({{formattedParameters}}): {{{asyncResultType}}} => {
+export const {{serviceName}}Impl =
+    ({{formattedInjectedDependencies}}): {{serviceType}} =>
+    ({{formattedParameterNames}}) => {
         return new AsyncResult(domainLogic().catch((e: Error) => Err(techError(e.message))));
         async function domainLogic(): {{{promiseOfResultType}}} {
-            //TODO: implement this domain logic here and return a {{{wrappedResultType}}} as in Rust.
-            //TODO: No try-catch inside here – return Ok() or Ok(value) or Err(create{{serviceErrorType}}(explanation)), instead.
-            //TODO: Avoid await, return the promise itself, instead!
+            //human dev: implement this domain logic here and return a {{{wrappedResultType}}} as in Rust.
+            //human dev: No try-catch inside here – return Ok() or Ok(value) or Err(create{{serviceErrorType}}(explanation)), instead.
+            //human dev: Avoid await, return the promise itself, instead!
         }
     };
