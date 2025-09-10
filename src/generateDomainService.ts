@@ -19,33 +19,28 @@ const inputSchema = z.object({
         ),
 });
 
+const outputSchema = z.object({
+    files: z.array(
+        z.object({
+            path: z
+                .string()
+                .describe('the path where the generated source file output should be written'),
+            content: z.string().describe('the content to write into the source file'),
+        }),
+    ),
+});
+
 export const generateDomainService = {
     name: 'generateDomainService',
     config: {
         title: 'Domain Service generator',
         description: 'Generate a domain service as a function with optional injected dependencies',
         inputSchema: inputSchema.shape,
-        outputSchema: {
-            files: z.array(
-                z.object({
-                    path: z
-                        .string()
-                        .describe(
-                            'the path where the generated source file output should be written',
-                        ),
-                    content: z.string().describe('the content to write into the source file'),
-                }),
-            ),
-        },
+        outputSchema: outputSchema.shape,
     },
     async execute(params: z.infer<typeof inputSchema>): Promise<{
         content: Array<{ type: 'text'; text: string }>;
-        structuredContent: {
-            files: {
-                path: string;
-                content: string;
-            }[];
-        };
+        structuredContent: z.infer<typeof outputSchema>;
     }> {
         const { serviceName, injectedDependencies, parameters, returns } = params;
 
