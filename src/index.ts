@@ -36,7 +36,7 @@ async function main() {
 
     return server
         .connect(transport)
-        .then(() => console.error(`MCP Server DDD sample is running on stdio`));
+        .then(() => console.error(`MCP Server ddd-scaffolder is running on stdio`));
 }
 
 await main().catch((error) => {

@@ -75,11 +75,11 @@ export const generateEntity = {
 
         const files = [
             {
-                path: `src/domain/${entityName.toLowerCase()}s/${entityName}.ts`,
+                path: `src/domain/${entityName.toLowerCase()}/${entityName}.ts`,
                 content: entityContent,
             },
             {
-                path: `test/${entityName.toLowerCase()}s/${entityName}.spec.ts`,
+                path: `test/${entityName.toLowerCase()}/${entityName}.spec.ts`,
                 content: testContent,
             },
         ];

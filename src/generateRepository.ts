@@ -102,15 +102,15 @@ export const generateRepository = {
 
         const files = [
             {
-                path: `src/domain/${aggregateName.toLowerCase()}s/${repositoryName}.ts`,
+                path: `src/domain/${aggregateName.toLowerCase()}/${repositoryName}.ts`,
                 content: repositoryContent,
             },
             {
-                path: `src/adapter/persistence/${aggregateName.toLowerCase()}s/${repositoryName}Impl.ts`,
+                path: `src/adapter/persistence/${aggregateName.toLowerCase()}/${repositoryName}Impl.ts`,
                 content: repositoryImplContent,
             },
             {
-                path: `test/${aggregateName.toLowerCase()}s/${repositoryName}.spec.ts`,
+                path: `test/${aggregateName.toLowerCase()}/${repositoryName}.spec.ts`,
                 content: testContent,
             },
         ];

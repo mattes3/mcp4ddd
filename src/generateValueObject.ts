@@ -73,11 +73,11 @@ export const generateValueObject = {
 
         const files = [
             {
-                path: `src/domain/${valueObjectName.toLowerCase()}s/${valueObjectName}.ts`,
+                path: `src/domain/${valueObjectName.toLowerCase()}/${valueObjectName}.ts`,
                 content: valueObjectContent,
             },
             {
-                path: `test/${valueObjectName.toLowerCase()}s/${valueObjectName}.spec.ts`,
+                path: `test/${valueObjectName.toLowerCase()}/${valueObjectName}.spec.ts`,
                 content: testContent,
             },
         ];

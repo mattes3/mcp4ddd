@@ -1,9 +1,4 @@
-/**
- * @Repository
- *
- * Stores {{aggregateName}} objects and
- * finds them according to certain criteria.
- */
+// @Repository
 export interface {{repositoryName}} {
 {{#methods}}
     {{name}}({{formattedParameters}}){{#if resultType}}: Promise{{{angle resultType}}}{{/if}};

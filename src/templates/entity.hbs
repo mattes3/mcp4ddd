@@ -10,8 +10,13 @@ type {{entityName}}Methods = {
 {{/methods}}
 };
 
-export type {{entityName}} = {{entityName}}Data & {{entityName}}Methods;{{#aggregateRoot}} // @AggregateRoot{{/aggregateRoot}}
+// @Entity
+{{#if aggregateRoot}}
+// @AggregateRoot
+{{/if}}
+export type {{entityName}} = {{entityName}}Data & {{entityName}}Methods;
 
+// @Factory
 export const create{{entityName}} = (data: {{entityName}}Data): {{entityName}} => ({
     ...data,
 {{#methods}}
