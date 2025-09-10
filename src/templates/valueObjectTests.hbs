@@ -8,7 +8,7 @@ describe('{{valueObjectName}}', () => {
 
 {{#methods}}
     it('{{name}}', () => { 
-        // test the method {{name}}({{formattedParameters}}){{#resultType}}: {{resultType}}{{/resultType}}
+        // test the method {{name}}({{formattedParameters}}){{#if resultType}}: {{resultType}}{{/if}}
     });
 
 {{/methods}}

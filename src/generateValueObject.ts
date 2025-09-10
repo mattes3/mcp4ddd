@@ -53,10 +53,7 @@ export const generateValueObject = {
         outputSchema: outputSchema.shape,
     },
     async execute(params: z.infer<typeof inputSchema>): Promise<{
-        content: {
-            type: 'text';
-            text: string;
-        }[];
+        content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
         const { valueObjectName, attributes, methods } = params;

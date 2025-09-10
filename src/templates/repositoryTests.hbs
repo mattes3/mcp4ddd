@@ -1,0 +1,11 @@
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
+
+describe('{{repositoryName}}', () => { 
+{{#methods}}
+    it('method {{name}}', async () => { 
+        // test the method {{name}}({{formattedParameters}}){{#if resultType}}: Promise{{{angle resultType}}}{{/if}}
+    });
+
+{{/methods}}
+});

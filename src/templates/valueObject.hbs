@@ -6,7 +6,7 @@ export type {{valueObjectName}}Data = {
 
 type {{valueObjectName}}Methods = {
 {{#methods}}
-    {{name}}({{formattedParameters}}){{#resultType}}: {{resultType}}{{/resultType}};
+    {{name}}({{formattedParameters}}){{#if resultType}}: {{resultType}}{{/if}};
 {{/methods}}
 };
 
@@ -15,7 +15,7 @@ export type {{valueObjectName}} = {{valueObjectName}}Data & {{valueObjectName}}M
 export const create{{valueObjectName}} = (data: {{valueObjectName}}Data): {{valueObjectName}} => ({
     ...data,
 {{#methods}}
-    {{name}}({{formattedParameters}}){{#resultType}}: {{resultType}}{{/resultType}} {
+    {{name}}({{formattedParameters}}){{#if resultType}}: {{resultType}}{{/if}} {
          //TODO: implement this method 
     },
 {{/methods}}

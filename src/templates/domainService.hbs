@@ -1,5 +1,5 @@
 export const {{serviceName}} =
     ({{formattedInjectedDependencies}}) =>
-    ({{formattedParameters}}){{#resultType}}: {{resultType}}{{/resultType}} => {
+    ({{formattedParameters}}){{#if resultType}}: {{resultType}}{{/if}} => {
         //TODO: implement this service function
     };

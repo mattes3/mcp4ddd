@@ -39,10 +39,7 @@ export const generateDomainService = {
         },
     },
     async execute(params: z.infer<typeof inputSchema>): Promise<{
-        content: {
-            type: 'text';
-            text: string;
-        }[];
+        content: Array<{ type: 'text'; text: string }>;
         structuredContent: {
             files: {
                 path: string;

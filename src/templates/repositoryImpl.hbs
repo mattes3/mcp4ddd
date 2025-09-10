@@ -1,0 +1,13 @@
+/**
+ * Repository implementation.
+ *
+ * Stores {{aggregateName}} objects and
+ * finds them according to certain criteria.
+ */
+export const {{repositoryName}}Impl: {{repositoryName}} = {
+{{#methods}}
+    async {{name}}({{formattedParameters}}){{#if resultType}}: Promise{{{angle resultType}}}{{/if}} {
+        // TODO: implement this method
+    }
+{{/methods}}
+};
