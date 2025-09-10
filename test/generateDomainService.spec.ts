@@ -38,12 +38,12 @@ describe('domain service generator', () => {
         expect(result.files[0]?.content).toContain('export const transferMoney =');
         expect(result.files[0]?.content).toContain('(repo: AccountRepository) =>');
         expect(result.files[0]?.content).toContain(
-            '(fromAccount: Account, toAccount: Account, amount: Money) => {',
+            '(fromAccount: Account, toAccount: Account, amount: Money): AsyncResult<void, TransferMoneyError> => {',
         );
 
         expect(result.files[1]?.path).toMatch(/transferMoney.spec.ts$/);
         expect(result.files[1]?.content).toContain(
-            '// test the method transferMoney(fromAccount: Account, toAccount: Account, amount: Money)',
+            '// test the method transferMoney(fromAccount: Account, toAccount: Account, amount: Money): AsyncResult<void, TransferMoneyError>',
         );
     });
 });

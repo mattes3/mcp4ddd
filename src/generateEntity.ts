@@ -61,6 +61,7 @@ export const generateEntity = {
 
         const processedMethods = methods.map((method) => ({
             ...method,
+            resultType: method.resultType ?? 'void',
             formattedParameters: method.parameters.map((p) => `${p.name}: ${p.type}`).join(', '),
         }));
 

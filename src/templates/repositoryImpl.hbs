@@ -6,7 +6,7 @@
  */
 export const {{repositoryName}}Impl: {{repositoryName}} = {
 {{#methods}}
-    async {{name}}({{formattedParameters}}){{#if resultType}}: Promise{{{angle resultType}}}{{/if}} {
+    async {{name}}({{formattedParameters}}): Promise{{{angle resultType}}} {
         // TODO: implement this method
     }
 {{/methods}}

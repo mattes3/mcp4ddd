@@ -1,6 +1,6 @@
 // @Repository
 export interface {{repositoryName}} {
 {{#methods}}
-    {{name}}({{formattedParameters}}){{#if resultType}}: Promise{{{angle resultType}}}{{/if}};
+    {{name}}({{formattedParameters}}): Promise{{{angle resultType}}};
 {{/methods}}
 };

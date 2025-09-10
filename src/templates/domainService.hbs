@@ -1,6 +1,23 @@
+import type { AsyncResult, Ok, Err } from 'ts-results-es';
+
+import {
+    type SingleError, singleError,
+    type TechError, techError
+} from '@yourproject/your-main-model';  //TODO: replace the module that contains you main model
+
+export type {{serviceErrorType}} = SingleError<'{{serviceErrorType}}'>;
+
+export const create{{serviceErrorType}} = (yourErrorInformation: string): {{serviceErrorType}} =>
+    singleError('{{serviceErrorType}}', `{{serviceName}} failed because of ${yourErrorInformation}`);
+
 // @DomainService
 export const {{serviceName}} =
     ({{formattedInjectedDependencies}}) =>
-    ({{formattedParameters}}){{#if resultType}}: {{resultType}}{{/if}} => {
-        //TODO: implement this service function
+    ({{formattedParameters}}): {{{asyncResultType}}} => {
+        return new AsyncResult(domainLogic().catch((e: Error) => Err(techError(e.message))));
+        async function domainLogic(): {{{promiseOfResultType}}} {
+            //TODO: implement this domain logic here and return a {{{wrappedResultType}}} as in Rust.
+            //TODO: No try-catch inside here – return Ok() or Ok(value) or Err(create{{serviceErrorType}}(explanation)), instead.
+            //TODO: Avoid await, return the promise itself, instead!
+        }
     };

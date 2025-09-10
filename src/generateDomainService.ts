@@ -49,11 +49,24 @@ export const generateDomainService = {
             .map((p) => `${p.name}: ${p.type}`)
             .join(', ');
 
+        const capitalize = (str: string): string => {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        };
+
+        const serviceErrorType = capitalize(`${serviceName}Error`);
+        const wrappedResultType = `Result<${returns ?? 'void'}, ${serviceErrorType}>`;
+        const asyncResultType = `Async${wrappedResultType}`;
+        const promiseOfResultType = `Promise<${wrappedResultType}>`;
+
         const dataForPlaceholders = {
             serviceName,
             formattedParameters,
             formattedInjectedDependencies,
             returns,
+            serviceErrorType,
+            wrappedResultType,
+            asyncResultType,
+            promiseOfResultType,
         };
 
         const serviceContent = Handlebars.compile(domainServiceTemplate)(dataForPlaceholders);

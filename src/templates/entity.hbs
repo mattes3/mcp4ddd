@@ -6,7 +6,7 @@ export type {{entityName}}Data = {
 
 type {{entityName}}Methods = {
 {{#methods}}
-    {{name}}({{formattedParameters}}){{#if resultType}}: {{resultType}}{{/if}};
+    {{name}}({{formattedParameters}}): {{resultType}};
 {{/methods}}
 };
 
@@ -20,7 +20,7 @@ export type {{entityName}} = {{entityName}}Data & {{entityName}}Methods;
 export const create{{entityName}} = (data: {{entityName}}Data): {{entityName}} => ({
     ...data,
 {{#methods}}
-    {{name}}({{formattedParameters}}){{#if resultType}}: {{resultType}}{{/if}} {
+    {{name}}({{formattedParameters}}): {{resultType}} {
          //TODO: implement this method 
     },
 {{/methods}}
