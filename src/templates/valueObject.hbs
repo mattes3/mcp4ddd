@@ -14,7 +14,7 @@ type {{valueObjectName}}Methods = {
 export type {{valueObjectName}} = {{valueObjectName}}Data & {{valueObjectName}}Methods;
 
 // @Factory
-const create{{valueObjectName}} = (data: {{valueObjectName}}Data): {{valueObjectName}} => ({
+export const create{{valueObjectName}} = (data: {{valueObjectName}}Data): {{valueObjectName}} => ({
     ...data,
 {{#methods}}
     {{name}}({{formattedParameters}}): {{resultType}} {
