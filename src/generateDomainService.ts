@@ -53,6 +53,25 @@ export const generateDomainService = {
             .map((p) => `${p.name}: ${p.type}`)
             .join(', ');
 
+        const typeToZod = (type: string): string => {
+            switch (type) {
+                case 'string':
+                    return 'string';
+                case 'number':
+                    return 'number';
+                case 'boolean':
+                    return 'boolean';
+                case 'Date':
+                    return 'date';
+                default:
+                    return 'unknown'; // or handle custom types
+            }
+        };
+
+        const serviceParametersAsZodSchema = parameters
+            .map((p) => `${p.name}: z.${typeToZod(p.type)}()`)
+            .join(', ');
+
         const capitalize = (str: string): string => {
             return str.charAt(0).toUpperCase() + str.slice(1);
         };
@@ -61,13 +80,16 @@ export const generateDomainService = {
         const serviceErrorType = `${serviceType}Error`;
 
         const serviceParametersType = `${serviceType}Params`;
-        const serviceParametersSchema = `${serviceType}Schema`;
+        const serviceParametersSchema = `${serviceName}Schema`;
         const validatedParametersType = `Branded<z.infer<typeof ${serviceParametersSchema}>, 'validated'>`;
         const wrappedServiceParametersType = `Result<${serviceParametersType}, ${serviceErrorType}>`;
 
         const wrappedResultType = `Result<${returns ?? 'void'}, ${serviceErrorType}>`;
         const asyncResultType = `Async${wrappedResultType}`;
         const promiseOfResultType = `Promise<${wrappedResultType}>`;
+
+        const getEnv = (key: string): string =>
+            process.env[key] ?? `*** configure ${key} in your MCP environment variables ***`;
 
         const dataForPlaceholders = {
             serviceName,
@@ -78,6 +100,7 @@ export const generateDomainService = {
             returns,
             serviceType,
             serviceParametersSchema,
+            serviceParametersAsZodSchema,
             serviceParametersType,
             validatedParametersType,
             wrappedServiceParametersType,
@@ -85,6 +108,8 @@ export const generateDomainService = {
             wrappedResultType,
             asyncResultType,
             promiseOfResultType,
+            basicTypesFrom: getEnv('BASIC_TYPES_FROM'),
+            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM'),
         };
 
         const serviceContent = Handlebars.compile(domainServiceTemplate)(dataForPlaceholders);

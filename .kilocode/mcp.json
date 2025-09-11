@@ -4,7 +4,8 @@
             "command": "node",
             "args": ["./dist/index.js"],
             "env": {
-                "DUMMY_ENV_VARIABLE": "hugo"
+                "BASIC_TYPES_FROM": "../../BasicModelTypes.js",
+                "BASIC_ERROR_TYPES_FROM": "../../BasicErrorTypes.js"
             }
         }
     }

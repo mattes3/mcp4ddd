@@ -1,4 +1,4 @@
-import { type SingleError, singleError, type TechError, techError, type ValidationError } from '../../BasicErrorTypes.js';
+import { type SingleError, singleError, type TechError, type ValidationError } from '{{basicErrorTypesFrom}}';
 
 export type {{serviceErrorType}} = SingleError<'{{serviceErrorType}}'> | TechError | ValidationError;
 
