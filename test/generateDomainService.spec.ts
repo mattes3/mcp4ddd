@@ -21,6 +21,8 @@ describe('domain service generator', () => {
         const parsed = z.object(generateDomainService.config.inputSchema).parse(params);
 
         // invoke the tool
+        process.env['BASIC_TYPES_FROM'] = '../../BasicModelTypes.js';
+        process.env['BASIC_ERROR_TYPES_FROM'] = '../../BasicErrorTypes.js';
         const resultAsText = await generateDomainService.execute(parsed);
 
         // assert that it has generated text output
@@ -34,19 +36,19 @@ describe('domain service generator', () => {
 
         // Assert that we should have usable data, now!
         expect(result.files).toHaveLength(4);
-        expect(result.files[0]?.path).toMatch(/transferMoney\.ts$/);
-        expect(result.files[0]?.content).toContain('export const transferMoneyImpl =');
-        expect(result.files[0]?.content).toContain('(repo: AccountRepository): TransferMoney =>');
-        expect(result.files[0]?.content).toContain('({ fromAccount, toAccount, amount }) => {');
+        expect(result.files[0]?.path).toMatch(/TransferMoneyErrors\.ts$/);
+        expect(result.files[0]?.content).toContain('export type TransferMoneyError');
+        expect(result.files[0]?.content).toContain('export const createTransferMoneyError');
 
-        expect(result.files[1]?.content).toContain('const TransferMoneySchema = z.object(');
+        expect(result.files[1]?.content).toContain('const transferMoneySchema = z.object({');
         expect(result.files[1]?.content).toContain(
             '): Result<TransferMoneyParams, TransferMoneyError> {',
         );
 
-        expect(result.files[2]?.path).toMatch(/TransferMoneyErrors\.ts$/);
-        expect(result.files[2]?.content).toContain('export type TransferMoneyError');
-        expect(result.files[2]?.content).toContain('export const createTransferMoneyError');
+        expect(result.files[2]?.path).toMatch(/transferMoney\.ts$/);
+        expect(result.files[2]?.content).toContain('export const transferMoneyImpl =');
+        expect(result.files[2]?.content).toContain('(repo: AccountRepository): TransferMoney =>');
+        expect(result.files[2]?.content).toContain('({ fromAccount, toAccount, amount }) => {');
 
         expect(result.files[3]?.path).toMatch(/transferMoney.spec.ts$/);
         expect(result.files[3]?.content).toContain(

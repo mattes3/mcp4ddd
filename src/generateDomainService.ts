@@ -123,16 +123,16 @@ export const generateDomainService = {
 
         const files = [
             {
-                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.ts`,
-                content: serviceContent,
+                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceErrorType}s.ts`,
+                content: serviceErrorsContent,
             },
             {
                 path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceParametersType}.ts`,
                 content: serviceParametersContent,
             },
             {
-                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceErrorType}s.ts`,
-                content: serviceErrorsContent,
+                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.ts`,
+                content: serviceContent,
             },
             {
                 path: `test/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.spec.ts`,
