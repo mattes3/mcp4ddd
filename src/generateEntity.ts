@@ -24,6 +24,11 @@ const inputSchema = z.object({
             })
             .describe('the method signatures of the entity'),
     ),
+    boundedContext: z.string().describe('The bounded context name (e.g., "stocks", "accounts")'),
+    layer: z
+        .enum(['domain', 'application'])
+        .default('domain')
+        .describe('The layer where the component should be generated'),
 });
 
 const outputSchema = z.object({
@@ -57,7 +62,7 @@ export const generateEntity = {
         content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { entityName, aggregateRoot, attributes, methods } = params;
+        const { entityName, aggregateRoot, attributes, methods, boundedContext, layer } = params;
 
         const processedMethods = methods.map((method) => ({
             ...method,
@@ -76,11 +81,11 @@ export const generateEntity = {
 
         const files = [
             {
-                path: `src/domain/${entityName.toLowerCase()}/${entityName}.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${entityName}.ts`,
                 content: entityContent,
             },
             {
-                path: `test/${entityName.toLowerCase()}/${entityName}.spec.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/test/${entityName}.spec.ts`,
                 content: testContent,
             },
         ];

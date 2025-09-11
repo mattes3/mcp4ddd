@@ -15,6 +15,8 @@ describe('domain service generator', () => {
                 { name: 'amount', type: 'Money' },
             ],
             returns: 'void',
+            boundedContext: 'stocks',
+            layer: 'domain',
         };
 
         // Validate input with Zod (like MCP would do)
@@ -36,21 +38,30 @@ describe('domain service generator', () => {
 
         // Assert that we should have usable data, now!
         expect(result.files).toHaveLength(4);
-        expect(result.files[0]?.path).toMatch(/TransferMoneyErrors\.ts$/);
+        expect(result.files[0]?.path).toBe(
+            'packages/domainlogic/stocks/domain/src/domainmodel/TransferMoneyErrors.ts',
+        );
         expect(result.files[0]?.content).toContain('export type TransferMoneyError');
         expect(result.files[0]?.content).toContain('export const createTransferMoneyError');
 
+        expect(result.files[1]?.path).toBe(
+            'packages/domainlogic/stocks/domain/src/domainmodel/TransferMoneyParams.ts',
+        );
         expect(result.files[1]?.content).toContain('const transferMoneySchema = z.object({');
         expect(result.files[1]?.content).toContain(
             '): Result<TransferMoneyParams, TransferMoneyError> {',
         );
 
-        expect(result.files[2]?.path).toMatch(/transferMoney\.ts$/);
+        expect(result.files[2]?.path).toBe(
+            'packages/domainlogic/stocks/domain/src/domainmodel/transferMoney.ts',
+        );
         expect(result.files[2]?.content).toContain('export const transferMoneyImpl =');
         expect(result.files[2]?.content).toContain('(repo: AccountRepository): TransferMoney =>');
         expect(result.files[2]?.content).toContain('({ fromAccount, toAccount, amount }) => {');
 
-        expect(result.files[3]?.path).toMatch(/transferMoney.spec.ts$/);
+        expect(result.files[3]?.path).toBe(
+            'packages/domainlogic/stocks/domain/test/transferMoney.spec.ts',
+        );
         expect(result.files[3]?.content).toContain(
             '// test the method transferMoney(fromAccount: Account, toAccount: Account, amount: Money): AsyncResult<void, TransferMoneyError>',
         );

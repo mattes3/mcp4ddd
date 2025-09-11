@@ -35,6 +35,11 @@ const inputSchema = z.object({
                 'for this repository interface',
             ].join(' '),
         ),
+    boundedContext: z.string().describe('The bounded context name (e.g., "stocks", "accounts")'),
+    layer: z
+        .enum(['domain', 'application'])
+        .default('domain')
+        .describe('The layer where the component should be generated'),
 });
 
 const outputSchema = z.object({
@@ -68,7 +73,8 @@ export const generateRepository = {
         content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { aggregateName, methods, defaultAddAndRemoveMethods } = params;
+        const { aggregateName, methods, defaultAddAndRemoveMethods, boundedContext, layer } =
+            params;
         const repositoryName = `${aggregateName}Repository`;
 
         const allMethods = [...methods];
@@ -103,15 +109,15 @@ export const generateRepository = {
 
         const files = [
             {
-                path: `src/domain/${aggregateName.toLowerCase()}/${repositoryName}.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${repositoryName}.ts`,
                 content: repositoryContent,
             },
             {
-                path: `src/adapter/persistence/${aggregateName.toLowerCase()}/${repositoryName}Impl.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/src/adapter/persistence/${repositoryName}Impl.ts`,
                 content: repositoryImplContent,
             },
             {
-                path: `test/${aggregateName.toLowerCase()}/${repositoryName}.spec.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/test/${repositoryName}.spec.ts`,
                 content: testContent,
             },
         ];

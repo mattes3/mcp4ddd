@@ -8,7 +8,6 @@ describe('value object generator', () => {
     it('creates value object and test files', async () => {
         const params = {
             valueObjectName: 'Address',
-            aggregateRoot: true,
             attributes: [
                 { name: 'street', type: 'string', valueObject: false },
                 { name: 'houseNumber', type: 'string', valueObject: false },
@@ -16,6 +15,8 @@ describe('value object generator', () => {
                 { name: 'zipCode', type: 'string', valueObject: false },
             ],
             methods: [{ name: 'validate', parameters: [{ name: 'strictly', type: 'boolean' }] }],
+            boundedContext: 'stocks',
+            layer: 'domain',
         };
 
         // Validate input with Zod (like MCP would do)
@@ -36,11 +37,15 @@ describe('value object generator', () => {
         // Assert that we should have usable data, now!
 
         expect(result.files).toHaveLength(2);
-        expect(result.files[0]?.path).toMatch(/Address\.ts$/);
+        expect(result.files[0]?.path).toBe(
+            'packages/domainlogic/stocks/domain/src/domainmodel/Address.ts',
+        );
         expect(result.files[0]?.content).toContain('type Address =');
         expect(result.files[0]?.content).toContain('houseNumber: string;');
 
-        expect(result.files[1]?.path).toMatch(/Address\.spec\.ts$/);
+        expect(result.files[1]?.path).toBe(
+            'packages/domainlogic/stocks/domain/test/Address.spec.ts',
+        );
         expect(result.files[1]?.content).toContain('test the method validate(strictly: boolean)');
     });
 });

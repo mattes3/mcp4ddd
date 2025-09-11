@@ -70,6 +70,8 @@ setTimeout(() => {
             aggregateRoot: true,
             attributes: [{ name: 'id', type: 'UUID', valueObject: false }],
             methods: [{ name: 'close', parameters: [{ name: 'absolute', type: 'boolean' }] }],
+            boundedContext: 'stocks',
+            layer: 'domain',
         },
     });
     child.stdin.write(toolMessage);

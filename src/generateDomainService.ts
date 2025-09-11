@@ -19,6 +19,11 @@ const inputSchema = z.object({
                 'but which do not belong in its parameter list',
             ].join(' '),
         ),
+    boundedContext: z.string().describe('The bounded context name (e.g., "stocks", "accounts")'),
+    layer: z
+        .enum(['domain', 'application'])
+        .default('domain')
+        .describe('The layer where the component should be generated'),
 });
 
 const outputSchema = z.object({
@@ -44,7 +49,8 @@ export const generateDomainService = {
         content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { serviceName, injectedDependencies, parameters, returns } = params;
+        const { serviceName, injectedDependencies, parameters, returns, boundedContext, layer } =
+            params;
 
         const formattedParameters = parameters.map((p) => `${p.name}: ${p.type}`).join(', ');
         const formattedParametersWithAnyTypes = parameters.map((p) => `${p.name}: any`).join(', ');
@@ -123,19 +129,19 @@ export const generateDomainService = {
 
         const files = [
             {
-                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceErrorType}s.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${serviceErrorType}s.ts`,
                 content: serviceErrorsContent,
             },
             {
-                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceParametersType}.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${serviceParametersType}.ts`,
                 content: serviceParametersContent,
             },
             {
-                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${serviceName}.ts`,
                 content: serviceContent,
             },
             {
-                path: `test/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.spec.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/test/${serviceName}.spec.ts`,
                 content: testContent,
             },
         ];

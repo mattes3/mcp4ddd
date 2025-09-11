@@ -21,6 +21,8 @@ describe('Repository generator', () => {
                 },
             ],
             defaultAddAndRemoveMethods: true,
+            boundedContext: 'stocks',
+            layer: 'domain',
         };
 
         // Validate input with Zod (like MCP would do)
@@ -41,17 +43,23 @@ describe('Repository generator', () => {
         // Assert that we should have usable data, now!
 
         expect(result.files).toHaveLength(3);
-        expect(result.files[0]?.path).toMatch(/PersonRepository\.ts$/);
+        expect(result.files[0]?.path).toBe(
+            'packages/domainlogic/stocks/domain/src/domainmodel/PersonRepository.ts',
+        );
         expect(result.files[0]?.content).toContain('export interface PersonRepository {');
         expect(result.files[0]?.content).toContain('add(item: Person): Promise<void>');
 
-        expect(result.files[1]?.path).toMatch(/PersonRepositoryImpl\.ts$/);
+        expect(result.files[1]?.path).toBe(
+            'packages/domainlogic/stocks/domain/src/adapter/persistence/PersonRepositoryImpl.ts',
+        );
         expect(result.files[1]?.content).toContain(
             'export const PersonRepositoryImpl: PersonRepository = {',
         );
         expect(result.files[1]?.content).toContain('async add(item: Person): Promise<void> {');
 
-        expect(result.files[2]?.path).toMatch(/PersonRepository\.spec\.ts$/);
+        expect(result.files[2]?.path).toBe(
+            'packages/domainlogic/stocks/domain/test/PersonRepository.spec.ts',
+        );
         expect(result.files[2]?.content).toContain("describe('PersonRepository'");
         expect(result.files[2]?.content).toContain(
             '// test the method add(item: Person): Promise<void>',

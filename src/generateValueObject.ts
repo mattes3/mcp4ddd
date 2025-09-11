@@ -23,6 +23,11 @@ const inputSchema = z.object({
             })
             .describe('the method signatures of the value object'),
     ),
+    boundedContext: z.string().describe('The bounded context name (e.g., "stocks", "accounts")'),
+    layer: z
+        .enum(['domain', 'application'])
+        .default('domain')
+        .describe('The layer where the component should be generated'),
 });
 
 const outputSchema = z.object({
@@ -56,7 +61,7 @@ export const generateValueObject = {
         content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { valueObjectName, attributes, methods } = params;
+        const { valueObjectName, attributes, methods, boundedContext, layer } = params;
 
         const processedMethods = methods.map((method) => ({
             ...method,
@@ -74,11 +79,11 @@ export const generateValueObject = {
 
         const files = [
             {
-                path: `src/domain/${valueObjectName.toLowerCase()}/${valueObjectName}.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${valueObjectName}.ts`,
                 content: valueObjectContent,
             },
             {
-                path: `test/${valueObjectName.toLowerCase()}/${valueObjectName}.spec.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/test/${valueObjectName}.spec.ts`,
                 content: testContent,
             },
         ];
