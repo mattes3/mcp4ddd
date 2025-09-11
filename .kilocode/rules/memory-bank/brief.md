@@ -42,9 +42,6 @@ Developers implementing Domain-Driven Design in TypeScript projects who want to 
 - Requires MCP SDK for server functionality
 
 ## Future Enhancements
-- Understand the notion of a `bounded context`
-- Generate code for a project that spans multiple bounded contexts
-- Generate zod validation code for service parameters
 - Generate repository implementations for DynamoDB
 
 ## Notes
