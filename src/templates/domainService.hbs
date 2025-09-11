@@ -1,16 +1,18 @@
-import { type AsyncResult, type Result, Ok, Err } from 'ts-results-es';
+import { AsyncResult, type Result, Ok, Err } from 'ts-results-es';
 
 import {
     type SingleError, singleError,
     type TechError, techError
-} from '@yourproject/your-main-model';  //TODO: replace the module that contains you main model
+} from '@yourproject/BasicErrorTypes';  //TODO for AI assistant: replace by the correct location of BasicErrorTypes
+
+import { type {{serviceParametersType}} } from './{{serviceParametersType}}.js';
 
 export type {{serviceErrorType}} = SingleError<'{{serviceErrorType}}'> | TechError;
 
 export const create{{serviceErrorType}} = (yourErrorInformation: string): {{serviceErrorType}} =>
     singleError('{{serviceErrorType}}', `{{serviceName}} failed: ${yourErrorInformation}`);
 
-export type {{serviceType}} = (params: { {{formattedParameters}} }) => {{{asyncResultType}}};
+export type {{serviceType}} = (params: {{serviceParametersType}}) => {{{asyncResultType}}};
 
 // @DomainService
 export const {{serviceName}}Impl =

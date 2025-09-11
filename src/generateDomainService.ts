@@ -3,6 +3,7 @@ import { z } from 'zod';
 
 import { fieldSchema } from './FieldSchema.js';
 import domainServiceTemplate from './templates/domainService.hbs';
+import domainServiceParametersTemplate from './templates/domainServiceParameters.hbs';
 import testTemplate from './templates/domainServiceTests.hbs';
 
 const inputSchema = z.object({
@@ -45,6 +46,7 @@ export const generateDomainService = {
         const { serviceName, injectedDependencies, parameters, returns } = params;
 
         const formattedParameters = parameters.map((p) => `${p.name}: ${p.type}`).join(', ');
+        const formattedParametersWithAnyTypes = parameters.map((p) => `${p.name}: any`).join(', ');
         const formattedParameterNames = parameters.map((p) => p.name).join(', ');
         const formattedInjectedDependencies = injectedDependencies
             .map((p) => `${p.name}: ${p.type}`)
@@ -56,6 +58,12 @@ export const generateDomainService = {
 
         const serviceType = capitalize(serviceName);
         const serviceErrorType = `${serviceType}Error`;
+
+        const serviceParametersType = `${serviceType}Params`;
+        const serviceParametersSchema = `${serviceType}Schema`;
+        const validatedParametersType = `Branded<z.infer<typeof ${serviceParametersSchema}>, 'validated'>`;
+        const wrappedServiceParametersType = `Result<${serviceParametersType}, ${serviceErrorType}>`;
+
         const wrappedResultType = `Result<${returns ?? 'void'}, ${serviceErrorType}>`;
         const asyncResultType = `Async${wrappedResultType}`;
         const promiseOfResultType = `Promise<${wrappedResultType}>`;
@@ -63,10 +71,15 @@ export const generateDomainService = {
         const dataForPlaceholders = {
             serviceName,
             formattedParameters,
+            formattedParametersWithAnyTypes,
             formattedParameterNames,
             formattedInjectedDependencies,
             returns,
             serviceType,
+            serviceParametersSchema,
+            serviceParametersType,
+            validatedParametersType,
+            wrappedServiceParametersType,
             serviceErrorType,
             wrappedResultType,
             asyncResultType,
@@ -74,12 +87,19 @@ export const generateDomainService = {
         };
 
         const serviceContent = Handlebars.compile(domainServiceTemplate)(dataForPlaceholders);
+        const serviceParametersContent = Handlebars.compile(domainServiceParametersTemplate)(
+            dataForPlaceholders,
+        );
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
         const files = [
             {
                 path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.ts`,
                 content: serviceContent,
+            },
+            {
+                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceParametersType}.ts`,
+                content: serviceParametersContent,
             },
             {
                 path: `test/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.spec.ts`,

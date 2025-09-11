@@ -1,0 +1,19 @@
+import { Err, Ok, type Result } from 'ts-results-es';
+import z from 'zod';
+
+import { type Branded, type ValidationError, zodValidationError } from '@yourproject/BasicModelTypes'; //TODO for AI assistant: replace by the correct location of BasicModelTypes
+
+const {{serviceParametersSchema}} = 
+    // TODO for AI assistant: Place a zod validation schema here, for a z.object() that has these attributes: {{formattedParameters}}
+;
+
+export type {{serviceParametersType}} = {{{validatedParametersType}}};
+
+export function parse{{serviceParametersType}}(
+    params: { {{formattedParametersWithAnyTypes}} }
+): {{{wrappedServiceParametersType}}} {
+    const result = {{serviceParametersSchema}}.safeParse(params);
+    return result.success
+        ? Ok(result.data as {{serviceParametersType}})
+        : Err(zodValidationError(result.error));
+}
