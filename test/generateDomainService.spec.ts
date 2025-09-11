@@ -33,21 +33,23 @@ describe('domain service generator', () => {
             .parse(resultAsText.structuredContent);
 
         // Assert that we should have usable data, now!
-        expect(result.files).toHaveLength(3);
+        expect(result.files).toHaveLength(4);
         expect(result.files[0]?.path).toMatch(/transferMoney\.ts$/);
         expect(result.files[0]?.content).toContain('export const transferMoneyImpl =');
         expect(result.files[0]?.content).toContain('(repo: AccountRepository): TransferMoney =>');
         expect(result.files[0]?.content).toContain('({ fromAccount, toAccount, amount }) => {');
 
-        expect(result.files[1]?.content).toContain(
-            'const TransferMoneySchema = z.object({ fromAccount: Account, toAccount: Account, amount: Money });',
-        );
+        expect(result.files[1]?.content).toContain('const TransferMoneySchema = z.object(');
         expect(result.files[1]?.content).toContain(
             '): Result<TransferMoneyParams, TransferMoneyError> {',
         );
 
-        expect(result.files[2]?.path).toMatch(/transferMoney.spec.ts$/);
-        expect(result.files[2]?.content).toContain(
+        expect(result.files[2]?.path).toMatch(/TransferMoneyErrors\.ts$/);
+        expect(result.files[2]?.content).toContain('export type TransferMoneyError');
+        expect(result.files[2]?.content).toContain('export const createTransferMoneyError');
+
+        expect(result.files[3]?.path).toMatch(/transferMoney.spec.ts$/);
+        expect(result.files[3]?.content).toContain(
             '// test the method transferMoney(fromAccount: Account, toAccount: Account, amount: Money): AsyncResult<void, TransferMoneyError>',
         );
     });

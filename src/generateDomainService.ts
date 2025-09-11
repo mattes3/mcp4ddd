@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { fieldSchema } from './FieldSchema.js';
 import domainServiceTemplate from './templates/domainService.hbs';
 import domainServiceParametersTemplate from './templates/domainServiceParameters.hbs';
+import domainServiceErrorsTemplate from './templates/domainServiceErrors.hbs';
 import testTemplate from './templates/domainServiceTests.hbs';
 
 const inputSchema = z.object({
@@ -90,6 +91,9 @@ export const generateDomainService = {
         const serviceParametersContent = Handlebars.compile(domainServiceParametersTemplate)(
             dataForPlaceholders,
         );
+        const serviceErrorsContent = Handlebars.compile(domainServiceErrorsTemplate)(
+            dataForPlaceholders,
+        );
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
         const files = [
@@ -100,6 +104,10 @@ export const generateDomainService = {
             {
                 path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceParametersType}.ts`,
                 content: serviceParametersContent,
+            },
+            {
+                path: `src/domain/${serviceName.toLowerCase().replace('service', '')}/${serviceErrorType}s.ts`,
+                content: serviceErrorsContent,
             },
             {
                 path: `test/${serviceName.toLowerCase().replace('service', '')}/${serviceName}.spec.ts`,
