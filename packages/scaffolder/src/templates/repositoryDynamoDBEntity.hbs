@@ -11,7 +11,7 @@ import {
     documentClientConfig,
     dynamoDBClientConfiguration,
     singleDBTableName,
-} from '@ddd-components/runtime';
+} from '{{dynamoDBConfigurationFrom}}';
 
 export function configure{{entityName}}Entity(): Entity {
     const client = DynamoDBDocumentClient.from(
