@@ -2,10 +2,11 @@
     "mcpServers": {
         "ddd-scaffolder": {
             "command": "node",
-            "args": ["./dist/index.js"],
+            "args": ["./packages/scaffolder/dist/index.js"],
             "env": {
-                "BASIC_TYPES_FROM": "../../BasicModelTypes.js",
-                "BASIC_ERROR_TYPES_FROM": "../../BasicErrorTypes.js"
+                "BASIC_TYPES_FROM": "@ddd-components/runtime",
+                "BASIC_ERROR_TYPES_FROM": "@ddd-components/runtime",
+                "DYNAMODB_CONFIG_FROM": "@ddd-components/runtime"
             }
         }
     }

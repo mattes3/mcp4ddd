@@ -1,4 +1,8 @@
 {
+    "compilerOptions": {
+        "composite": true
+    },
+
     "references": [
         // Source files (e.g. everything under "./src").
         { "path": "./tsconfig.src.json" },
