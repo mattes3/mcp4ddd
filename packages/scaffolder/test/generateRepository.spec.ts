@@ -1,10 +1,14 @@
-import { describe, it } from 'node:test';
+import { describe, it, before } from 'node:test';
 import { expect } from 'expect';
 import { z } from 'zod';
 
 import { generateRepository } from '../src/generateRepository.js';
 
 describe('Repository generator', () => {
+    before(() => {
+        // Ensure consistent test behavior by setting the default parent folder
+        process.env['BOUNDED_CONTEXTS_PARENT_FOLDER'] = 'packages/domainlogic';
+    });
     it('creates repository interface, implementation, and test files', async () => {
         const params = {
             aggregateName: 'Person',

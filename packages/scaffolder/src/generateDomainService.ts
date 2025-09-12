@@ -94,7 +94,8 @@ export const generateDomainService = {
         const asyncResultType = `Async${wrappedResultType}`;
         const promiseOfResultType = `Promise<${wrappedResultType}>`;
 
-        const getEnv = (key: string): string => process.env[key] ?? '@ddd-components/runtime';
+        const getEnv = (key: string, defaultValue: string): string =>
+            process.env[key] ?? defaultValue;
 
         const dataForPlaceholders = {
             serviceName,
@@ -113,8 +114,8 @@ export const generateDomainService = {
             wrappedResultType,
             asyncResultType,
             promiseOfResultType,
-            basicTypesFrom: getEnv('BASIC_TYPES_FROM'),
-            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM'),
+            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
+            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
         };
 
         const serviceContent = Handlebars.compile(domainServiceTemplate)(dataForPlaceholders);
@@ -126,21 +127,26 @@ export const generateDomainService = {
         );
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
+        const boundedContextsParentFolder = getEnv(
+            'BOUNDED_CONTEXTS_PARENT_FOLDER',
+            'packages/domainlogic',
+        );
+
         const files = [
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${serviceErrorType}s.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${serviceErrorType}s.ts`,
                 content: serviceErrorsContent,
             },
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${serviceParametersType}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${serviceParametersType}.ts`,
                 content: serviceParametersContent,
             },
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${serviceName}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${serviceName}.ts`,
                 content: serviceContent,
             },
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/test/${serviceName}.spec.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${serviceName}.spec.ts`,
                 content: testContent,
             },
         ];

@@ -6,6 +6,8 @@ import testTemplate from './templates/valueObjectTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
 
+const getEnv = (key: string, defaultValue: string): string => process.env[key] ?? defaultValue;
+
 const inputSchema = z.object({
     valueObjectName: z.string().describe('Name of the value object'),
     attributes: z.array(fieldSchema).describe('the attributes inside the value object'),
@@ -77,13 +79,18 @@ export const generateValueObject = {
         const valueObjectContent = Handlebars.compile(valueObjectTemplate)(dataForPlaceholders);
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
+        const boundedContextsParentFolder = getEnv(
+            'BOUNDED_CONTEXTS_PARENT_FOLDER',
+            'packages/domainlogic',
+        );
+
         const files = [
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${valueObjectName}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${valueObjectName}.ts`,
                 content: valueObjectContent,
             },
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/test/${valueObjectName}.spec.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${valueObjectName}.spec.ts`,
                 content: testContent,
             },
         ];

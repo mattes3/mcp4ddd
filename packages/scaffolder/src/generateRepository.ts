@@ -7,6 +7,8 @@ import testTemplate from './templates/repositoryTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
 
+const getEnv = (key: string, defaultValue: string): string => process.env[key] ?? defaultValue;
+
 const inputSchema = z.object({
     aggregateName: z
         .string()
@@ -107,17 +109,22 @@ export const generateRepository = {
             Handlebars.compile(repositoryImplTemplate)(dataForPlaceholders);
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
+        const boundedContextsParentFolder = getEnv(
+            'BOUNDED_CONTEXTS_PARENT_FOLDER',
+            'packages/domainlogic',
+        );
+
         const files = [
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${repositoryName}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${repositoryName}.ts`,
                 content: repositoryContent,
             },
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/adapter/persistence/${repositoryName}Impl.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/adapter/persistence/${repositoryName}Impl.ts`,
                 content: repositoryImplContent,
             },
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/test/${repositoryName}.spec.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${repositoryName}.spec.ts`,
                 content: testContent,
             },
         ];

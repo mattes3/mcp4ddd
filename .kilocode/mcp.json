@@ -6,7 +6,8 @@
             "env": {
                 "BASIC_TYPES_FROM": "@ddd-components/runtime",
                 "BASIC_ERROR_TYPES_FROM": "@ddd-components/runtime",
-                "DYNAMODB_CONFIG_FROM": "@ddd-components/runtime"
+                "DYNAMODB_CONFIG_FROM": "@ddd-components/runtime",
+                "BOUNDED_CONTEXTS_PARENT_FOLDER": "packages"
             }
         }
     }

@@ -6,6 +6,8 @@ import testTemplate from './templates/entityTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
 
+const getEnv = (key: string, defaultValue: string): string => process.env[key] ?? defaultValue;
+
 const inputSchema = z.object({
     entityName: z.string().describe('Name of the entity'),
     aggregateRoot: z.boolean().default(false).describe('is this an aggregate root, true/false'),
@@ -79,13 +81,18 @@ export const generateEntity = {
         const entityContent = Handlebars.compile(entityTemplate)(dataForPlaceholders);
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
+        const boundedContextsParentFolder = getEnv(
+            'BOUNDED_CONTEXTS_PARENT_FOLDER',
+            'packages/domainlogic',
+        );
+
         const files = [
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/domainmodel/${entityName}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${entityName}.ts`,
                 content: entityContent,
             },
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/test/${entityName}.spec.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${entityName}.spec.ts`,
                 content: testContent,
             },
         ];

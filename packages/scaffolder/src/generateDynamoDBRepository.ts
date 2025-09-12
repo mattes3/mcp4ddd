@@ -7,6 +7,8 @@ import dynamoDBTestTemplate from './templates/repositoryDynamoDBTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
 
+const getEnv = (key: string, defaultValue: string): string => process.env[key] ?? defaultValue;
+
 const inputSchema = z.object({
     // Required parameters (minimal for usability)
     boundedContext: z.string().describe('The bounded context name (e.g., "stocks", "accounts")'),
@@ -190,8 +192,6 @@ export const generateDynamoDBRepository = {
             })),
         }));
 
-        const getEnv = (key: string): string => process.env[key] ?? '@ddd-components/runtime';
-
         const dataForPlaceholders = {
             boundedContext,
             aggregateName,
@@ -202,7 +202,7 @@ export const generateDynamoDBRepository = {
             attributes: processedAttributes,
             indexes: defaultIndexes,
             methods: processedMethods,
-            dynamoDBConfigurationFrom: getEnv('DYNAMODB_CONFIG_FROM'),
+            dynamoDBConfigurationFrom: getEnv('DYNAMODB_CONFIG_FROM', '@ddd-components/runtime'),
         };
 
         const entityTemplate = Handlebars.compile(dynamoDBEntityTemplate);
@@ -213,17 +213,22 @@ export const generateDynamoDBRepository = {
         const repositoryContent = repositoryTemplateCompiled(dataForPlaceholders);
         const testContent = testTemplateCompiled(dataForPlaceholders);
 
+        const boundedContextsParentFolder = getEnv(
+            'BOUNDED_CONTEXTS_PARENT_FOLDER',
+            'packages/domainlogic',
+        );
+
         const files = [
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/adapter/persistence/${aggregateName}Entity.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/adapter/persistence/${aggregateName}Entity.ts`,
                 content: entityContent,
             },
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/adapter/persistence/${repositoryName}Impl.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/adapter/persistence/${repositoryName}Impl.ts`,
                 content: repositoryContent,
             },
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/test/${repositoryName}Impl.spec.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${repositoryName}Impl.spec.ts`,
                 content: testContent,
             },
         ];

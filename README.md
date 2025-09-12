@@ -14,5 +14,14 @@ This project provides an MCP (Model Context Protocol) server that scaffolds Doma
 - Automatic test file generation
 - Zod schema validation for inputs
 
+## Environment Variables
+
+The MCP server supports several environment variables to customize its behavior:
+
+- `BOUNDED_CONTEXTS_PARENT_FOLDER`: Configures the parent folder for generated bounded contexts (default: `packages/domainlogic`)
+- `BASIC_TYPES_FROM`: Specifies the import path for basic types used in domain services (default: `@ddd-components/runtime`)
+- `BASIC_ERROR_TYPES_FROM`: Specifies the import path for basic error types used in domain services (default: `@ddd-components/runtime`)
+- `DYNAMODB_CONFIG_FROM`: Specifies the import path for DynamoDB configuration used in repository implementations (default: `@ddd-components/runtime`)
+
 ## Target Users
 Developers implementing Domain-Driven Design in TypeScript projects who want to quickly scaffold DDD components with consistent patterns.
