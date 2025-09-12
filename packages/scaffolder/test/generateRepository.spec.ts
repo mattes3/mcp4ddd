@@ -69,7 +69,7 @@ describe('Repository generator', () => {
         );
         expect(result.files[1]?.content).toContain("describe('PersonRepository'");
         expect(result.files[1]?.content).toContain(
-            '// test the method add(item: Person): Promise<void>',
+            '// test the method add(item: Person): AsyncResult<void, TechError>',
         );
     });
 });

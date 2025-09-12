@@ -2,10 +2,10 @@ import { describe, it } from 'node:test';
 import { expect } from 'expect';
 
 describe('{{repositoryName}}', () => { 
-{{#methods}}
+{{#each methods}}
     it('method {{name}}', async () => { 
-        // test the method {{name}}({{formattedParameters}}): Promise{{{angle resultType}}}
+        // test the method {{name}}({{{formattedParameters}}}): {{{formattedResultType}}}
     });
 
-{{/methods}}
+{{/each}}
 });
