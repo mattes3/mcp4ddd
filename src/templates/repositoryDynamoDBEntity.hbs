@@ -1,0 +1,88 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import {
+    DynamoDBDocumentClient,
+    QueryCommand,
+    type QueryCommandInput,
+} from '@aws-sdk/lib-dynamodb';
+
+import { Entity } from 'electrodb';
+
+import {
+    documentClientConfig,
+    dynamoDBClientConfiguration,
+    singleDBTableName,
+} from '{{dynamoDBConfigurationFrom}}';
+
+export function configure{{entityName}}Entity(): Entity {
+    const client = DynamoDBDocumentClient.from(
+        new DynamoDBClient(dynamoDBClientConfiguration),
+        documentClientConfig,
+    );
+
+    return new Entity(
+        {
+            model: {
+                entity: '{{entityName}}',
+                service: '{{service}}',
+                version: '{{version}}',
+            },
+
+            attributes: {
+                // see https://electrodb.dev/en/recipes/created-at-updated-at/
+                createdAt: {
+                    type: 'string',
+                    readOnly: true,
+                    required: true,
+                    default: () => new Date().toISOString(),
+                    set: () => new Date().toISOString(),
+                },
+                updatedAt: {
+                    type: 'string',
+                    watch: '*',
+                    required: true,
+                    default: () => new Date().toISOString(),
+                    set: () => new Date().toISOString(),
+                },
+
+            {{#each attributes}}
+                {{name}}: {
+                    type: '{{type}}'{{#if required}},
+                    required: true{{/if}}{{#if default}},
+                    default: {{#if isStringType}}'{{default}}'{{else}}{{default}}{{/if}}{{/if}}{{#if readOnly}},
+                    readOnly: true{{/if}}{{#if watch}},
+                    watch: ['{{watch}}']{{/if}}
+                },
+                {{/each}}
+            },
+
+            indexes: {
+                primary: {
+                    pk: {
+                    field: '{{indexes.primary.pk.field}}'{{#if indexes.primary.pk.composite}},
+                    composite: [{{#each indexes.primary.pk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}
+                    }{{#if indexes.primary.sk}},
+                    sk: {
+                    field: '{{indexes.primary.sk.field}}'{{#if indexes.primary.sk.composite}},
+                    composite: [{{#each indexes.primary.sk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}
+                    }{{/if}}
+                }{{#if indexes.globalSecondaryIndexes}},
+                {{#each indexes.globalSecondaryIndexes}}
+                {{name}}: {
+                    index: '{{name}}',
+                    pk: {
+                    field: '{{pk.field}}'{{#if pk.composite}},
+                    composite: [{{#each pk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}
+                    }{{#if sk}},
+                    sk: {
+                    field: '{{sk.field}}'{{#if sk.composite}},
+                    composite: [{{#each sk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}
+                    }{{/if}}
+                },
+                {{/each}}
+                {{/if}}
+            },
+        },
+
+        { client, table: singleDBTableName },
+    );
+}

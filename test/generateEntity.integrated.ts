@@ -60,10 +60,10 @@ const initMessage = buildJsonRpcMessage(1, 'initialize', {
 });
 child.stdin.write(initMessage);
 
-// Wait a bit then send the tool call
+// Wait a bit then send the entity generation request
 setTimeout(() => {
-    console.log('Sending tool request...');
-    const toolMessage = buildJsonRpcMessage(2, 'tools/call', {
+    console.log('Sending entity generation request...');
+    const entityMessage = buildJsonRpcMessage(2, 'tools/call', {
         name: 'generateEntity',
         arguments: {
             entityName: 'Invoice',
@@ -74,10 +74,24 @@ setTimeout(() => {
             layer: 'domain',
         },
     });
-    child.stdin.write(toolMessage);
+    child.stdin.write(entityMessage);
 
-    // Exit after a few seconds
+    // Send DynamoDB repository generation request after entity
     setTimeout(() => {
-        child.kill();
-    }, 3000);
+        console.log('Sending DynamoDB repository generation request...');
+        const dynamoMessage = buildJsonRpcMessage(3, 'tools/call', {
+            name: 'generateDynamoDBRepository',
+            arguments: {
+                boundedContext: 'stocks',
+                aggregateName: 'Invoice',
+                tableName: 'InvoicesTable',
+            },
+        });
+        child.stdin.write(dynamoMessage);
+
+        // Exit after a few more seconds
+        setTimeout(() => {
+            child.kill();
+        }, 3000);
+    }, 2000);
 }, 1000);

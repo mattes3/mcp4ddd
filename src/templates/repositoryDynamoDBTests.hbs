@@ -1,0 +1,135 @@
+import { describe, it, beforeEach, mock } from 'node:test';
+import { expect } from 'expect';
+
+import { {{repositoryName}}Impl } from '../src/adapter/persistence/{{repositoryName}}Impl.js';
+import { {{entityName}}Entity } from '../src/adapter/persistence/{{entityName}}Entity.js';
+
+describe('{{repositoryName}}Impl', () => {
+  let repository: {{repositoryName}}Impl;
+  let mockEntity: any;
+
+  beforeEach(() => {
+    // Mock the ElectroDB entity
+    mockEntity = {
+      create: mock.fn(() => ({ go: mock.fn() })),
+      query: {
+        primary: mock.fn(() => ({ go: mock.fn(() => ({ data: [] })) }))
+      },
+      update: mock.fn(() => ({ set: mock.fn(() => ({ go: mock.fn() })) })),
+      delete: mock.fn(() => ({ go: mock.fn() })),
+      scan: mock.fn(() => ({ go: mock.fn(() => ({ data: [] })) }))
+    };
+
+    // Replace the entity in the repository
+    repository = new {{repositoryName}}Impl();
+    (repository as any).entity = mockEntity;
+  });
+
+  describe('create', () => {
+    it('should create an item successfully', async () => {
+      const testItem = { id: 'test-id', name: 'Test Item' };
+
+      await repository.create(testItem);
+
+      expect(mockEntity.create).toHaveBeenCalledWith(testItem);
+      expect(mockEntity.create(testItem).go).toHaveBeenCalled();
+    });
+
+    it('should handle create errors', async () => {
+      const testItem = { id: 'test-id', name: 'Test Item' };
+      const error = new Error('DynamoDB error');
+      mockEntity.create(testItem).go.mock.mockImplementation(() => {
+        throw error;
+      });
+
+      await expect(repository.create(testItem)).rejects.toThrow('DynamoDB error');
+    });
+  });
+
+  describe('getById', () => {
+    it('should return an item when found', async () => {
+      const testId = 'test-id';
+      const expectedItem = { id: testId, name: 'Test Item' };
+      mockEntity.query.primary(testId).go.mock.mockResolvedValue({
+        data: [expectedItem]
+      });
+
+      const result = await repository.getById(testId);
+
+      expect(result).toEqual(expectedItem);
+      expect(mockEntity.query.primary).toHaveBeenCalledWith({ id: testId });
+    });
+
+    it('should throw error when item not found', async () => {
+      const testId = 'non-existent-id';
+      mockEntity.query.primary(testId).go.mock.mockResolvedValue({
+        data: []
+      });
+
+      await expect(repository.getById(testId)).rejects.toThrow('{{aggregateName}} not found');
+    });
+  });
+
+  describe('update', () => {
+    it('should update an item successfully', async () => {
+      const testId = 'test-id';
+      const updates = { name: 'Updated Name' };
+
+      await repository.update(testId, updates);
+
+      expect(mockEntity.update).toHaveBeenCalledWith({ id: testId });
+      expect(mockEntity.update({ id: testId }).set).toHaveBeenCalledWith(updates);
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete an item successfully', async () => {
+      const testId = 'test-id';
+
+      await repository.delete(testId);
+
+      expect(mockEntity.delete).toHaveBeenCalledWith({ id: testId });
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return all items', async () => {
+      const expectedItems = [
+        { id: '1', name: 'Item 1' },
+        { id: '2', name: 'Item 2' }
+      ];
+      mockEntity.scan.go.mock.mockResolvedValue({
+        data: expectedItems
+      });
+
+      const result = await (repository as any).findAll();
+
+      expect(result).toEqual(expectedItems);
+      expect(mockEntity.scan.go).toHaveBeenCalled();
+    });
+  });
+
+  describe('exists', () => {
+    it('should return true when item exists', async () => {
+      const testId = 'existing-id';
+      mockEntity.query.primary(testId).go.mock.mockResolvedValue({
+        data: [{ id: testId }]
+      });
+
+      const result = await (repository as any).exists(testId);
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false when item does not exist', async () => {
+      const testId = 'non-existent-id';
+      mockEntity.query.primary(testId).go.mock.mockResolvedValue({
+        data: []
+      });
+
+      const result = await (repository as any).exists(testId);
+
+      expect(result).toBe(false);
+    });
+  });
+});

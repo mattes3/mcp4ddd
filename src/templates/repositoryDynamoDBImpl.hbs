@@ -1,0 +1,42 @@
+import { configure{{entityName}}Entity } from './{{entityName}}Entity.js';
+import { {{repositoryName}} } from '../domainmodel/{{repositoryName}}.js';
+
+export function {{repositoryName}}Impl(): {{repositoryName}} {
+    const entity = configure{{entityName}}Entity();
+
+    return { 
+        {{#each methods}}
+
+        async {{name}}({ {{formattedParameterNames}} }) {
+            try {
+                {{#if isCreate}}
+                await entity.create({{parameters.[0].name}}).go();
+                {{/if}}
+                {{#if isGetById}}
+                const result = await entity.query.primary({ {{formattedParameterNames}} }).go();
+                if (!result.data.length) {
+                    throw new Error('{{aggregateName}} not found');
+                }
+                return result.data[0];
+                {{/if}}
+                {{#if isUpdate}}
+                await entity.update({ {{#each parametersWithIndex}}{{#unless isSecond}}{{name}}: {{name}}{{#unless @last}}, {{/unless}}{{/unless}}{{/each}} })
+                    .set({{parameters.[1].name}})
+                    .go();
+                {{/if}}
+                {{#if isDelete}}
+                await entity.delete({ {{formattedParameterNames}} }).go();
+                {{/if}}
+                {{#if isCustom}}
+                // Custom method - implement based on requirements
+                throw new Error('Method {{name}} not implemented');
+                {{/if}}
+            } catch (error) {
+                console.error('{{repositoryName}}Impl.{{name}} error:', error);
+                throw error;
+            }
+        },
+        {{/each}}
+
+    }
+}
