@@ -9,7 +9,8 @@ describe('Repository generator', () => {
         // Ensure consistent test behavior by setting the default parent folder
         process.env['BOUNDED_CONTEXTS_PARENT_FOLDER'] = 'packages/domainlogic';
     });
-    it('creates repository interface, implementation, and test files', async () => {
+
+    it('creates repository interface and test files', async () => {
         const params = {
             aggregateName: 'Person',
             methods: [
@@ -17,11 +18,6 @@ describe('Repository generator', () => {
                     name: 'findByName',
                     parameters: [{ name: 'name', type: 'string' }],
                     resultType: 'Person[]',
-                },
-                {
-                    name: 'findById',
-                    parameters: [{ name: 'id', type: 'UUID' }],
-                    resultType: 'Person',
                 },
             ],
             defaultAddAndRemoveMethods: true,
@@ -46,26 +42,33 @@ describe('Repository generator', () => {
 
         // Assert that we should have usable data, now!
 
-        expect(result.files).toHaveLength(3);
+        expect(result.files).toHaveLength(2);
         expect(result.files[0]?.path).toBe(
             'packages/domainlogic/stocks/domain/src/domainmodel/PersonRepository.ts',
         );
+        expect(result.files[0]?.content).toContain("import { Person } from './Person.ts';");
         expect(result.files[0]?.content).toContain('export interface PersonRepository {');
-        expect(result.files[0]?.content).toContain('add(item: Person): Promise<void>');
+        expect(result.files[0]?.content).toContain(
+            'add(params: { item: Person }): AsyncResult<void, TechError>',
+        );
+        expect(result.files[0]?.content).toContain(
+            "get(params: { id: Person['id'] }): AsyncResult<Option<Person>, TechError>",
+        );
+        expect(result.files[0]?.content).toContain(
+            "update(params: { id: Person['id'], updates: Partial<Omit<Person, 'id'>> }): AsyncResult<Person, TechError>",
+        );
+        expect(result.files[0]?.content).toContain(
+            'remove(params: { item: Person }): AsyncResult<void, TechError>',
+        );
+        expect(result.files[0]?.content).toContain(
+            'findByName(params: { name: string }): AsyncResult<Person[], TechError>',
+        );
 
         expect(result.files[1]?.path).toBe(
-            'packages/domainlogic/stocks/domain/src/adapter/persistence/PersonRepositoryImpl.ts',
-        );
-        expect(result.files[1]?.content).toContain(
-            'export const PersonRepositoryImpl: PersonRepository = {',
-        );
-        expect(result.files[1]?.content).toContain('async add(item: Person): Promise<void> {');
-
-        expect(result.files[2]?.path).toBe(
             'packages/domainlogic/stocks/domain/test/PersonRepository.spec.ts',
         );
-        expect(result.files[2]?.content).toContain("describe('PersonRepository'");
-        expect(result.files[2]?.content).toContain(
+        expect(result.files[1]?.content).toContain("describe('PersonRepository'");
+        expect(result.files[1]?.content).toContain(
             '// test the method add(item: Person): Promise<void>',
         );
     });

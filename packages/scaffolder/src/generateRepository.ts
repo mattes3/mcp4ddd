@@ -26,13 +26,13 @@ const inputSchema = z.object({
             })
             .describe('the method signatures for the repository interface'),
     ),
-    defaultAddAndRemoveMethods: z
+    defaultCrudMethods: z
         .boolean()
         .default(true)
         .describe(
             [
                 'indicates whether the generator shall create',
-                'default add() and remove() methods',
+                'default add(), get(id), update(id, updates) and remove() methods',
                 'for this repository interface',
             ].join(' '),
         ),
@@ -74,21 +74,41 @@ export const generateRepository = {
         content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { aggregateName, methods, defaultAddAndRemoveMethods, boundedContext, layer } =
-            params;
+        const {
+            aggregateName,
+            methods,
+            defaultCrudMethods: defaultAddAndRemoveMethods,
+            boundedContext,
+            layer,
+        } = params;
         const repositoryName = `${aggregateName}Repository`;
 
         const allMethods = [...methods];
 
+        const asyncResultType = (typeName: string) => `AsyncResult<${typeName}, TechError>`;
+
         if (defaultAddAndRemoveMethods) {
             allMethods.unshift({
+                name: 'update',
+                parameters: [
+                    { name: 'id', type: `${aggregateName}['id']` },
+                    { name: 'updates', type: `Partial<Omit<${aggregateName}, 'id'>>` },
+                ],
+                resultType: aggregateName,
+            });
+            allMethods.unshift({
+                name: 'get',
+                parameters: [{ name: 'id', type: `${aggregateName}['id']` }],
+                resultType: `Option<${aggregateName}>`,
+            });
+            allMethods.unshift({
                 name: 'remove',
-                parameters: [{ type: aggregateName, name: 'item' }],
+                parameters: [{ name: 'item', type: aggregateName }],
                 resultType: 'void',
             });
             allMethods.unshift({
                 name: 'add',
-                parameters: [{ type: aggregateName, name: 'item' }],
+                parameters: [{ name: 'item', type: aggregateName }],
                 resultType: 'void',
             });
         }
@@ -97,9 +117,15 @@ export const generateRepository = {
             ...method,
             resultType: method.resultType ?? 'void',
             formattedParameters: method.parameters.map((p) => `${p.name}: ${p.type}`).join(', '),
+            formattedResultType: asyncResultType(method.resultType ?? 'void'),
         }));
 
-        const dataForPlaceholders = { aggregateName, repositoryName, methods: processedMethods };
+        const dataForPlaceholders = {
+            aggregateName,
+            repositoryName,
+            methods: processedMethods,
+            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
+        };
 
         Handlebars.registerHelper('angle', (t) => `<${t}>`);
 

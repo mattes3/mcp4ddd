@@ -1,8 +1,11 @@
-//TODO: Add imports for the types that are being used in the parameter lists of the methods inside the repository interface, below.
+import { TechError } from '{{{basicErrorTypesFrom}}}';
+import type { AsyncResult, Option } from 'ts-results-es';
+
+import { {{aggregateName}} } from './{{aggregateName}}.ts';
 
 // @Repository
 export interface {{repositoryName}} {
-{{#methods}}
-    {{name}}(params: { {{formattedParameters}} }): Promise{{{angle resultType}}};
-{{/methods}}
+{{#each methods}}
+    {{name}}(params: { {{{formattedParameters}}} }): {{{formattedResultType}}};
+{{/each}}
 };
