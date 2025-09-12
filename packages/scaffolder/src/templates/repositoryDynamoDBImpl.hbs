@@ -1,8 +1,8 @@
-import { configure{{entityName}}Entity } from './{{entityName}}Entity.js';
+import { configure{{aggregateName}}Entity } from './{{aggregateName}}Entity.js';
 import { {{repositoryName}} } from '../domainmodel/{{repositoryName}}.js';
 
 export function {{repositoryName}}Impl(): {{repositoryName}} {
-    const entity = configure{{entityName}}Entity();
+    const entity = configure{{aggregateName}}Entity();
 
     return { 
         {{#each methods}}

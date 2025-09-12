@@ -19,7 +19,6 @@ const inputSchema = z.object({
         .enum(['domain', 'application'])
         .default('domain')
         .describe('The layer where the component should be generated'),
-    entityName: z.string().optional().describe('ElectroDB entity name (defaults to aggregateName)'),
     service: z.string().optional().describe('ElectroDB service name (defaults to boundedContext)'),
     version: z.string().default('1').describe('ElectroDB entity version'),
 
@@ -126,7 +125,6 @@ export const generateDynamoDBRepository = {
             boundedContext,
             aggregateName,
             layer = 'domain',
-            entityName = aggregateName,
             service = boundedContext,
             version = '1',
             attributes = [],
@@ -199,7 +197,6 @@ export const generateDynamoDBRepository = {
             aggregateName,
             repositoryName,
             layer,
-            entityName,
             service,
             version,
             attributes: processedAttributes,
@@ -218,7 +215,7 @@ export const generateDynamoDBRepository = {
 
         const files = [
             {
-                path: `packages/domainlogic/${boundedContext}/${layer}/src/adapter/persistence/${entityName}Entity.ts`,
+                path: `packages/domainlogic/${boundedContext}/${layer}/src/adapter/persistence/${aggregateName}Entity.ts`,
                 content: entityContent,
             },
             {

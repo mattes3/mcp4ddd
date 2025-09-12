@@ -33,9 +33,7 @@ describe('DynamoDB Repository generator', () => {
         expect(result.files[0]?.path).toBe(
             'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderEntity.ts',
         );
-        expect(result.files[0]?.content).toContain(
-            'export function configureOrderEntity(): Entity {',
-        );
+        expect(result.files[0]?.content).toContain('export function configureOrderEntity() {');
 
         expect(result.files[1]?.path).toBe(
             'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderRepositoryImpl.ts',
@@ -54,8 +52,6 @@ describe('DynamoDB Repository generator', () => {
         const params = {
             boundedContext: 'stocks',
             aggregateName: 'Order',
-            tableName: 'OrdersTable',
-            entityName: 'CustomOrderEntity',
             service: 'custom-service',
             version: '2.0',
         };
@@ -66,7 +62,7 @@ describe('DynamoDB Repository generator', () => {
             .object(generateDynamoDBRepository.config.outputSchema)
             .parse(resultAsText.structuredContent);
 
-        expect(result.files[0]?.content).toContain("entity: 'CustomOrderEntity'");
+        expect(result.files[0]?.content).toContain("entity: 'Order'");
         expect(result.files[0]?.content).toContain("service: 'custom-service'");
         expect(result.files[0]?.content).toContain("version: '2.0'");
     });

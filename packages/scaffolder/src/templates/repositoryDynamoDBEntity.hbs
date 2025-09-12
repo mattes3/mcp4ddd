@@ -13,7 +13,7 @@ import {
     singleDBTableName,
 } from '{{dynamoDBConfigurationFrom}}';
 
-export function configure{{entityName}}Entity(): Entity {
+export function configure{{aggregateName}}Entity() {
     const client = DynamoDBDocumentClient.from(
         new DynamoDBClient(dynamoDBClientConfiguration),
         documentClientConfig,
@@ -22,7 +22,7 @@ export function configure{{entityName}}Entity(): Entity {
     return new Entity(
         {
             model: {
-                entity: '{{entityName}}',
+                entity: '{{aggregateName}}',
                 service: '{{service}}',
                 version: '{{version}}',
             },
@@ -58,24 +58,24 @@ export function configure{{entityName}}Entity(): Entity {
             indexes: {
                 primary: {
                     pk: {
-                    field: '{{indexes.primary.pk.field}}'{{#if indexes.primary.pk.composite}},
-                    composite: [{{#each indexes.primary.pk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}
+                    field: '{{indexes.primary.pk.field}}',
+                    composite: [{{#each indexes.primary.pk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]
                     }{{#if indexes.primary.sk}},
                     sk: {
-                    field: '{{indexes.primary.sk.field}}'{{#if indexes.primary.sk.composite}},
-                    composite: [{{#each indexes.primary.sk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}
+                    field: '{{indexes.primary.sk.field}}',
+                    composite: [{{#each indexes.primary.sk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]
                     }{{/if}}
                 }{{#if indexes.globalSecondaryIndexes}},
                 {{#each indexes.globalSecondaryIndexes}}
                 {{name}}: {
                     index: '{{name}}',
                     pk: {
-                    field: '{{pk.field}}'{{#if pk.composite}},
-                    composite: [{{#each pk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}
+                    field: '{{pk.field}}',
+                    composite: [{{#each pk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]
                     }{{#if sk}},
                     sk: {
-                    field: '{{sk.field}}'{{#if sk.composite}},
-                    composite: [{{#each sk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]{{/if}}
+                    field: '{{sk.field}}',
+                    composite: [{{#each sk.composite}}'{{this}}'{{#unless @last}}, {{/unless}}{{/each}}]
                     }{{/if}}
                 },
                 {{/each}}
