@@ -23,8 +23,8 @@ describe('domain service generator', () => {
         const parsed = z.object(generateDomainService.config.inputSchema).parse(params);
 
         // invoke the tool
-        process.env['BASIC_TYPES_FROM'] = '../../BasicModelTypes.js';
-        process.env['BASIC_ERROR_TYPES_FROM'] = '../../BasicErrorTypes.js';
+        process.env['BASIC_TYPES_FROM'] = '@ddd-components/runtime';
+        process.env['BASIC_ERROR_TYPES_FROM'] = '@ddd-components/runtime';
         const resultAsText = await generateDomainService.execute(parsed);
 
         // assert that it has generated text output

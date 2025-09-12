@@ -1,0 +1,29 @@
+{
+    "name": "@ddd-components/testbed",
+    "version": "1.0.0",
+    "description": "Testbed for experimenting with DDD component generation",
+    "main": "dist/index.js",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsx src/index.ts"
+    },
+    "keywords": [
+        "ddd",
+        "testbed",
+        "experimentation"
+    ],
+    "author": "Matthias Bohlen",
+    "license": "MIT",
+    "devDependencies": {
+        "@tsconfig/node22": "^22.0.2",
+        "@tsconfig/strictest": "^2.0.5",
+        "@types/node": "^24.3.1",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2"
+    },
+    "dependencies": {
+        "@ddd-components/runtime": "workspace:*",
+        "ts-results-es": "^6.0.0"
+    }
+}

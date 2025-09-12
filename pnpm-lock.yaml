@@ -58,6 +58,102 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.1)(tsx@4.20.5)
 
+  packages/runtime:
+    dependencies:
+      ts-results-es:
+        specifier: ^6.0.0
+        version: 6.0.0
+    devDependencies:
+      '@tsconfig/node22':
+        specifier: ^22.0.2
+        version: 22.0.2
+      '@tsconfig/strictest':
+        specifier: ^2.0.5
+        version: 2.0.5
+      '@types/node':
+        specifier: ^24.3.1
+        version: 24.3.1
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
+  packages/scaffolder:
+    dependencies:
+      '@ddd-components/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.17.5
+        version: 1.17.5
+      handlebars:
+        specifier: ^4.7.8
+        version: 4.7.8
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+    devDependencies:
+      '@aws-sdk/client-dynamodb':
+        specifier: ^3.887.0
+        version: 3.887.0
+      '@aws-sdk/lib-dynamodb':
+        specifier: ^3.887.0
+        version: 3.887.0(@aws-sdk/client-dynamodb@3.887.0)
+      '@tsconfig/node22':
+        specifier: ^22.0.2
+        version: 22.0.2
+      '@tsconfig/strictest':
+        specifier: ^2.0.5
+        version: 2.0.5
+      '@types/node':
+        specifier: ^24.3.1
+        version: 24.3.1
+      electrodb:
+        specifier: ^2.15.1
+        version: 2.15.1(@aws-sdk/client-dynamodb@3.887.0)
+      esbuild:
+        specifier: ^0.25.9
+        version: 0.25.9
+      expect:
+        specifier: ^30.1.2
+        version: 30.1.2
+      prettier:
+        specifier: ^3.6.2
+        version: 3.6.2
+      tsx:
+        specifier: ^4.20.5
+        version: 4.20.5
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@24.3.1)(tsx@4.20.5)
+
+  packages/testbed:
+    dependencies:
+      '@ddd-components/runtime':
+        specifier: workspace:*
+        version: link:../runtime
+      ts-results-es:
+        specifier: ^6.0.0
+        version: 6.0.0
+    devDependencies:
+      '@tsconfig/node22':
+        specifier: ^22.0.2
+        version: 22.0.2
+      '@tsconfig/strictest':
+        specifier: ^2.0.5
+        version: 2.0.5
+      '@types/node':
+        specifier: ^24.3.1
+        version: 24.3.1
+      tsx:
+        specifier: ^4.20.5
+        version: 4.20.5
+      typescript:
+        specifier: ^5.9.2
+        version: 5.9.2
+
 packages:
 
   '@aws-crypto/sha256-browser@5.2.0':

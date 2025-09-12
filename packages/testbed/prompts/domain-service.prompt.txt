@@ -1,0 +1,17 @@
+Generate a domain service for transferring money between accounts.
+
+Service details:
+- Name: transferMoney
+- Parameters:
+  - fromAccountId: string
+  - toAccountId: string
+  - amount: number
+- Returns: Result<void, TransferError>
+- Injected Dependencies:
+  - accountRepository: AccountRepository
+  - transferRepository: TransferRepository
+- Bounded Context: accounts
+- Layer: domain
+
+The service should validate that both accounts exist, check sufficient funds,
+create a transfer record, and update both account balances.

@@ -11,7 +11,7 @@ describe('DynamoDB Repository generator', () => {
             aggregateName: 'Order',
         };
 
-        process.env['DYNAMODB_CONFIG_FROM'] = '../../DynamoDBConfig.js';
+        process.env['DYNAMODB_CONFIG_FROM'] = '@ddd-components/runtime';
 
         // Validate input with Zod (like MCP would do)
         const parsed = z.object(generateDynamoDBRepository.config.inputSchema).parse(params);

@@ -54,7 +54,7 @@ export const generateEntity = {
     name: 'generateEntity',
     config: {
         title: 'Entity generator',
-        description: 'Generate a DDD entity, optionally as an aggregate root.',
+        description: 'Generates a DDD entity, optionally as an aggregate root.',
         inputSchema: inputSchema.shape,
         outputSchema: outputSchema.shape,
     },

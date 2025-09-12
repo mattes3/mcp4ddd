@@ -1,0 +1,26 @@
+Generate a DynamoDB repository for the Order aggregate.
+
+Repository details:
+- Bounded Context: orders
+- Aggregate Name: Order
+- Layer: domain
+- Entity Name: OrderEntity
+- Service: orders-service
+- Version: 1.0
+
+Attributes:
+- id: string (required)
+- customerId: string (required)
+- total: number (required)
+- status: string (required, default: "pending")
+- createdAt: string (required)
+- updatedAt: string (required)
+
+Indexes:
+- Primary: pk=id, sk=customerId
+- GSI: CustomerOrders (pk=customerId, sk=status)
+
+Custom Methods:
+- findByCustomerId(customerId: string): Order[]
+- findPendingOrders(): Order[]
+- updateStatus(id: string, status: string): void

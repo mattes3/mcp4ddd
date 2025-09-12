@@ -12,4 +12,5 @@ export const documentClientConfig = {
     },
 };
 
+//TODO: remove this and make it configurable via an env variable in the generator
 export const singleDBTableName = 'MySingleTableName';

@@ -113,7 +113,7 @@ export const generateDynamoDBRepository = {
     config: {
         title: 'DynamoDB Repository generator',
         description:
-            'Generate a DynamoDB repository implementation using ElectroDB for an aggregate.',
+            'Generates a DynamoDB repository implementation using ElectroDB for an aggregate.',
         inputSchema: inputSchema.shape,
         outputSchema: outputSchema.shape,
     },
@@ -192,8 +192,7 @@ export const generateDynamoDBRepository = {
             })),
         }));
 
-        const getEnv = (key: string): string =>
-            process.env[key] ?? `*** configure ${key} in your MCP environment variables ***`;
+        const getEnv = (key: string): string => process.env[key] ?? '@ddd-components/runtime';
 
         const dataForPlaceholders = {
             boundedContext,

@@ -2,16 +2,39 @@
 
 ## System Architecture
 
-mcp4ddd is implemented as an MCP (Model Context Protocol) server that runs as a local process and communicates with MCP clients via standard input/output streams. The server exposes four generation tools that create Domain-Driven Design components using templated code generation.
+mcp4ddd is implemented as a monorepo with three packages:
+
+1. **@ddd-components/scaffolder**: MCP server that generates DDD components
+2. **@ddd-components/runtime**: Shared runtime library with utilities
+3. **@ddd-components/testbed**: Safe experimentation environment
+
+The MCP server runs as a local process and communicates with MCP clients via standard input/output streams. The server exposes four generation tools that create Domain-Driven Design components using templated code generation.
 
 ## Source Code Paths
 
+### Scaffolder Package (`packages/scaffolder/`)
 - `src/index.ts` - Main server entry point and tool registration
 - `src/generate*.ts` - Individual generator implementations (entity, valueObject, repository, domainService)
 - `src/templates/` - Handlebars templates for code generation
 - `src/FieldSchema.ts` - Shared Zod schema for field definitions
 - `test/` - Unit tests for generators
+- `tsconfig.json` - Main TypeScript configuration with project references
+- `tsconfig.src.json` - Source files TypeScript configuration
+- `tsconfig.test.json` - Test files TypeScript configuration
 - `dist/index.js` - Compiled output (generated)
+
+### Runtime Package (`packages/runtime/`)
+- `src/BasicErrorTypes.ts` - Error type definitions
+- `src/BasicModelTypes.ts` - Basic model type utilities
+- `src/DynamoDBConfig.ts` - DynamoDB configuration
+- `src/WorkflowStart.ts` - Workflow utilities
+- `src/index.ts` - Main exports
+- `dist/` - Compiled output
+
+### Testbed Package (`packages/testbed/`)
+- `src/index.ts` - Test application entry point
+- `prompts/` - Example prompt files for testing
+- `dist/` - Compiled output
 
 ## Key Technical Decisions
 
@@ -48,7 +71,7 @@ Generated repository interfaces follow DDD repository patterns with optional CRU
 ## Component Relationships
 
 ```
-MCP Client <-> MCP Server (ddd-scaffolder)
+MCP Client <-> MCP Server (@ddd-components/scaffolder)
     |
     +-> generateEntity
     +-> generateValueObject
@@ -58,6 +81,16 @@ MCP Client <-> MCP Server (ddd-scaffolder)
         +-> Zod Schemas (validation)
         +-> Handlebars Templates (code generation)
         +-> File Output (TypeScript + Tests)
+            |
+            +-> @ddd-components/runtime (shared utilities)
+```
+
+```
+@ddd-components/testbed
+    |
+    +-> Safe experimentation environment
+    +-> Example prompts for testing
+    +-> Imports from @ddd-components/runtime
 ```
 
 ## Critical Implementation Paths

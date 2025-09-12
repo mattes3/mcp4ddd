@@ -65,7 +65,7 @@ export const generateRepository = {
     name: 'generateRepository',
     config: {
         title: 'Repository generator',
-        description: 'Generate a repository interface for an aggregate.',
+        description: 'Generates a repository interface for an aggregate.',
         inputSchema: inputSchema.shape,
         outputSchema: outputSchema.shape,
     },

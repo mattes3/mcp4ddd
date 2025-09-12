@@ -1,0 +1,15 @@
+Generate a DDD entity for a User aggregate in the "accounts" bounded context.
+
+Entity details:
+- Name: User
+- Aggregate Root: true
+- Attributes:
+  - id: string
+  - email: string
+  - firstName: string
+  - lastName: string
+  - createdAt: Date
+  - updatedAt: Date
+- Methods:
+  - updateProfile(firstName: string, lastName: string): void
+  - changeEmail(newEmail: string): void

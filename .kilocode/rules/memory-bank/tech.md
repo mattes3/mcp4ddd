@@ -26,11 +26,21 @@
 ### Project Structure
 ```
 mcp4ddd/
-├── src/                 # Source TypeScript files
-├── test/               # Test files
-├── dist/               # Compiled output (generated)
-├── src/templates/      # Handlebars templates
-├── types/              # Type definitions
+├── packages/
+│   ├── scaffolder/     # @ddd-components/scaffolder
+│   │   ├── src/        # MCP server source files
+│   │   ├── test/       # Unit tests
+│   │   ├── types/      # Type definitions
+│   │   └── dist/       # Compiled output
+│   ├── runtime/        # @ddd-components/runtime
+│   │   ├── src/        # Shared utilities
+│   │   └── dist/       # Compiled output
+│   └── testbed/        # @ddd-components/testbed
+│       ├── src/        # Test application
+│       ├── prompts/    # Example prompts
+│       └── dist/       # Compiled output
+├── package.json        # Root workspace config
+├── pnpm-workspace.yaml # Workspace configuration
 └── tsconfig.*.json     # TypeScript configurations
 ```
 
@@ -82,11 +92,13 @@ mcp4ddd/
 ## Tool Usage Patterns
 
 ### Package Management
-- `pnpm install`: Install dependencies
-- `pnpm build`: Compile and bundle the project
-- `pnpm dev`: Build and run in development mode
-- `pnpm test`: Run test suite
-- `pnpm test:watch`: Run tests in watch mode
+- `pnpm install`: Install dependencies for all packages
+- `pnpm -r build`: Compile and bundle all packages
+- `pnpm dev`: Build and run the MCP server
+- `pnpm test`: Run test suite for the scaffolder package
+- `pnpm test:watch`: Run tests in watch mode for the scaffolder package
+- `pnpm --filter @ddd-components/scaffolder <command>`: Run command for specific package
+- `pnpm --filter @ddd-components/testbed dev`: Run testbed in development mode
 
 ### Development Workflow
 1. Make changes to source files or templates

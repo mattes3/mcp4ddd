@@ -1,9 +1,12 @@
 {
     "references": [
-        // Source files (e.g. everything under "./src").
-        { "path": "./tsconfig.src.json" },
+        // Runtime package
+        { "path": "./packages/runtime" },
 
-        // Integration tests (e.g. everything under "./test").
-        { "path": "./tsconfig.test.json" }
+        // Scaffolder package
+        { "path": "./packages/scaffolder" },
+
+        // Testbed package
+        { "path": "./packages/testbed" }
     ]
 }

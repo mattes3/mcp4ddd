@@ -5,10 +5,10 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "build": "tsc -b && esbuild src/index.ts --bundle --outfile=dist/index.js --format=esm --platform=node --loader:.hbs=text",
-        "dev": "pnpm build && pnpm node dist/index.js",
-        "test": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec test/*.spec.ts",
-        "test:watch": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec --watch test/*.spec.ts"
+        "build": "pnpm -r build",
+        "dev": "pnpm --filter @ddd-components/scaffolder dev",
+        "test": "pnpm --filter @ddd-components/scaffolder test",
+        "test:watch": "pnpm --filter @ddd-components/scaffolder test:watch"
     },
     "keywords": [],
     "author": "Matthias Bohlen",

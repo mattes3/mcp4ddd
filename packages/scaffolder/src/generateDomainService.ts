@@ -41,7 +41,7 @@ export const generateDomainService = {
     name: 'generateDomainService',
     config: {
         title: 'Domain Service generator',
-        description: 'Generate a domain service as a function with optional injected dependencies',
+        description: 'Generates a domain service as a function with optional injected dependencies',
         inputSchema: inputSchema.shape,
         outputSchema: outputSchema.shape,
     },
@@ -94,8 +94,7 @@ export const generateDomainService = {
         const asyncResultType = `Async${wrappedResultType}`;
         const promiseOfResultType = `Promise<${wrappedResultType}>`;
 
-        const getEnv = (key: string): string =>
-            process.env[key] ?? `*** configure ${key} in your MCP environment variables ***`;
+        const getEnv = (key: string): string => process.env[key] ?? '@ddd-components/runtime';
 
         const dataForPlaceholders = {
             serviceName,

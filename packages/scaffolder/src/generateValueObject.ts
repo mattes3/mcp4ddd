@@ -53,7 +53,7 @@ export const generateValueObject = {
     name: 'generateValueObject',
     config: {
         title: 'Value object generator',
-        description: 'Generate a DDD value object.',
+        description: 'Generates a DDD value object.',
         inputSchema: inputSchema.shape,
         outputSchema: outputSchema.shape,
     },

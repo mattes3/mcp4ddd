@@ -7,7 +7,7 @@ mcp4ddd
 1.0.0
 
 ## Description
-An MCP server that generates code based on the Domain-Driven Design methodology.
+A monorepo containing an MCP server that generates code based on the Domain-Driven Design methodology, along with shared runtime utilities and a testbed for safe experimentation.
 
 ## Author
 Matthias Bohlen
