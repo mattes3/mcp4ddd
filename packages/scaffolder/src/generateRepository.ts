@@ -2,7 +2,6 @@ import Handlebars from 'handlebars';
 import { z } from 'zod';
 
 import repositoryTemplate from './templates/repository.hbs';
-import repositoryImplTemplate from './templates/repositoryImpl.hbs';
 import testTemplate from './templates/repositoryTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
@@ -105,8 +104,6 @@ export const generateRepository = {
         Handlebars.registerHelper('angle', (t) => `<${t}>`);
 
         const repositoryContent = Handlebars.compile(repositoryTemplate)(dataForPlaceholders);
-        const repositoryImplContent =
-            Handlebars.compile(repositoryImplTemplate)(dataForPlaceholders);
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
         const boundedContextsParentFolder = getEnv(
@@ -118,10 +115,6 @@ export const generateRepository = {
             {
                 path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${repositoryName}.ts`,
                 content: repositoryContent,
-            },
-            {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/adapter/persistence/${repositoryName}Impl.ts`,
-                content: repositoryImplContent,
             },
             {
                 path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${repositoryName}.spec.ts`,

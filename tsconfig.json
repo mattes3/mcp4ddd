@@ -7,6 +7,6 @@
         { "path": "./packages/scaffolder" },
 
         // Testbed package
-        { "path": "./packages/testbed" }
+        { "path": "./packages/testbed/domain" }
     ]
 }

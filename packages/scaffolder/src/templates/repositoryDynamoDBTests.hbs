@@ -1,11 +1,12 @@
 import { describe, it, beforeEach, mock } from 'node:test';
 import { expect } from 'expect';
 
+import { {{repositoryName}} } from '../src/domainmodel/{{repositoryName}}.js';
 import { {{repositoryName}}Impl } from '../src/adapter/persistence/{{repositoryName}}Impl.js';
 import { {{aggregateName}}Entity } from '../src/adapter/persistence/{{aggregateName}}Entity.js';
 
 describe('{{repositoryName}}Impl', () => {
-  let repository: {{repositoryName}}Impl;
+  let repository: {{repositoryName}};
   let mockEntity: any;
 
   beforeEach(() => {
@@ -21,7 +22,7 @@ describe('{{repositoryName}}Impl', () => {
     };
 
     // Replace the entity in the repository
-    repository = new {{repositoryName}}Impl();
+    repository = {{repositoryName}}Impl();
     (repository as any).entity = mockEntity;
   });
 

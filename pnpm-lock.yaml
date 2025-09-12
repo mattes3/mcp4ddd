@@ -129,11 +129,11 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.1)(tsx@4.20.5)
 
-  packages/testbed:
+  packages/testbed/domain:
     dependencies:
       '@ddd-components/runtime':
         specifier: workspace:*
-        version: link:../runtime
+        version: link:../../runtime
       ts-results-es:
         specifier: ^6.0.0
         version: 6.0.0

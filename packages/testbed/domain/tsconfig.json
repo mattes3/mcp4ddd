@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "composite": true
+    },
+
+    "references": [
+        // Source files (e.g. everything under "./src").
+        { "path": "./tsconfig.src.json" },
+
+        // Integration tests (e.g. everything under "./test").
+        { "path": "./tsconfig.test.json" }
+    ]
+}
