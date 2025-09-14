@@ -46,19 +46,21 @@ describe('Repository generator', () => {
         expect(result.files[0]?.path).toBe(
             'packages/domainlogic/stocks/domain/src/domainmodel/PersonRepository.ts',
         );
-        expect(result.files[0]?.content).toContain("import { Person } from './Person.ts';");
+        expect(result.files[0]?.content).toContain(
+            "import type { Person, PersonData } from './Person.ts';",
+        );
         expect(result.files[0]?.content).toContain('export interface PersonRepository {');
         expect(result.files[0]?.content).toContain(
-            'add(params: { item: Person }): AsyncResult<void, TechError>',
+            'add(params: { item: PersonData }): AsyncResult<void, TechError>',
         );
         expect(result.files[0]?.content).toContain(
             "get(params: { id: Person['id'] }): AsyncResult<Option<Person>, TechError>",
         );
         expect(result.files[0]?.content).toContain(
-            "update(params: { id: Person['id'], updates: Partial<Omit<Person, 'id'>> }): AsyncResult<Person, TechError>",
+            "update(params: { id: Person['id'], updates: Partial<Omit<PersonData, 'id'>> }): AsyncResult<Person, TechError>;",
         );
         expect(result.files[0]?.content).toContain(
-            'remove(params: { item: Person }): AsyncResult<void, TechError>',
+            'remove(params: { item: PersonData }): AsyncResult<void, TechError>;',
         );
         expect(result.files[0]?.content).toContain(
             'findByName(params: { name: string }): AsyncResult<Person[], TechError>',
@@ -69,7 +71,7 @@ describe('Repository generator', () => {
         );
         expect(result.files[1]?.content).toContain("describe('PersonRepository'");
         expect(result.files[1]?.content).toContain(
-            '// test the method add(item: Person): AsyncResult<void, TechError>',
+            '// test the method add(item: PersonData): AsyncResult<void, TechError>',
         );
     });
 });

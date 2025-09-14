@@ -13,6 +13,7 @@ describe('DynamoDB Repository generator', () => {
         const params = {
             boundedContext: 'stocks',
             aggregateName: 'Order',
+            attributes: [],
         };
 
         process.env['DYNAMODB_CONFIG_FROM'] = '@ddd-components/runtime';
@@ -45,6 +46,8 @@ describe('DynamoDB Repository generator', () => {
         expect(result.files[1]?.content).toContain(
             'export function OrderRepositoryImpl(): OrderRepository {',
         );
+        expect(result.files[1]?.content).toContain('failed:\\n');
+        expect(result.files[1]?.content).not.toContain('failed:\\\\n');
 
         expect(result.files[2]?.path).toBe(
             'packages/domainlogic/stocks/domain/test/OrderRepositoryImpl.spec.ts',
@@ -58,6 +61,7 @@ describe('DynamoDB Repository generator', () => {
             aggregateName: 'Order',
             service: 'custom-service',
             version: '2.0',
+            attributes: [],
         };
 
         const parsed = z.object(generateDynamoDBRepository.config.inputSchema).parse(params);
@@ -77,6 +81,7 @@ describe('DynamoDB Repository generator', () => {
             aggregateName: 'Order',
             tableName: 'OrdersTable',
             layer: 'application',
+            attributes: [],
         };
 
         const parsed = z.object(generateDynamoDBRepository.config.inputSchema).parse(params);
@@ -143,6 +148,7 @@ describe('DynamoDB Repository generator', () => {
             boundedContext: 'stocks',
             aggregateName: 'Order',
             tableName: 'OrdersTable',
+            attributes: [],
             methods: [
                 {
                     name: 'findByUserId',
@@ -166,6 +172,5 @@ describe('DynamoDB Repository generator', () => {
         const repositoryContent = result.files[1]?.content;
         expect(repositoryContent).toContain('async findByUserId({ userId }) {');
         expect(repositoryContent).toContain('async findPendingOrders({  }) {');
-        expect(repositoryContent).toContain('// Custom method - implement based on requirements');
     });
 });
