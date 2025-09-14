@@ -1,7 +1,8 @@
 import { TechError } from '{{{basicErrorTypesFrom}}}';
 import type { AsyncResult, Option } from 'ts-results-es';
 
-import type { {{aggregateName}}, {{aggregateName}}Data } from './{{aggregateName}}.ts';
+// Using .js extensions for ESM compliance with TypeScript's nodenext moduleResolution
+import type { {{aggregateName}}, {{aggregateName}}Data } from './{{aggregateName}}.js';
 
 // @Repository
 export interface {{repositoryName}} {

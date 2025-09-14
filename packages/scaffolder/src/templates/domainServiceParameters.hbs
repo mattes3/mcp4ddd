@@ -4,6 +4,7 @@ import z from 'zod';
 import { type Branded } from '{{basicTypesFrom}}';
 import { zodValidationError } from '{{basicErrorTypesFrom}}';
 
+// Using .js extensions for ESM compliance with TypeScript's nodenext moduleResolution
 import { type {{serviceErrorType}} } from './{{serviceErrorType}}s.js';
 
 const {{serviceParametersSchema}} = z.object({
