@@ -3,7 +3,6 @@ import { z } from 'zod';
 
 import dynamoDBEntityTemplate from './templates/repositoryDynamoDBEntity.hbs';
 import dynamoDBRepositoryTemplate from './templates/repositoryDynamoDBImpl.hbs';
-import dynamoDBTestTemplate from './templates/repositoryDynamoDBTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
 
@@ -183,11 +182,9 @@ export const generateDynamoDBRepository = {
 
         const entityTemplate = Handlebars.compile(dynamoDBEntityTemplate);
         const repositoryTemplateCompiled = Handlebars.compile(dynamoDBRepositoryTemplate);
-        const testTemplateCompiled = Handlebars.compile(dynamoDBTestTemplate);
 
         const entityContent = entityTemplate(dataForPlaceholders);
         const repositoryContent = repositoryTemplateCompiled(dataForPlaceholders);
-        const testContent = testTemplateCompiled(dataForPlaceholders);
 
         const boundedContextsParentFolder = getEnv(
             'BOUNDED_CONTEXTS_PARENT_FOLDER',
@@ -202,10 +199,6 @@ export const generateDynamoDBRepository = {
             {
                 path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/adapter/persistence/${repositoryName}Impl.ts`,
                 content: repositoryContent,
-            },
-            {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${repositoryName}Impl.spec.ts`,
-                content: testContent,
             },
         ];
 

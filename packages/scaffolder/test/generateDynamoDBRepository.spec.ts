@@ -34,7 +34,7 @@ describe('DynamoDB Repository generator', () => {
             .parse(resultAsText.structuredContent);
 
         // Assert that we should have usable data
-        expect(result.files).toHaveLength(3);
+        expect(result.files).toHaveLength(2);
         expect(result.files[0]?.path).toBe(
             'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderEntity.ts',
         );
@@ -48,11 +48,6 @@ describe('DynamoDB Repository generator', () => {
         );
         expect(result.files[1]?.content).toContain('failed:\\n');
         expect(result.files[1]?.content).not.toContain('failed:\\\\n');
-
-        expect(result.files[2]?.path).toBe(
-            'packages/domainlogic/stocks/domain/test/OrderRepositoryImpl.spec.ts',
-        );
-        expect(result.files[2]?.content).toContain("describe('OrderRepositoryImpl'");
     });
 
     it('uses custom entity name and service when provided', async () => {
@@ -95,9 +90,6 @@ describe('DynamoDB Repository generator', () => {
         );
         expect(result.files[1]?.path).toBe(
             'packages/domainlogic/stocks/application/src/adapter/persistence/OrderRepositoryImpl.ts',
-        );
-        expect(result.files[2]?.path).toBe(
-            'packages/domainlogic/stocks/application/test/OrderRepositoryImpl.spec.ts',
         );
     });
 
