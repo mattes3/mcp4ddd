@@ -24,11 +24,13 @@ const inputSchema = z.object({
     service: z.string().optional().describe('ElectroDB service name (defaults to boundedContext)'),
     version: z.string().default('1').describe('ElectroDB entity version'),
 
-    // DynamoDB schema (optional with defaults)
+    // Business domain attributes of the aggregate that will become attributes of the DynamoDB schema
     attributes: z
         .array(
             z.object({
-                name: z.string(),
+                name: z.string().refine((val) => !['createdAt', 'updatedAt'].includes(val), {
+                    message: 'This value is not allowed as timestamps are managed internally!',
+                }),
                 type: z.enum(['string', 'number', 'boolean', 'list', 'map']),
                 required: z.boolean().default(true),
                 default: z.any().optional(),
@@ -36,8 +38,14 @@ const inputSchema = z.object({
                 watch: z.string().optional(),
             }),
         )
-        .optional()
-        .describe('DynamoDB item attributes'),
+        .describe(
+            [
+                'Business domain attributes of the aggregate to be persisted.',
+                'These will also become attributes of the DynamoDB entity.',
+                'createdAt and updatedAt timestamps are automatically',
+                "added by this tool, using ElectroDB's built-in timestamp management.",
+            ].join(' '),
+        ),
 
     indexes: z
         .object({
