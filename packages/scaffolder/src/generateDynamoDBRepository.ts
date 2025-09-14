@@ -143,48 +143,16 @@ export const generateDynamoDBRepository = {
             },
         };
 
-        // Provide default methods if none specified
-        const defaultMethods = methods.concat([
-            {
-                name: 'create',
-                parameters: [{ name: 'item', type: aggregateName }],
-                resultType: 'void',
-            },
-            {
-                name: 'getById',
-                parameters: [{ name: 'id', type: 'string' }],
-                resultType: aggregateName,
-            },
-            {
-                name: 'update',
-                parameters: [
-                    { name: 'id', type: 'string' },
-                    { name: 'updates', type: `Partial<${aggregateName}>` },
-                ],
-                resultType: 'void',
-            },
-            {
-                name: 'delete',
-                parameters: [{ name: 'id', type: 'string' }],
-                resultType: 'void',
-            },
-        ]);
-
         const processedAttributes = attributes.map((attr) => ({
             ...attr,
             isStringType: attr.type === 'string',
         }));
 
-        const processedMethods = defaultMethods.map((method) => ({
+        const processedMethods = methods.map((method) => ({
             ...method,
             resultType: method.resultType ?? 'void',
             formattedParameters: method.parameters.map((p) => `${p.name}: ${p.type}`).join(', '),
             formattedParameterNames: method.parameters.map((p) => p.name).join(', '),
-            isCreate: method.name === 'create',
-            isGetById: method.name === 'getById',
-            isUpdate: method.name === 'update',
-            isDelete: method.name === 'delete',
-            isCustom: !['create', 'getById', 'update', 'delete'].includes(method.name),
             parametersWithIndex: method.parameters.map((p, index) => ({
                 ...p,
                 isFirst: index === 0,

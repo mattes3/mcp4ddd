@@ -26,16 +26,6 @@ const inputSchema = z.object({
             })
             .describe('the method signatures for the repository interface'),
     ),
-    defaultCrudMethods: z
-        .boolean()
-        .default(true)
-        .describe(
-            [
-                'indicates whether the generator shall create',
-                'default add(), get(id), update(id, updates) and remove() methods',
-                'for this repository interface',
-            ].join(' '),
-        ),
     boundedContext: z.string().describe('The bounded context name (e.g., "stocks", "accounts")'),
     layer: z
         .enum(['domain', 'application'])
@@ -74,44 +64,37 @@ export const generateRepository = {
         content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const {
-            aggregateName,
-            methods,
-            defaultCrudMethods: defaultAddAndRemoveMethods,
-            boundedContext,
-            layer,
-        } = params;
+        const { aggregateName, methods, boundedContext, layer } = params;
         const repositoryName = `${aggregateName}Repository`;
+        const aggregateDataName = `${aggregateName}Data`;
 
-        const allMethods = [...methods];
-
-        const asyncResultType = (typeName: string) => `AsyncResult<${typeName}, TechError>`;
-
-        if (defaultAddAndRemoveMethods) {
-            allMethods.unshift({
-                name: 'update',
-                parameters: [
-                    { name: 'id', type: `${aggregateName}['id']` },
-                    { name: 'updates', type: `Partial<Omit<${aggregateName}, 'id'>>` },
-                ],
-                resultType: aggregateName,
-            });
-            allMethods.unshift({
+        const allMethods = methods.concat([
+            {
+                name: 'add',
+                parameters: [{ name: 'item', type: aggregateDataName }],
+                resultType: 'void',
+            },
+            {
                 name: 'get',
                 parameters: [{ name: 'id', type: `${aggregateName}['id']` }],
                 resultType: `Option<${aggregateName}>`,
-            });
-            allMethods.unshift({
+            },
+            {
+                name: 'update',
+                parameters: [
+                    { name: 'id', type: `${aggregateName}['id']` },
+                    { name: 'updates', type: `Partial<Omit<${aggregateDataName}, 'id'>>` },
+                ],
+                resultType: aggregateName,
+            },
+            {
                 name: 'remove',
-                parameters: [{ name: 'item', type: aggregateName }],
+                parameters: [{ name: 'item', type: aggregateDataName }],
                 resultType: 'void',
-            });
-            allMethods.unshift({
-                name: 'add',
-                parameters: [{ name: 'item', type: aggregateName }],
-                resultType: 'void',
-            });
-        }
+            },
+        ]);
+
+        const asyncResultType = (typeName: string) => `AsyncResult<${typeName}, TechError>`;
 
         const processedMethods = allMethods.map((method) => ({
             ...method,

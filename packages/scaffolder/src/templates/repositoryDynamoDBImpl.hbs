@@ -1,42 +1,138 @@
-import { configure{{aggregateName}}Entity } from './{{aggregateName}}Entity.js';
+import { techError } from '@ddd-components/runtime';
+import { getLogger } from '@logtape/logtape';
+import { AsyncResult, Err, None, Ok, Some } from 'ts-results-es';
+
+import {
+    create{{aggregateName}},
+    {{aggregateName}}Data,
+    {{aggregateName}}Timestamps,
+} from '../../domainmodel/{{aggregateName}}.js';
 import { {{repositoryName}} } from '../../domainmodel/{{repositoryName}}.js';
+
+import { configure{{aggregateName}}Entity } from './{{aggregateName}}Entity.js';
 
 export function {{repositoryName}}Impl(): {{repositoryName}} {
     const entity = configure{{aggregateName}}Entity();
+    const logger = getLogger(['YOUR_APP_NAME', 'MODULE_NAME']);
 
-    return { 
+    const dataOf = ({
+        createdAt,
+        updatedAt,
+        ...rest
+    }: {{aggregateName}}Data & {{aggregateName}}Timestamps): {{aggregateName}}Data => rest;
+
+    const timestampsOf = ({
+        createdAt,
+        updatedAt,
+    }: {{aggregateName}}Data & {{aggregateName}}Timestamps): {{aggregateName}}Timestamps => ({
+        createdAt,
+        updatedAt,
+    });
+
+    return {
         {{#each methods}}
-
         async {{name}}({ {{formattedParameterNames}} }) {
-            try {
-                {{#if isCreate}}
-                await entity.create({{parameters.[0].name}}).go();
-                {{/if}}
-                {{#if isGetById}}
-                const result = await entity.query.primary({ {{formattedParameterNames}} }).go();
-                if (!result.data.length) {
-                    throw new Error('{{aggregateName}} not found');
-                }
-                return result.data[0];
-                {{/if}}
-                {{#if isUpdate}}
-                await entity.update({ {{#each parametersWithIndex}}{{#unless isSecond}}{{name}}: {{name}}{{#unless @last}}, {{/unless}}{{/unless}}{{/each}} })
-                    .set({{parameters.[1].name}})
-                    .go();
-                {{/if}}
-                {{#if isDelete}}
-                await entity.delete({ {{formattedParameterNames}} }).go();
-                {{/if}}
-                {{#if isCustom}}
-                // Custom method - implement based on requirements
-                throw new Error('Method {{name}} not implemented');
-                {{/if}}
-            } catch (error) {
-                console.error('{{repositoryName}}Impl.{{name}} error:', error);
-                throw error;
-            }
+            throw new Error('Method {{name}} not implemented');
         },
+
         {{/each}}
 
+        add({ item }) {
+            return new AsyncResult(
+                entity
+                    .create(item)
+                    .go()
+                    .then(() => Ok(undefined))
+                    .catch((error: Error) => {
+                        const method = '{{repositoryName}}.add()';
+                        logger.error(`{ method } failed:\n { error }`, {
+                            method,
+                            error,
+                            item,
+                        });
+                        return Err(techError(`${method} failed for ID ${item.id}: ${error.message}`));
+                    }),
+            );
+        },
+
+        get({ id }) {
+            return new AsyncResult(
+                entity
+                    .get({ id })
+                    .go()
+                    .then((result) =>
+                        Ok(
+                            result.data
+                                ? Some(
+                                      create{{aggregateName}}(
+                                          dataOf(result.data),
+                                          timestampsOf(result.data),
+                                      ),
+                                  )
+                                : None,
+                        ),
+                    )
+                    .catch((error: Error) => {
+                        const method = '{{repositoryName}}.get()';
+                        logger.error(`{ method } failed:\n { error }`, {
+                            method,
+                            error,
+                            id,
+                        });
+                        return Err(techError(`${method} failed for ID ${id}: ${error.message}`));
+                    }),
+            );
+        },
+
+        update({ id, updates }) {
+            return new AsyncResult(
+                entity
+                    .update({ id })
+                    .set(updates)
+                    .go()
+                    .then((result) =>
+                        Ok(
+                            create{{aggregateName}}(
+                                dataOf(
+                                    result.data as {{aggregateName}}Data &
+                                        {{aggregateName}}Timestamps,
+                                ),
+                                timestampsOf(
+                                    result.data as {{aggregateName}}Data &
+                                        {{aggregateName}}Timestamps,
+                                ),
+                            ),
+                        ),
+                    )
+                    .catch((error: Error) => {
+                        const method = '{{repositoryName}}.update()';
+                        logger.error(`{ method } failed:\n { error }`, {
+                            method,
+                            error,
+                            id,
+                            updates,
+                        });
+                        return Err(techError(`${method} failed for ID ${id}: ${error.message}`));
+                    }),
+            );
+        },
+
+        remove({ item }) {
+            return new AsyncResult(
+                entity
+                    .delete({ id: item.id })
+                    .go()
+                    .then(() => Ok(undefined))
+                    .catch((error: Error) => {
+                        const method = '{{repositoryName}}.remove()';
+                        logger.error(`{ method } failed:\n { error }`, {
+                            method,
+                            error,
+                            id: item.id,
+                        });
+                        return Err(techError(`${method} failed for ID ${item.id}: ${error.message}`));
+                    }),
+            );
+        },
     }
 }

@@ -4,6 +4,11 @@ export type {{entityName}}Data = {
 {{/attributes}}
 };
 
+export type {{entityName}}Timestamps = {
+    createdAt: Date | string; // Date or ISO string for the Date
+    updatedAt: Date | string; // Date or ISO string for the Date
+};
+
 type {{entityName}}Methods = {
 {{#methods}}
     {{name}}({{formattedParameters}}): {{resultType}};
@@ -14,12 +19,20 @@ type {{entityName}}Methods = {
 {{#if aggregateRoot}}
 // @AggregateRoot
 {{/if}}
-export type {{entityName}} = {{entityName}}Data & {{entityName}}Methods;
+export type {{entityName}} = {{entityName}}Data & 
+    {{entityName}}Timestamps &
+    {{entityName}}Methods;
 
 // @Factory
-export const create{{entityName}} = (data: {{entityName}}Data): {{entityName}} => ({
+export const create{{entityName}} = (
+    data: {{entityName}}Data,
+    timestamps?: ImprovementProposalTimestamps,
+): {{entityName}} => ({
     ...data,
+    createdAt: timestamps ? new Date(timestamps?.createdAt) : new Date(),
+    updatedAt: timestamps ? new Date(timestamps.updatedAt) : new Date(),
 {{#methods}}
+
     {{name}}({{formattedParameters}}): {{resultType}} {
          //TODO: implement this method 
     },

@@ -1,11 +1,12 @@
 import { TechError } from '{{{basicErrorTypesFrom}}}';
 import type { AsyncResult, Option } from 'ts-results-es';
 
-import { {{aggregateName}} } from './{{aggregateName}}.ts';
+import type { {{aggregateName}}, {{aggregateName}}Data } from './{{aggregateName}}.ts';
 
 // @Repository
 export interface {{repositoryName}} {
 {{#each methods}}
     {{name}}(params: { {{{formattedParameters}}} }): {{{formattedResultType}}};
+
 {{/each}}
 };
