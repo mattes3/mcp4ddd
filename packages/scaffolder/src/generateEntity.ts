@@ -11,7 +11,16 @@ const getEnv = (key: string, defaultValue: string): string => process.env[key] ?
 const inputSchema = z.object({
     entityName: z.string().describe('Name of the entity'),
     aggregateRoot: z.boolean().default(false).describe('is this an aggregate root, true/false'),
-    attributes: z.array(fieldSchema).describe('the fields inside the entity'),
+    attributes: z
+        .array(
+            z.object({
+                name: z.string().refine((val) => !['createdAt', 'updatedAt'].includes(val), {
+                    message: 'This value is not allowed as timestamps are managed internally!',
+                }),
+                type: z.string(),
+            }),
+        )
+        .describe('the fields inside the entity'),
     methods: z.array(
         z
             .object({

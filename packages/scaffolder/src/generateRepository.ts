@@ -56,7 +56,12 @@ export const generateRepository = {
     name: 'generateRepository',
     config: {
         title: 'Repository generator',
-        description: 'Generates a repository interface for an aggregate.',
+        description: [
+            'Generates a repository interface for an aggregate.',
+            'It automatically contains add(), remove(), get(), and update(),',
+            'so neither save() nor findById() are needed that can',
+            'usually be found in existing knowledge about DDD repositories.',
+        ].join(' '),
         inputSchema: inputSchema.shape,
         outputSchema: outputSchema.shape,
     },
