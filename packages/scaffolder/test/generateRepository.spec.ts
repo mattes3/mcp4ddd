@@ -47,7 +47,7 @@ describe('Repository generator', () => {
             'packages/domainlogic/stocks/domain/src/domainmodel/PersonRepository.ts',
         );
         expect(result.files[0]?.content).toContain(
-            "import type { Person, PersonData } from './Person.ts';",
+            "import type { Person, PersonData } from './Person.js';",
         );
         expect(result.files[0]?.content).toContain('export interface PersonRepository {');
         expect(result.files[0]?.content).toContain(
