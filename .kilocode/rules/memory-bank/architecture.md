@@ -53,9 +53,10 @@ The MCP server runs as a local process and communicates with MCP clients via sta
 - Modular generator functions for maintainability
 - Template-based approach for consistency
 
-## Design Patterns
+## Design Patterns (quite opinionated!)
 
 ### Template Method Pattern
+
 Each generator follows the same structure:
 1. Define Zod input/output schemas
 2. Process input parameters
@@ -63,10 +64,34 @@ Each generator follows the same structure:
 4. Return structured file generation data
 
 ### Factory Pattern
+
 Generated code includes factory functions for creating DDD components (e.g., `createEntity`)
 
 ### Repository Pattern
+
 Generated repository interfaces follow DDD repository patterns with optional CRUD methods
+
+### "Parse, don't Validate" Pattern in the generated DDD code
+
+Entitites, value objects, and the parameter object of a service only work with already validated data. None of the functions inside a DDD element validates any data but they assume that the `parseXYZServiceParameters()` method that is generated for each service has already done the job. We `parse` raw parameters into valid parameters before entering the business logic. We do not `validate` inside the business logic itself!
+
+### Error handling pattern in the generated DDD code
+
+The business logic of a service does not use try/catch for error handling. Instead, it uses the `AsyncResult` type (from the NPM library ts-results-es). This type can contain a valid result like `Ok(5)` or an error object like `Err(createXYZServiceError('not found'))`. This way, the business logic code that the user or assistant writes manually, must look like this:
+
+```ts
+const result = await beginWith(serviceParameterObject)
+    .andThen(
+        someRepository.get({id: serviceParameterObject.interestingId })
+            .toResult(createXYZServiceError('interesting object not found'))
+    )
+    .andThen(doSomethingThatReturnsAResultOrAsyncResult)
+    .andThen(...possibly more workflow steps...);
+
+if (result.isErr()) { /* ...handle the error ...*/ }
+
+// ... No error, now use `result.value`
+```
 
 ## Component Relationships
 
