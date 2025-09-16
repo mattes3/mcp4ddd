@@ -12,5 +12,5 @@ export const documentClientConfig = {
     },
 };
 
-//TODO: remove this and make it configurable via an env variable in the generator
-export const singleDBTableName = 'MySingleTableName';
+// Configurable via DYNAMODB_TABLE_NAME environment variable for single-table design
+export const singleDBTableName = process.env['DYNAMODB_TABLE_NAME'] ?? 'MySingleDynamoDBTable';

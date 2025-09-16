@@ -10,6 +10,7 @@ Monorepo architecture fully implemented with three packages: scaffolder (MCP ser
 - **Template Updates**: Updated .hbs templates to reference @ddd-components/runtime
 - **Build System**: Updated pnpm workspace configuration and build scripts
 - **Testbed Environment**: Created safe experimentation space with example prompts
+- **DynamoDB Table Name**: Made the DynamoDB table name configurable via `DYNAMODB_TABLE_NAME` environment variable instead of hard-coded value, supporting single-table design
 - All tests passing and packages building successfully
 
 ## Next Steps
