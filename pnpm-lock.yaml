@@ -134,9 +134,6 @@ importers:
       '@ddd-components/runtime':
         specifier: workspace:*
         version: link:../../runtime
-      '@logtape/logtape':
-        specifier: ^1.1.0
-        version: 1.1.0
       ts-results-es:
         specifier: ^6.0.0
         version: 6.0.0
@@ -482,9 +479,6 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
-
-  '@logtape/logtape@1.1.0':
-    resolution: {integrity: sha512-WJksvFQQxHRm+OgyQWibeudPcJnYUIECxVRBnckPdotiyaF49dRmaaZylyHstO5is1dS3i3o/4XnoBZz8Uophw==}
 
   '@modelcontextprotocol/sdk@1.17.5':
     resolution: {integrity: sha512-QakrKIGniGuRVfWBdMsDea/dx1PNE739QJ7gCM41s9q+qaCYTHCdsIBXQVVXry3mfWAiaM9kT22Hyz53Uw8mfg==}
@@ -2072,8 +2066,6 @@ snapshots:
       chalk: 4.1.2
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
-
-  '@logtape/logtape@1.1.0': {}
 
   '@modelcontextprotocol/sdk@1.17.5':
     dependencies:
