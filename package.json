@@ -1,6 +1,6 @@
 {
     "name": "mcp4ddd",
-    "version": "1.0.0",
+    "version": "0.7.0",
     "description": "An MCP server that generates code based on the Domain-Driven Design methodology.",
     "main": "index.js",
     "type": "module",
@@ -8,15 +8,24 @@
         "build": "pnpm -r build",
         "dev": "pnpm --filter @ddd-components/scaffolder dev",
         "test": "pnpm --filter @ddd-components/scaffolder test",
-        "test:watch": "pnpm --filter @ddd-components/scaffolder test:watch"
+        "test:watch": "pnpm --filter @ddd-components/scaffolder test:watch",
+        "changeset": "changeset",
+        "version-packages": "changeset version",
+        "release": "changeset publish"
     },
     "keywords": [],
     "author": "Matthias Bohlen",
     "license": "MIT",
     "packageManager": "pnpm@10.15.1",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/mattes3/mcp4ddd.git"
+    },
+    "homepage": "https://github.com/mattes3/mcp4ddd#readme",
     "devDependencies": {
         "@aws-sdk/client-dynamodb": "^3.887.0",
         "@aws-sdk/lib-dynamodb": "^3.887.0",
+        "@changesets/cli": "^2.29.7",
         "@tsconfig/node22": "^22.0.2",
         "@tsconfig/strictest": "^2.0.5",
         "@types/node": "^24.3.1",
@@ -29,9 +38,5 @@
         "typescript": "^5.9.2",
         "vitest": "^3.2.4"
     },
-    "dependencies": {
-        "@modelcontextprotocol/sdk": "^1.17.5",
-        "handlebars": "^4.7.8",
-        "zod": "^3.25.76"
-    }
+    "dependencies": {}
 }

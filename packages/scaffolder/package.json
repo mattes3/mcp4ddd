@@ -1,6 +1,6 @@
 {
     "name": "@ddd-components/scaffolder",
-    "version": "1.0.0",
+    "version": "0.7.0",
     "description": "MCP server that generates code based on the Domain-Driven Design methodology.",
     "main": "dist/index.js",
     "type": "module",
