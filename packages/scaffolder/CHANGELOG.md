@@ -1,5 +1,13 @@
 # @ddd-components/scaffolder
 
+## 0.7.3
+
+### Patch Changes
+
+- 386672d: Brushed up the docs and updated the sample prompts in the testbed package.
+- Updated dependencies [386672d]
+    - @ddd-components/runtime@0.7.3
+
 ## 0.7.2
 
 ### Patch Changes
