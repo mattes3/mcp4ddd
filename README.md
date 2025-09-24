@@ -18,10 +18,12 @@ This project provides an MCP (Model Context Protocol) server that scaffolds Doma
 
 The MCP server supports several environment variables to customize its behavior:
 
-- `BOUNDED_CONTEXTS_PARENT_FOLDER`: Configures the parent folder for generated bounded contexts (default: `packages/domainlogic`)
-- `BASIC_TYPES_FROM`: Specifies the import path for basic types used in domain services (default: `@ddd-components/runtime`)
-- `BASIC_ERROR_TYPES_FROM`: Specifies the import path for basic error types used in domain services (default: `@ddd-components/runtime`)
-- `DYNAMODB_CONFIG_FROM`: Specifies the import path for DynamoDB configuration used in repository implementations (default: `@ddd-components/runtime`)
+| Variable Name | Default Value | Meaning |
+|---------------|---------------|---------|
+| `BOUNDED_CONTEXTS_PARENT_FOLDER` | `packages/domainlogic` | Configures the parent folder for generated bounded contexts |
+| `BASIC_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic types used in domain services |
+| `BASIC_ERROR_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic error types used in domain services |
+| `DYNAMODB_CONFIG_FROM` | `@ddd-components/runtime` | Specifies the import path for DynamoDB configuration used in repository implementations |
 
 ## Target Users
 Developers implementing Domain-Driven Design in TypeScript projects who want to quickly scaffold DDD components with consistent patterns.
