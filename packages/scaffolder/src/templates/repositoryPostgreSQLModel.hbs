@@ -1,0 +1,42 @@
+import { Model } from 'objection';
+
+export class {{aggregateName}}Model extends Model {
+    static tableName = '{{tableName}}';
+
+    static jsonSchema = {
+        type: 'object',
+        properties: {
+            {{#each attributes}}
+            {{name}}: {
+                type: '{{jsonSchemaType}}'{{#if format}},
+                format: '{{format}}'{{/if}}
+            },
+            {{/each}}
+            createdAt: {
+                type: 'string',
+                format: 'date-time'
+            },
+            updatedAt: {
+                type: 'string',
+                format: 'date-time'
+            }
+        },
+        required: [
+            {{#each attributes}}
+            {{#if required}}'{{name}}'{{#unless @last}},{{/unless}}{{/if}}
+            {{/each}}
+            'createdAt',
+            'updatedAt'
+        ]
+    };
+
+    // Timestamps handling
+    $beforeInsert() {
+        this.createdAt = new Date().toISOString();
+        this.updatedAt = new Date().toISOString();
+    }
+
+    $beforeUpdate() {
+        this.updatedAt = new Date().toISOString();
+    }
+}

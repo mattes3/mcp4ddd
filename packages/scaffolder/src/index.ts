@@ -4,6 +4,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { generateDomainService } from './generateDomainService.js';
 import { generateDynamoDBRepository } from './generateDynamoDBRepository.js';
 import { generateEntity } from './generateEntity.js';
+import { generatePostgreSQLRepository } from './generatePostgreSQLRepository.js';
 import { generateRepository } from './generateRepository.js';
 import { generateValueObject } from './generateValueObject.js';
 
@@ -37,6 +38,12 @@ async function main() {
         generateDynamoDBRepository.name,
         generateDynamoDBRepository.config,
         generateDynamoDBRepository.execute,
+    );
+
+    server.registerTool(
+        generatePostgreSQLRepository.name,
+        generatePostgreSQLRepository.config,
+        generatePostgreSQLRepository.execute,
     );
 
     const transport = new StdioServerTransport();

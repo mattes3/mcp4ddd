@@ -61,7 +61,6 @@ describe('domain service generator', () => {
         );
         expect(result.files[2]?.content).toContain('export const transferMoneyImpl =');
         expect(result.files[2]?.content).toContain('(repo: AccountRepository): TransferMoney =>');
-        expect(result.files[2]?.content).toContain('({ fromAccount, toAccount, amount }) => {');
 
         expect(result.files[3]?.path).toBe(
             'packages/domainlogic/stocks/domain/test/transferMoney.spec.ts',

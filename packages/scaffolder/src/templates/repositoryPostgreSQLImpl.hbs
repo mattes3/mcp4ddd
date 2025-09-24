@@ -1,0 +1,137 @@
+import { Knex } from 'knex';
+import { techError } from '@ddd-components/runtime';
+import { getLogger } from '@logtape/logtape';
+import { AsyncResult, Err, None, Ok, Some } from 'ts-results-es';
+
+// Using .js extensions for ESM compliance with TypeScript's nodenext moduleResolution
+import {
+    create{{aggregateName}},
+    {{aggregateName}}Data,
+    {{aggregateName}}Timestamps,
+} from '../../domainmodel/{{aggregateName}}.js';
+import { {{repositoryName}} } from '../../domainmodel/{{repositoryName}}.js';
+
+import { {{aggregateName}}Model } from './{{aggregateName}}Model.js';
+
+export function {{repositoryName}}Impl(knex: Knex): {{repositoryName}} {
+    // Initialize knex for Objection models
+    {{aggregateName}}Model.knex(knex);
+
+    const logger = getLogger(['YOUR_APP_NAME', 'MODULE_NAME']);
+
+    const dataOf = ({
+        createdAt,
+        updatedAt,
+        ...rest
+    }: {{aggregateName}}Data & {{aggregateName}}Timestamps): {{aggregateName}}Data => rest;
+
+    const timestampsOf = ({
+        createdAt,
+        updatedAt,
+    }: {{aggregateName}}Data & {{aggregateName}}Timestamps): {{aggregateName}}Timestamps => ({
+        createdAt,
+        updatedAt,
+    });
+
+    return {
+        {{#each methods}}
+        async {{name}}({ {{formattedParameterNames}} }) {
+            throw new Error('Method {{name}} not implemented');
+        },
+
+        {{/each}}
+
+        add({ item }) {
+            return new AsyncResult(
+                {{aggregateName}}Model.query()
+                    .insert(item)
+                    .then(() => Ok(undefined))
+                    .catch((error: Error) => {
+                        const method = '{{repositoryName}}.add()';
+                        logger.error(`{ method } failed:\n { error }`, {
+                            method,
+                            error,
+                            item,
+                        });
+                        return Err(techError(`${method} failed for ID ${item.id}: ${error.message}`));
+                    }),
+            );
+        },
+
+        get({ id }) {
+            return new AsyncResult(
+                {{aggregateName}}Model.query()
+                    .findById(id)
+                    .then((result) =>
+                        Ok(
+                            result
+                                ? Some(
+                                      create{{aggregateName}}(
+                                          dataOf(result as {{aggregateName}}Data & {{aggregateName}}Timestamps),
+                                          timestampsOf(result as {{aggregateName}}Data & {{aggregateName}}Timestamps),
+                                      ),
+                                  )
+                                : None,
+                        ),
+                    )
+                    .catch((error: Error) => {
+                        const method = '{{repositoryName}}.get()';
+                        logger.error(`{ method } failed:\n { error }`, {
+                            method,
+                            error,
+                            id,
+                        });
+                        return Err(techError(`${method} failed for ID ${id}: ${error.message}`));
+                    }),
+            );
+        },
+
+        update({ id, updates }) {
+            return new AsyncResult(
+                {{aggregateName}}Model.query()
+                    .patchAndFetchById(id, updates)
+                    .then((result) =>
+                        Ok(
+                            create{{aggregateName}}(
+                                dataOf(
+                                    result as {{aggregateName}}Data &
+                                        {{aggregateName}}Timestamps,
+                                ),
+                                timestampsOf(
+                                    result as {{aggregateName}}Data &
+                                        {{aggregateName}}Timestamps,
+                                ),
+                            ),
+                        ),
+                    )
+                    .catch((error: Error) => {
+                        const method = '{{repositoryName}}.update()';
+                        logger.error(`{ method } failed:\n { error }`, {
+                            method,
+                            error,
+                            id,
+                            updates,
+                        });
+                        return Err(techError(`${method} failed for ID ${id}: ${error.message}`));
+                    }),
+            );
+        },
+
+        remove({ item }) {
+            return new AsyncResult(
+                {{aggregateName}}Model.query()
+                    .deleteById(item.id)
+                    .then(() => Ok(undefined))
+                    .catch((error: Error) => {
+                        const method = '{{repositoryName}}.remove()';
+                        logger.error(`{ method } failed:\n { error }`, {
+                            method,
+                            error,
+                            id: item.id,
+                        });
+                        return Err(techError(`${method} failed for ID ${item.id}: ${error.message}`));
+                    }),
+            );
+        },
+    }
+}

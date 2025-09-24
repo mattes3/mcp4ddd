@@ -63,6 +63,9 @@ importers:
       ts-results-es:
         specifier: ^6.0.0
         version: 6.0.0
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
     devDependencies:
       '@tsconfig/node22':
         specifier: ^22.0.2
