@@ -65,12 +65,7 @@ export function {{repositoryName}}Impl(knex: Knex): {{repositoryName}} {
                     .then((result) =>
                         Ok(
                             result
-                                ? Some(
-                                      create{{aggregateName}}(
-                                          dataOf(result as {{aggregateName}}Data & {{aggregateName}}Timestamps),
-                                          timestampsOf(result as {{aggregateName}}Data & {{aggregateName}}Timestamps),
-                                      ),
-                                  )
+                                ? Some(create{{aggregateName}}(dataOf(result), timestampsOf(result)))
                                 : None,
                         ),
                     )
@@ -91,18 +86,7 @@ export function {{repositoryName}}Impl(knex: Knex): {{repositoryName}} {
                 {{aggregateName}}Model.query()
                     .patchAndFetchById(id, updates)
                     .then((result) =>
-                        Ok(
-                            create{{aggregateName}}(
-                                dataOf(
-                                    result as {{aggregateName}}Data &
-                                        {{aggregateName}}Timestamps,
-                                ),
-                                timestampsOf(
-                                    result as {{aggregateName}}Data &
-                                        {{aggregateName}}Timestamps,
-                                ),
-                            ),
-                        ),
+                        Ok(create{{aggregateName}}(dataOf(result), timestampsOf(result))),
                     )
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.update()';

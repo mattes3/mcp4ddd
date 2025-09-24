@@ -1,9 +1,9 @@
 import { Model } from 'objection';
 
 export class {{aggregateName}}Model extends Model {
-    static tableName = '{{tableName}}';
+    static override tableName = '{{tableName}}';
 
-    static jsonSchema = {
+    static override jsonSchema = {
         type: 'object',
         properties: {
             {{#each attributes}}
@@ -31,12 +31,12 @@ export class {{aggregateName}}Model extends Model {
     };
 
     // Timestamps handling
-    $beforeInsert() {
+    override $beforeInsert() {
         this.createdAt = new Date().toISOString();
         this.updatedAt = new Date().toISOString();
     }
 
-    $beforeUpdate() {
+    override $beforeUpdate() {
         this.updatedAt = new Date().toISOString();
     }
 }
