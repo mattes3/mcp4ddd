@@ -66,6 +66,15 @@ Thank you for your interest in contributing to mcp4ddd! We welcome contributions
 
 Releases are managed through changesets. When your PR is merged, the maintainers will handle versioning and publishing.
 
+A maintainer will need to do the following after merging the pull requests:
+
+```bash
+pnpm version-packages
+git add .
+git commit -m "Released vX.Y.Z"
+git push origin/main
+```
+
 ## Questions?
 
 Feel free to open an issue for questions or discussions.
