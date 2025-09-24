@@ -1,5 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import { Model } from 'objection';
 
+import { {{aggregateName}} } from '../../domainmodel/{{aggregateName}}.js';
+
+// TypeScript Declaration merging takes place here, by design!
+// See https://www.typescriptlang.org/docs/handbook/declaration-merging.html
+export interface {{aggregateName}}Model extends {{aggregateName}} {}
 export class {{aggregateName}}Model extends Model {
     static override tableName = '{{tableName}}';
 
