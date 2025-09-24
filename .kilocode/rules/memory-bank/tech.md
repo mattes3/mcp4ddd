@@ -100,6 +100,11 @@ mcp4ddd/
 - `pnpm --filter @ddd-components/scaffolder <command>`: Run command for specific package
 - `pnpm --filter @ddd-components/testbed dev`: Run testbed in development mode
 
+### MCP Tool Failure Handling
+- If `use_mcp_tool` or `access_mcp_resource` calls fail or do not return expected results, immediately report the failure to the user.
+- Do not attempt manual generation, simulation, or workarounds based on reading source code.
+- Wait for user guidance on how to proceed, such as fixing the MCP server configuration or using alternative tools.
+
 ### Development Workflow
 1. Make changes to source files or templates
 2. Run `pnpm build` to compile
