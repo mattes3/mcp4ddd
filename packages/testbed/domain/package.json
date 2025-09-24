@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "@ddd-components/runtime": "workspace:*",
+        "@logtape/logtape": "^1.1.0",
         "ts-results-es": "^6.0.0"
     }
 }
