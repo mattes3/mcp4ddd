@@ -72,7 +72,7 @@ A maintainer will need to do the following after merging the pull requests:
 pnpm version-packages
 git add .
 git commit -m "Released vX.Y.Z"
-git push origin/main
+git push origin main
 ```
 
 ## Questions?
