@@ -1,0 +1,12 @@
+Generate a repository interface for the Account aggregate in the "accounts" bounded context.
+
+Repository details:
+- Aggregate Name: Account
+- Custom Methods:
+  - findByEmail(email: string): Account | null
+  - findByStatus(status: string): Account[]
+  - updateBalance(id: string, amount: number): void
+- Bounded Context: accounts
+- Layer: domain
+
+The repository should provide standard CRUD operations plus the custom methods for account management.

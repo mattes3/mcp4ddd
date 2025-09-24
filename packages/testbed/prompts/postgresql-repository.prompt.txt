@@ -1,0 +1,19 @@
+Generate a PostgreSQL repository for the Product aggregate in the "inventory" bounded context.
+
+Repository details:
+- Bounded Context: inventory
+- Aggregate Name: Product
+- Layer: domain
+- Table Name: products
+- Attributes:
+  - id: string (required)
+  - name: string (required)
+  - price: number (required)
+  - category: string (required)
+- Primary Key: id
+- Custom Methods:
+  - findByCategory(category: string): Product[]
+  - findByPriceRange(min: number, max: number): Product[]
+  - updateStock(id: string, quantity: number): void
+
+The repository should use Objection.js for database operations and provide efficient querying for product management.

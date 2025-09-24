@@ -16,6 +16,8 @@ This project provides an MCP (Model Context Protocol) server that scaffolds Doma
 - Generate value objects
 - Generate repository interfaces
 - Generate domain services
+- Generate DynamoDB repository implementations
+- Generate PostgreSQL repository implementations
 - Automatic test file generation
 - Zod schema validation for inputs
 
@@ -98,6 +100,8 @@ import { beginWith, singleError, techError, validationError } from '@ddd-compone
 - `generateValueObject`: Generates immutable value objects
 - `generateRepository`: Creates repository interfaces
 - `generateDomainService`: Generates domain services with dependency injection
+- `generateDynamoDBRepository`: Generates DynamoDB repository implementations using ElectroDB
+- `generatePostgreSQLRepository`: Generates PostgreSQL repository implementations using Objection.js
 
 ### Runtime Exports
 - `BasicErrorTypes`: Error type definitions

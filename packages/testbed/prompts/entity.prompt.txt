@@ -8,8 +8,6 @@ Entity details:
   - email: string
   - firstName: string
   - lastName: string
-  - createdAt: Date
-  - updatedAt: Date
 - Methods:
   - updateProfile(firstName: string, lastName: string): void
   - changeEmail(newEmail: string): void

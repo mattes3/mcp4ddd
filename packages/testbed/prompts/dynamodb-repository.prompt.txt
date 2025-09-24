@@ -13,8 +13,6 @@ Attributes:
 - customerId: string (required)
 - total: number (required)
 - status: string (required, default: "pending")
-- createdAt: string (required)
-- updatedAt: string (required)
 
 Indexes:
 - Primary: pk=id, sk=customerId

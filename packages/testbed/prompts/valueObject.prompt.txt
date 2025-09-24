@@ -1,0 +1,12 @@
+Generate a DDD value object for an Email address in the "accounts" bounded context.
+
+Value Object details:
+- Name: Email
+- Attributes:
+  - value: string
+- Methods:
+  - getDomain(): string
+- Bounded Context: accounts
+- Layer: domain
+
+The value object should validate email format and provide domain extraction.
