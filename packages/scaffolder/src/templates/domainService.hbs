@@ -1,6 +1,7 @@
 import { AsyncResult, type Result, Ok, Err } from 'ts-results-es';
 
-import { techError } from '{{basicErrorTypesFrom}}';
+import { beginWith } from '{{basicTypesFrom}}';
+import { techError, type TechError } from '{{basicErrorTypesFrom}}';
 
 // Using .js extensions for ESM compliance with TypeScript's nodenext moduleResolution
 import { type {{serviceParametersType}} } from './{{serviceParametersType}}.js';
@@ -8,14 +9,22 @@ import { type {{serviceErrorType}}, create{{serviceErrorType}} } from './create{
 
 export type {{serviceType}} = (params: {{serviceParametersType}}) => {{{asyncResultType}}};
 
+//human dev: Delete this adapter function if you don't need it!
+function safeAsync<T>(fn: () => Promise<T>): Promise<Result<T, TechError>> {
+    return fn()
+        .then((t) => Ok(t))
+        .catch((err) => Err(techError(`technical failure: ${err}`)));
+}
+
 // @DomainService
 export const {{serviceName}}Impl =
     ({{formattedInjectedDependencies}}): {{serviceType}} =>
-    ({ {{formattedParameterNames}} }) => {
-        return new AsyncResult(domainLogic().catch((e: Error) => Err(techError(e.message))));
-        async function domainLogic(): {{{promiseOfResultType}}} {
-            //human dev: implement this domain logic here and return a {{{wrappedResultType}}} as in Rust.
-            //human dev: No try-catch inside here – return Ok() or Ok(value) or Err(create{{serviceErrorType}}(explanation)), instead.
-            //human dev: Avoid await, return the promise itself, instead!
-        }
+    (parameterObject) => {
+        return beginWith(parameterObject)
+            .andThen((params) => 
+                Ok(undefined)
+                //human dev: implement this domain logic here and return a {{{asyncResultType}}} as in Rust.
+                //human dev: No try-catch inside here – return Ok() or Ok(value) or Err(create{{serviceErrorType}}(explanation)), instead.
+                //human dev: Avoid await, return the promise itself, instead!
+            );
     };
