@@ -26,7 +26,7 @@ export type {{entityName}} = {{entityName}}Data &
 // @Factory
 export const create{{entityName}} = (
     data: {{entityName}}Data,
-    timestamps?: ImprovementProposalTimestamps,
+    timestamps?: {{entityName}}Timestamps,
 ): {{entityName}} => ({
     ...data,
     createdAt: timestamps ? new Date(timestamps?.createdAt) : new Date(),
