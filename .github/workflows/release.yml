@@ -76,17 +76,12 @@ jobs:
         id: get_version
         run: echo "version=$(node -p "require('./packages/scaffolder/package.json').version")" >> $GITHUB_OUTPUT
 
-      - name: Create GitHub release for scaffolder
-        if: steps.parse.outputs.scaffolder_has_changesets == 'true'
-        run: gh release create v${{ steps.get_version.outputs.version }} --generate-notes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload files to scaffolder release
+      - name: Create GitHub release and upload files for scaffolder
         if: steps.parse.outputs.scaffolder_has_changesets == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.get_version.outputs.version }}
+          tag_name: scaffolder-v${{ steps.get_version.outputs.version }}
+          generate_release_notes: true
           files: |
             packages/scaffolder/dist/index.js
             README.md
