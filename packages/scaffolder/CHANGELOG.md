@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 0.7.10
+
+### Patch Changes
+
+- 8f6299d: ci: Testing patch bump on the scaffolder
+
 ## 0.7.9
 
 ### Patch Changes
