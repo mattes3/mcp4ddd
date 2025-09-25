@@ -37,6 +37,10 @@ const outputSchema = z.object({
     ),
 });
 
+/**
+ * MCP tool for generating domain services in Domain-Driven Design.
+ * Generates TypeScript code for domain services including parameters, errors, and tests.
+ */
 export const generateDomainService = {
     name: 'generateDomainService',
     config: {
