@@ -75,10 +75,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: '@ddd-components/scaffolder@${{ steps.get_version.outputs.version }}'
-          generate_release_notes: true
+          body_path: packages/scaffolder/CHANGELOG.md
           files: |
-            packages/scaffolder/dist/index.js
             README.md
-            packages/scaffolder/CHANGELOG.md
+            packages/scaffolder/dist/index.js
+          preserve_order: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
