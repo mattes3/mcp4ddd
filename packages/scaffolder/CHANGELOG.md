@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 0.7.5
+
+### Patch Changes
+
+- 9e426ed: chore: updated the README to clarify the installation process
+
 ## 0.7.4
 
 ### Patch Changes
