@@ -58,7 +58,6 @@ jobs:
       - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
-        if: steps.parse.outputs.runtime_has_changesets == 'true' || steps.parse.outputs.scaffolder_has_changesets == 'true'
         with:
           version: pnpm changeset version
           publish: pnpm changeset publish
