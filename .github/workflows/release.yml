@@ -65,13 +65,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Get scaffolder version
-        if: steps.parse.outputs.scaffolder_has_changesets == 'true'
+      - name: No changesets found, so get scaffolder version
+        if: steps.parse.outputs.scaffolder_has_changesets == 'false'
         id: get_version
         run: echo "version=$(node -p "require('./packages/scaffolder/package.json').version")" >> $GITHUB_OUTPUT
 
-      - name: Create GitHub release and upload files for scaffolder
-        if: steps.parse.outputs.scaffolder_has_changesets == 'true'
+      - name: No changesets found, so create GitHub release and upload files for scaffolder
+        if: steps.parse.outputs.scaffolder_has_changesets == 'false'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: '@ddd-components/scaffolder@${{ steps.get_version.outputs.version }}'
@@ -79,5 +79,6 @@ jobs:
           files: |
             packages/scaffolder/dist/index.js
             README.md
+            packages/scaffolder/CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
