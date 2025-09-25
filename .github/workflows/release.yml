@@ -59,12 +59,17 @@ jobs:
         if: steps.parse.outputs.runtime_has_changesets == 'true' || steps.parse.outputs.scaffolder_has_changesets == 'true'
         run: pnpm changeset version
 
+      - name: Setup NPM auth
+        if: steps.parse.outputs.runtime_has_changesets == 'true'
+        run: npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish runtime to NPM
         if: steps.parse.outputs.runtime_has_changesets == 'true'
         run: pnpm changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Get scaffolder version
         if: steps.parse.outputs.scaffolder_has_changesets == 'true'
