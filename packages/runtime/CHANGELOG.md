@@ -1,5 +1,12 @@
 # @ddd-components/runtime
 
+## 0.7.5
+
+### Patch Changes
+
+- ae69a64: chore: Updated GitHub actions file for better scaffolder releasing.
+- 93b23aa: fix(scaffolder): Made the release tag resemble the runtime release tag schema.
+
 ## 0.7.4
 
 ### Patch Changes
