@@ -80,7 +80,7 @@ jobs:
         if: steps.parse.outputs.scaffolder_has_changesets == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: scaffolder-v${{ steps.get_version.outputs.version }}
+          tag_name: '@ddd-components/scaffolder@${{ steps.get_version.outputs.version }}'
           generate_release_notes: true
           files: |
             packages/scaffolder/dist/index.js
