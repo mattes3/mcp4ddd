@@ -1,31 +1,33 @@
-name: Build & Release
+name: Release
 
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
 
-permissions:
-    contents: write   # allows creating/updating releases & uploading assets
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  build:
+  release:
+    name: Release
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout Repo
         uses: actions/checkout@v4
+        with:
+          # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          run_install: false   # we'll install in the next step!
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -33,16 +35,11 @@ jobs:
       - name: Build project
         run: pnpm build
 
-      - name: Publish runtime package to npm
-        run: pnpm publish --filter @ddd-components/runtime --access public --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Upload built files to release
-        uses: softprops/action-gh-release@v2
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
         with:
-          files: |
-            packages/scaffolder/dist/index.js
-            README.md
+          publish: pnpm release # this does a "changeset publish"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
