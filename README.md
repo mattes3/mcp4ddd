@@ -21,17 +21,6 @@ This project provides an MCP (Model Context Protocol) server that scaffolds Doma
 - Automatic test file generation
 - Zod schema validation for inputs
 
-## Environment Variables
-
-The MCP server supports several environment variables to customize its behavior:
-
-| Variable Name | Default Value | Meaning |
-|---------------|---------------|---------|
-| `BOUNDED_CONTEXTS_PARENT_FOLDER` | `packages/domainlogic` | Configures the parent folder for generated bounded contexts |
-| `BASIC_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic types used in domain services |
-| `BASIC_ERROR_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic error types used in domain services |
-| `DYNAMODB_CONFIG_FROM` | `@ddd-components/runtime` | Specifies the import path for DynamoDB configuration used in repository implementations |
-
 ## Installation
 
 ### MCP Server
@@ -83,7 +72,7 @@ The AI assistant that you use with this MCP server will "see" that it can genera
 - You can override these module names to fit your project environment.
 
 ### Runtime Library
-The runtime library provides utilities for DDD components:
+The runtime library [@ddd-components/runtime](https://www.npmjs.com/package/@ddd-components/runtime?activeTab=readme) provides utilities for the generated DDD components:
 
 ```typescript
 import type { Branded, SingleError, TechError, ValidationError } from '@ddd-components/runtime';
@@ -107,6 +96,17 @@ import { beginWith, singleError, techError, validationError } from '@ddd-compone
 - `BasicErrorTypes`: Error type definitions
 - `BasicModelTypes`: Basic model utilities
 - `WorkflowStart`: Workflow utilities
+
+### Environment Variables
+
+The MCP server supports several environment variables to customize its behavior:
+
+| Variable Name | Default Value | Meaning |
+|---------------|---------------|---------|
+| `BOUNDED_CONTEXTS_PARENT_FOLDER` | `packages/domainlogic` | Configures the parent folder for generated bounded contexts |
+| `BASIC_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic types used in domain services |
+| `BASIC_ERROR_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic error types used in domain services |
+| `DYNAMODB_CONFIG_FROM` | `@ddd-components/runtime` | Specifies the import path for DynamoDB configuration used in repository implementations |
 
 ## Contributing
 
