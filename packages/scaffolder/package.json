@@ -14,7 +14,8 @@
         "ddd",
         "domain-driven-design",
         "mcp",
-        "code-generation"
+        "code-generation",
+        "kilocode"
     ],
     "author": "Matthias Bohlen",
     "license": "MIT",
