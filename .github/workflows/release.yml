@@ -55,28 +55,12 @@ jobs:
             echo "scaffolder_has_changesets=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Update versions
-        if: steps.parse.outputs.runtime_has_changesets == 'true' || steps.parse.outputs.scaffolder_has_changesets == 'true'
-        run: pnpm changeset version
-
-      - name: Commit version changes
-        if: steps.parse.outputs.runtime_has_changesets == 'true' || steps.parse.outputs.scaffolder_has_changesets == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
-          git commit -m "Version packages" || echo "No changes to commit"
-          git push
-
-      - name: Setup NPM auth
-        if: steps.parse.outputs.runtime_has_changesets == 'true'
-        run: npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Publish runtime to NPM
-        if: steps.parse.outputs.runtime_has_changesets == 'true'
-        run: pnpm changeset publish
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: pnpm changeset version
+          publish: pnpm changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

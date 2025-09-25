@@ -9,9 +9,7 @@
         "dev": "pnpm --filter @ddd-components/scaffolder dev",
         "test": "pnpm --filter @ddd-components/scaffolder test",
         "test:watch": "pnpm --filter @ddd-components/scaffolder test:watch",
-        "changeset": "changeset",
-        "version-packages": "changeset version",
-        "release": "changeset publish"
+        "changeset": "changeset"
     },
     "keywords": [],
     "author": "Matthias Bohlen",
