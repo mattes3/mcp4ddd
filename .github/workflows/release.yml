@@ -80,5 +80,6 @@ jobs:
             README.md
             packages/scaffolder/dist/index.js
           preserve_order: true
+          overwrite_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
