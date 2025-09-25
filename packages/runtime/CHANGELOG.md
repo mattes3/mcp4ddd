@@ -1,5 +1,11 @@
 # @ddd-components/runtime
 
+## 0.7.7
+
+### Patch Changes
+
+- 5f11e8f: ci: Testing whether everything is now in sync.
+
 ## 0.7.6
 
 ### Patch Changes

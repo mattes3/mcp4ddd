@@ -3,49 +3,43 @@
     {
       "releases": [
         {
-          "name": "@ddd-components/runtime",
-          "type": "patch"
-        },
-        {
           "name": "@ddd-components/scaffolder",
           "type": "patch"
         },
         {
-          "name": "@ddd-components/testbed",
+          "name": "@ddd-components/runtime",
           "type": "patch"
         }
       ],
-      "summary": "ci: Testing whether changesets are now properly removed.",
-      "id": "dirty-trains-take"
+      "summary": "ci: Testing whether everything is now in sync.",
+      "id": "rude-poems-pay"
     }
   ],
   "releases": [
     {
-      "name": "@ddd-components/runtime",
+      "name": "@ddd-components/scaffolder",
       "type": "patch",
-      "oldVersion": "0.7.5",
+      "oldVersion": "0.7.7",
       "changesets": [
-        "dirty-trains-take"
+        "rude-poems-pay"
       ],
-      "newVersion": "0.7.6"
+      "newVersion": "0.7.8"
     },
     {
-      "name": "@ddd-components/scaffolder",
+      "name": "@ddd-components/runtime",
       "type": "patch",
       "oldVersion": "0.7.6",
       "changesets": [
-        "dirty-trains-take"
+        "rude-poems-pay"
       ],
       "newVersion": "0.7.7"
     },
     {
       "name": "@ddd-components/testbed",
       "type": "patch",
-      "oldVersion": "0.7.5",
-      "changesets": [
-        "dirty-trains-take"
-      ],
-      "newVersion": "0.7.6"
+      "oldVersion": "0.7.6",
+      "changesets": [],
+      "newVersion": "0.7.7"
     }
   ]
 }

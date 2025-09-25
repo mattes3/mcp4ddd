@@ -1,5 +1,13 @@
 # @ddd-components/scaffolder
 
+## 0.7.8
+
+### Patch Changes
+
+- 5f11e8f: ci: Testing whether everything is now in sync.
+- Updated dependencies [5f11e8f]
+    - @ddd-components/runtime@0.7.7
+
 ## 0.7.7
 
 ### Patch Changes
