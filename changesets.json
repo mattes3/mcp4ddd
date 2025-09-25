@@ -1,0 +1,51 @@
+{
+  "changesets": [
+    {
+      "releases": [
+        {
+          "name": "@ddd-components/runtime",
+          "type": "patch"
+        },
+        {
+          "name": "@ddd-components/scaffolder",
+          "type": "patch"
+        },
+        {
+          "name": "@ddd-components/testbed",
+          "type": "patch"
+        }
+      ],
+      "summary": "ci: Testing whether changesets are now properly removed.",
+      "id": "dirty-trains-take"
+    }
+  ],
+  "releases": [
+    {
+      "name": "@ddd-components/runtime",
+      "type": "patch",
+      "oldVersion": "0.7.5",
+      "changesets": [
+        "dirty-trains-take"
+      ],
+      "newVersion": "0.7.6"
+    },
+    {
+      "name": "@ddd-components/scaffolder",
+      "type": "patch",
+      "oldVersion": "0.7.6",
+      "changesets": [
+        "dirty-trains-take"
+      ],
+      "newVersion": "0.7.7"
+    },
+    {
+      "name": "@ddd-components/testbed",
+      "type": "patch",
+      "oldVersion": "0.7.5",
+      "changesets": [
+        "dirty-trains-take"
+      ],
+      "newVersion": "0.7.6"
+    }
+  ]
+}

@@ -1,5 +1,11 @@
 # @ddd-components/runtime
 
+## 0.7.6
+
+### Patch Changes
+
+- f792c5b: ci: Testing whether changesets are now properly removed.
+
 ## 0.7.5
 
 ### Patch Changes
