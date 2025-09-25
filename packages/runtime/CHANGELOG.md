@@ -1,5 +1,11 @@
 # @ddd-components/runtime
 
+## 0.7.8
+
+### Patch Changes
+
+- 5ccb8ad: Testing an automated patch bump on the version, with some documentation added to a file.
+
 ## 0.7.7
 
 ### Patch Changes
