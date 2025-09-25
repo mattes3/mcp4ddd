@@ -18,6 +18,7 @@
     ],
     "author": "Matthias Bohlen",
     "license": "MIT",
+    "private": true,
     "devDependencies": {
         "@aws-sdk/client-dynamodb": "^3.887.0",
         "@aws-sdk/lib-dynamodb": "^3.887.0",
