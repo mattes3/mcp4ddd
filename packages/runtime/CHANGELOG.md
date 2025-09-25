@@ -1,5 +1,12 @@
 # @ddd-components/runtime
 
+## 0.7.4
+
+### Patch Changes
+
+- 85733a2: Extracted `safeAsync` into the runtime library.
+- 9df89c0: docs(runtime): Added README to document the usage of the package.
+
 ## 0.7.3
 
 ### Patch Changes
