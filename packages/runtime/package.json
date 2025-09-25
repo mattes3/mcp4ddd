@@ -24,6 +24,9 @@
     ],
     "author": "Matthias Bohlen",
     "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
     "devDependencies": {
         "@tsconfig/node22": "^22.0.2",
         "@tsconfig/strictest": "^2.0.5",
