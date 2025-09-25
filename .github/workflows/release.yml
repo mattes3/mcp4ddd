@@ -48,6 +48,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Debug changesets outputs
+        run: |
+          echo "hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}"
+          echo "published: ${{ steps.changesets.outputs.published }}"
+          echo "publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}"
+
       - name: Get latest tag
         id: get_tag
         if: steps.changesets.outputs.published == 'true'

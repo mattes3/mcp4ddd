@@ -23,20 +23,21 @@ This project provides an MCP (Model Context Protocol) server that scaffolds Doma
 
 ## Installation
 
-### MCP Server
+mcp4ddd consists of a generator file that you need to run on your machine as a NodeJS process.
+
+The generated code depends on a very small runtime library that you will find in the NPM package `@ddd-components/runtime`.
+
+### Installing the MCP Server
 Download the latest release from [GitHub Releases](https://github.com/mattes3/mcp4ddd/releases) and take the file `index.js`. You need to have NodeJS installed on your machine to be able to run it.
 
-### Runtime Library
-```bash
-npm install  @ddd-components/runtime
-```
+### Installing the Runtime Library and further dependencies
 
-### Dependencies
-```bash
-npm install  ts-results-es  zod
-```
+Add this to your own project where the generated code will run:
 
-| Library | What it does |
+```bash
+npm install  @ddd-components/runtime ts-results-es zod
+```
+| Dependency | What it does |
 | ------- | -------- |
 | [ts-results-es](https://ts-results-es.readthedocs.io/en/latest/) | A TypeScript implementation of Rust's Result and Option objects. Brings compile-time error checking and optional values to TypeScript. |
 | [zod](https://zod.dev/) | TypeScript-first schema validation with static type inference |
