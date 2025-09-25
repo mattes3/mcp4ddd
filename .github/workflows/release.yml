@@ -39,31 +39,49 @@ jobs:
       - name: Build project
         run: pnpm build
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          publish: pnpm release # this does a "changeset publish"
+      - name: Check changesets
+        run: pnpm changeset status --output changesets.json
+
+      - name: Parse changesets JSON
+        id: parse
+        run: |
+          if [ -f changesets.json ]; then
+            runtime=$(node -p "JSON.parse(require('fs').readFileSync('changesets.json', 'utf8')).releases.some(r => r.name === '@ddd-components/runtime')")
+            scaffolder=$(node -p "JSON.parse(require('fs').readFileSync('changesets.json', 'utf8')).releases.some(r => r.name === '@ddd-components/scaffolder')")
+            echo "runtime_has_changesets=$runtime" >> $GITHUB_OUTPUT
+            echo "scaffolder_has_changesets=$scaffolder" >> $GITHUB_OUTPUT
+          else
+            echo "runtime_has_changesets=false" >> $GITHUB_OUTPUT
+            echo "scaffolder_has_changesets=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update versions
+        if: steps.parse.outputs.runtime_has_changesets == 'true' || steps.parse.outputs.scaffolder_has_changesets == 'true'
+        run: pnpm changeset version
+
+      - name: Publish runtime to NPM
+        if: steps.parse.outputs.runtime_has_changesets == 'true'
+        run: pnpm changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Debug changesets outputs
-        run: |
-          echo "hasChangesets: ${{ steps.changesets.outputs.hasChangesets }}"
-          echo "published: ${{ steps.changesets.outputs.published }}"
-          echo "publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}"
+      - name: Get scaffolder version
+        if: steps.parse.outputs.scaffolder_has_changesets == 'true'
+        id: get_version
+        run: echo "version=$(node -p "require('./packages/scaffolder/package.json').version")" >> $GITHUB_OUTPUT
 
-      - name: Get latest tag
-        id: get_tag
-        if: steps.changesets.outputs.published == 'true'
-        run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+      - name: Create GitHub release for scaffolder
+        if: steps.parse.outputs.scaffolder_has_changesets == 'true'
+        run: gh release create v${{ steps.get_version.outputs.version }} --generate-notes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload built files to release
-        if: steps.changesets.outputs.published == 'true'
+      - name: Upload files to scaffolder release
+        if: steps.parse.outputs.scaffolder_has_changesets == 'true'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.get_tag.outputs.tag }}
+          tag_name: v${{ steps.get_version.outputs.version }}
           files: |
             packages/scaffolder/dist/index.js
             README.md
