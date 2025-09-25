@@ -21,8 +21,7 @@
         "ddd",
         "domain-driven-design",
         "typescript",
-        "code-generation",
-        "kilocode"
+        "code-generation"
     ],
     "author": "Matthias Bohlen",
     "license": "MIT",
