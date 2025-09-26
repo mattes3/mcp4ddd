@@ -66,6 +66,7 @@ const result = await beginWith(initialParameters)
 const resultWithAsync = await beginWith(initialParameters)
   .andThen((params) => safeAsync(() => fetchData(params)))
   .andThen(processData);
+```
 
 ## Dependencies
 
