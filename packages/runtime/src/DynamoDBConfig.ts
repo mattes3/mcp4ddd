@@ -11,6 +11,3 @@ export const documentClientConfig = {
         convertEmptyValues: false,
     },
 };
-
-// Configurable via DYNAMODB_TABLE_NAME environment variable for single-table design
-export const singleDBTableName = process.env['DYNAMODB_TABLE_NAME'] ?? 'MySingleDynamoDBTable';

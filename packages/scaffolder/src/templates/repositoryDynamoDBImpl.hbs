@@ -12,8 +12,12 @@ import { {{repositoryName}} } from '../../domainmodel/{{repositoryName}}.js';
 
 import { configure{{aggregateName}}Entity } from './{{aggregateName}}Entity.js';
 
-export function {{repositoryName}}Impl(): {{repositoryName}} {
-    const entity = configure{{aggregateName}}Entity();
+/**
+ * Implements the {{repositoryName}} interface, as an adapter to AWS DynamoDB.
+ * @param singleDBTableName name of the database table (single DB table pattern)
+ */
+export function {{repositoryName}}Impl(singleDBTableName: string): {{repositoryName}} {
+    const entity = configure{{aggregateName}}Entity(singleDBTableName);
     const logger = getLogger(['YOUR_APP_NAME', 'MODULE_NAME']);
 
     const dataOf = ({

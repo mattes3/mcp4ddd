@@ -38,13 +38,15 @@ describe('DynamoDB Repository generator', () => {
         expect(result.files[0]?.path).toBe(
             'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderEntity.ts',
         );
-        expect(result.files[0]?.content).toContain('export function configureOrderEntity() {');
+        expect(result.files[0]?.content).toContain(
+            'export function configureOrderEntity(singleDBTableName: string) {',
+        );
 
         expect(result.files[1]?.path).toBe(
             'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderRepositoryImpl.ts',
         );
         expect(result.files[1]?.content).toContain(
-            'export function OrderRepositoryImpl(): OrderRepository {',
+            'export function OrderRepositoryImpl(singleDBTableName: string): OrderRepository {',
         );
         expect(result.files[1]?.content).toContain('failed:\\n');
         expect(result.files[1]?.content).not.toContain('failed:\\\\n');

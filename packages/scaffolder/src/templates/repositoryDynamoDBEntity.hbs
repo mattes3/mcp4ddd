@@ -6,10 +6,9 @@ import { Entity } from 'electrodb';
 import {
     documentClientConfig,
     dynamoDBClientConfiguration,
-    singleDBTableName,
 } from '{{dynamoDBConfigurationFrom}}';
 
-export function configure{{aggregateName}}Entity() {
+export function configure{{aggregateName}}Entity(singleDBTableName: string) {
     const client = DynamoDBDocumentClient.from(
         new DynamoDBClient(dynamoDBClientConfiguration),
         documentClientConfig,
@@ -79,6 +78,6 @@ export function configure{{aggregateName}}Entity() {
             },
         },
 
-        { client, table: singleDBTableName },
+        { client, singleDBTableName },
     );
 }
