@@ -164,7 +164,7 @@ describe('DynamoDB Repository generator', () => {
             .parse(resultAsText.structuredContent);
 
         const repositoryContent = result.files[1]?.content;
-        expect(repositoryContent).toContain('async findByUserId({ userId }) {');
-        expect(repositoryContent).toContain('async findPendingOrders({  }) {');
+        expect(repositoryContent).toContain('findByUserId({ userId }) {');
+        expect(repositoryContent).toContain('findPendingOrders({  }) {');
     });
 });
