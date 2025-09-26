@@ -1,5 +1,11 @@
 # @ddd-components/runtime
 
+## 0.8.0
+
+### Minor Changes
+
+- 0bae369: Made the database table name for DynamoDB repositories configurable.
+
 ## 0.7.9
 
 ### Patch Changes

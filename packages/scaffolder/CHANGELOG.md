@@ -1,5 +1,19 @@
 # @ddd-components/scaffolder
 
+## 0.8.0
+
+### Minor Changes
+
+- 39e07fd: Fixed bus in the DynamoDB generator that had to do with async functions.
+- 8ab87a7: Made the generated PostgreSQL repositories transaction-aware.
+- a398d86: Fixed the PostgreSQL repository generator so it generates compilable code now.
+- 0bae369: Made the database table name for DynamoDB repositories configurable.
+
+### Patch Changes
+
+- Updated dependencies [0bae369]
+    - @ddd-components/runtime@0.8.0
+
 ## 0.7.11
 
 ### Patch Changes
