@@ -90,7 +90,7 @@ export const generateRepository = {
                     { name: 'id', type: `${aggregateName}['id']` },
                     { name: 'updates', type: `Partial<Omit<${aggregateDataName}, 'id'>>` },
                 ],
-                resultType: aggregateName,
+                resultType: 'void',
             },
             {
                 name: 'remove',

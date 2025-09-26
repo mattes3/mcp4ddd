@@ -98,9 +98,7 @@ export const {{repositoryName}}Impl = (
             return new AsyncResult(
                 {{aggregateName}}Model.query(trx)
                     .patchAndFetchById(id, updates)
-                    .then((result) =>
-                        Ok(create{{aggregateName}}(dataOf(result), timestampsOf(result))),
-                    )
+                    .then(() => Ok(undefined))
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.update()';
                         logger.error(`{ method } failed:\n { error }`, {

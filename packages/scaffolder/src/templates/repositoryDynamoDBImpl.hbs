@@ -1,10 +1,12 @@
 import { techError } from '@ddd-components/runtime';
 import { getLogger } from '@logtape/logtape';
 import { AsyncResult, Err, None, Ok, Some } from 'ts-results-es';
+import { Service } from 'electrodb';
 
 // Using .js extensions for ESM compliance with TypeScript's nodenext moduleResolution
 import {
     create{{aggregateName}},
+    {{aggregateName}},
     {{aggregateName}}Data,
     {{aggregateName}}Timestamps,
 } from '../../domainmodel/{{aggregateName}}.js';
@@ -12,12 +14,21 @@ import { {{repositoryName}} } from '../../domainmodel/{{repositoryName}}.js';
 
 import { configure{{aggregateName}}Entity } from './{{aggregateName}}Entity.js';
 
+type TransactionOnRepoProvider<RepositoryType> = <T>(work: (repo: RepositoryType) => Promise<T>) => Promise<T>;
+
+type DynamoDBTransaction = {
+  writeOps: ((entities: any) => any)[];
+};
+
 /**
  * Implements the {{repositoryName}} interface, as an adapter to AWS DynamoDB.
  * @param singleDBTableName name of the database table (single DB table pattern)
  */
-export function {{repositoryName}}Impl(singleDBTableName: string): {{repositoryName}} {
+export const {{repositoryName}}Impl = (
+    singleDBTableName: string,
+): TransactionOnRepoProvider<{{repositoryName}}> => {
     const entity = configure{{aggregateName}}Entity(singleDBTableName);
+    const service = new Service({ {{aggregateName}}: entity });
     const logger = getLogger(['YOUR_APP_NAME', 'MODULE_NAME']);
 
     const dataOf = ({
@@ -34,7 +45,25 @@ export function {{repositoryName}}Impl(singleDBTableName: string): {{repositoryN
         updatedAt,
     });
 
-    return {
+    const withTransactionFor =
+        <R>(createRepository: (trx: DynamoDBTransaction) => R): TransactionOnRepoProvider<R> =>
+        async (work) => {
+            const writeOps: any[] = [];
+            const trx = { writeOps };
+            const repo = createRepository(trx);
+            const result = await work(repo);
+
+            // Execute batched writes
+            if (trx.writeOps.length > 0) {
+                await service.transaction
+                    .write(({ {{aggregateName}} }) => trx.writeOps.map(op => op({ {{aggregateName}} })))
+                    .go();
+            }
+
+            return result;
+        };
+
+    return withTransactionFor<{{repositoryName}}>((trx) => ({
         {{#each methods}}
         {{name}}({ {{formattedParameterNames}} }) {
             return new AsyncResult(Err(techError('Method {{name}} not implemented')));
@@ -43,39 +72,15 @@ export function {{repositoryName}}Impl(singleDBTableName: string): {{repositoryN
         {{/each}}
 
         add({ item }) {
-            return new AsyncResult(
-                entity
-                    .create(item)
-                    .go()
-                    .then(() => Ok(undefined))
-                    .catch((error: Error) => {
-                        const method = '{{repositoryName}}.add()';
-                        logger.error(`{ method } failed:\n { error }`, {
-                            method,
-                            error,
-                            item,
-                        });
-                        return Err(techError(`${method} failed for ID ${item.id}: ${error.message}`));
-                    }),
-            );
+            trx.writeOps.push((entities) => entities.{{aggregateName}}.put(item).commit({ response: "all_old" }));
+            return new AsyncResult(Ok(undefined));
         },
 
         get({ id }) {
             return new AsyncResult(
-                entity
-                    .get({ id })
-                    .go()
-                    .then((result) =>
-                        Ok(
-                            result.data
-                                ? Some(
-                                      create{{aggregateName}}(
-                                          dataOf(result.data),
-                                          timestampsOf(result.data),
-                                      ),
-                                  )
-                                : None,
-                        ),
+                entity.get({ id }).go()
+                    .then(result =>
+                        result.data ? Ok(Some(create{{aggregateName}}(dataOf(result.data), timestampsOf(result.data)))) : Ok(None)
                     )
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.get()';
@@ -90,54 +95,13 @@ export function {{repositoryName}}Impl(singleDBTableName: string): {{repositoryN
         },
 
         update({ id, updates }) {
-            return new AsyncResult(
-                entity
-                    .update({ id })
-                    .set(updates)
-                    .go()
-                    .then((result) =>
-                        Ok(
-                            create{{aggregateName}}(
-                                dataOf(
-                                    result.data as {{aggregateName}}Data &
-                                        {{aggregateName}}Timestamps,
-                                ),
-                                timestampsOf(
-                                    result.data as {{aggregateName}}Data &
-                                        {{aggregateName}}Timestamps,
-                                ),
-                            ),
-                        ),
-                    )
-                    .catch((error: Error) => {
-                        const method = '{{repositoryName}}.update()';
-                        logger.error(`{ method } failed:\n { error }`, {
-                            method,
-                            error,
-                            id,
-                            updates,
-                        });
-                        return Err(techError(`${method} failed for ID ${id}: ${error.message}`));
-                    }),
-            );
+            trx.writeOps.push((entities) => entities.{{aggregateName}}.update({ id }).set(updates).commit({ response: "all_new" }));
+            return new AsyncResult(Ok(undefined));
         },
 
         remove({ item }) {
-            return new AsyncResult(
-                entity
-                    .delete({ id: item.id })
-                    .go()
-                    .then(() => Ok(undefined))
-                    .catch((error: Error) => {
-                        const method = '{{repositoryName}}.remove()';
-                        logger.error(`{ method } failed:\n { error }`, {
-                            method,
-                            error,
-                            id: item.id,
-                        });
-                        return Err(techError(`${method} failed for ID ${item.id}: ${error.message}`));
-                    }),
-            );
+            trx.writeOps.push((entities) => entities.{{aggregateName}}.delete({ id: item.id }).commit({ response: "all_old" }));
+            return new AsyncResult(Ok(undefined));
         },
-    }
-}
+    }));
+};

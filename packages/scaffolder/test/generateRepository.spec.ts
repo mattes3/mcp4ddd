@@ -57,7 +57,7 @@ describe('Repository generator', () => {
             "get(params: { id: Person['id'] }): AsyncResult<Option<Person>, TechError>",
         );
         expect(result.files[0]?.content).toContain(
-            "update(params: { id: Person['id'], updates: Partial<Omit<PersonData, 'id'>> }): AsyncResult<Person, TechError>;",
+            "update(params: { id: Person['id'], updates: Partial<Omit<PersonData, 'id'>> }): AsyncResult<void, TechError>;",
         );
         expect(result.files[0]?.content).toContain(
             'remove(params: { item: PersonData }): AsyncResult<void, TechError>;',
