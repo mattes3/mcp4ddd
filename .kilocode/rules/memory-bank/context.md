@@ -12,6 +12,7 @@ Monorepo architecture fully implemented with three packages: scaffolder (MCP ser
 - **Testbed Environment**: Created safe experimentation space with example prompts
 - **DynamoDB Table Name**: Made the DynamoDB table name configurable via `DYNAMODB_TABLE_NAME` environment variable instead of hard-coded value, supporting single-table design
 - **PostgreSQL Repository Generation**: Successfully generated PostgreSQL repository implementation for a sample aggregate in testbed bounded context using Objection.js
+- **Aggregate Support in Domain Services**: Added aggregateName parameter to domain service generation, enabling automatic generation of transaction-based services with proper error handling and repository integration
 - All tests passing and packages building successfully
 
 ## Next Steps

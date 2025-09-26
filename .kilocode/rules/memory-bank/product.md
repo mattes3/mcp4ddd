@@ -21,7 +21,7 @@ The system operates as an MCP server that provides four main tools:
 1. **Entity Generator**: Creates DDD entities with optional aggregate root designation
 2. **Value Object Generator**: Generates immutable value objects with validation
 3. **Repository Generator**: Creates repository interfaces for data persistence
-4. **Domain Service Generator**: Generates domain services with dependency injection
+4. **Domain Service Generator**: Generates domain services with dependency injection and optional transaction-aware repository support
 
 Each tool:
 - Accepts structured input via Zod schemas

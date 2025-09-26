@@ -22,7 +22,7 @@ This project provides an MCP (Model Context Protocol) server that scaffolds Doma
 - Generate DDD entities (optionally as aggregate roots)
 - Generate value objects
 - Generate repository interfaces
-- Generate domain services
+- Generate domain services (with optional transaction-aware repository support)
 - Automatic test file generation
 - Zod schema validation for inputs
 
