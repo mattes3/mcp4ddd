@@ -12,7 +12,7 @@ describe('domain service generator', () => {
     it('creates domain service and test files', async () => {
         const params = {
             serviceName: 'transferMoney',
-            injectedDependencies: [{ name: 'repo', type: 'AccountRepository' }],
+            injectedDependencies: [{ name: 'dummy', type: 'Dependency' }],
             parameters: [
                 { name: 'fromAccount', type: 'Account' },
                 { name: 'toAccount', type: 'Account' },
@@ -60,7 +60,9 @@ describe('domain service generator', () => {
             'packages/domainlogic/stocks/domain/src/domainmodel/transferMoney.ts',
         );
         expect(result.files[2]?.content).toContain('export const transferMoneyImpl =');
-        expect(result.files[2]?.content).toContain('(repo: AccountRepository): TransferMoney =>');
+        expect(result.files[2]?.content).toContain(
+            '(transact: TransactionOnRepository, dummy: Dependency): TransferMoney =>',
+        );
 
         expect(result.files[3]?.path).toBe(
             'packages/domainlogic/stocks/domain/test/transferMoney.spec.ts',

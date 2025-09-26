@@ -38,7 +38,7 @@ const outputSchema = z.object({
         .string()
         .describe(
             [
-                'a short summary of what the repository generator produced,',
+                'a short summary of what the generator produced,',
                 'with an instruction for the AI assistant about how to proceed',
             ].join(' '),
         ),
@@ -138,7 +138,11 @@ export const generateRepository = {
 
         const contentSummary = [
             `Prepared ${files.length} files for ${repositoryName}.`,
-            `Write the files with the exact content provided.`,
+            'Assistant alert: Write the code to the named output files,',
+            'exactly as the generator produced it.',
+            'The generator itself does not write the code to disk.',
+            'Assistant alert: Disregard compilation errors in the generated code',
+            'and leave them for the human to fix.',
         ].join(' ');
 
         const structuredContent = { contentSummary, files };

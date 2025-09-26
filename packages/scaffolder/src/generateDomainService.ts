@@ -10,7 +10,17 @@ import testTemplate from './templates/domainServiceTests.hbs';
 const inputSchema = z.object({
     serviceName: z.string().describe('the name of the domain service'),
     parameters: z.array(fieldSchema).describe('the parameters of the domain service'),
-    returns: z.string().describe('the result type of what the domain service returns'),
+    returns: z
+        .string()
+        .refine((val) => !['AsyncResult', 'AsyncOption'].some((substr) => val.includes(substr)), {
+            message: [
+                'This return type is not allowed',
+                'as asynchronicity is handled internally.',
+                'Use a simpler data type, it will automatically',
+                'be wrapped into an asynchronous one.',
+            ].join(' '),
+        })
+        .describe('the result type of what the domain service returns'),
     injectedDependencies: z
         .array(fieldSchema)
         .describe(
@@ -24,9 +34,21 @@ const inputSchema = z.object({
         .enum(['domain', 'application'])
         .default('domain')
         .describe('The layer where the component should be generated'),
+    aggregateName: z
+        .string()
+        .optional()
+        .describe('the name of the aggregate if the service uses a repository'),
 });
 
 const outputSchema = z.object({
+    contentSummary: z
+        .string()
+        .describe(
+            [
+                'a short summary of what the generator produced,',
+                'with an instruction for the AI assistant about how to proceed',
+            ].join(' '),
+        ),
     files: z.array(
         z.object({
             path: z
@@ -53,8 +75,15 @@ export const generateDomainService = {
         content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { serviceName, injectedDependencies, parameters, returns, boundedContext, layer } =
-            params;
+        const {
+            serviceName,
+            injectedDependencies,
+            parameters,
+            returns,
+            boundedContext,
+            layer,
+            aggregateName,
+        } = params;
 
         const formattedParameters = parameters.map((p) => `${p.name}: ${p.type}`).join(', ');
         const formattedParametersWithAnyTypes = parameters.map((p) => `${p.name}: any`).join(', ');
@@ -118,6 +147,10 @@ export const generateDomainService = {
             wrappedResultType,
             asyncResultType,
             promiseOfResultType,
+            aggregateName: aggregateName || 'Aggregate',
+            repositoryName: aggregateName ? `${aggregateName}Repository` : 'Repository',
+            aggregateNameLower: (aggregateName || 'Aggregate').toLowerCase(),
+            idField: parameters[0]?.name || 'id',
             basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
             basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
         };
@@ -157,7 +190,11 @@ export const generateDomainService = {
 
         const contentSummary = [
             `Prepared ${files.length} files for the domain service "${serviceName}".`,
-            `Write the files with the exact content provided.`,
+            'Assistant alert: Write the code to the named output files,',
+            'exactly as the generator produced it.',
+            'The generator itself does not write the code to disk.',
+            'Assistant alert: Disregard compilation errors in the generated code',
+            'and leave them for the human to fix.',
         ].join(' ');
 
         const structuredContent = { contentSummary, files };

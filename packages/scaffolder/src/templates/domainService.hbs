@@ -5,19 +5,50 @@ import { techError, type TechError } from '{{basicErrorTypesFrom}}';
 
 // Using .js extensions for ESM compliance with TypeScript's nodenext moduleResolution
 import { type {{serviceParametersType}} } from './{{serviceParametersType}}.js';
-import { type {{serviceErrorType}}, create{{serviceErrorType}} } from './create{{serviceErrorType}}s.js';
+import { type {{serviceErrorType}}, create{{serviceErrorType}} } from './{{serviceErrorType}}s.js';
+{{#if aggregateName}}
+import { type {{aggregateName}} } from './{{aggregateName}}.js';
+import { type {{repositoryName}} } from './{{repositoryName}}.js';
+
+type TransactionOn{{repositoryName}} = <T, E>(
+    work: (repo: {{repositoryName}}) => AsyncResult<T, E>,
+) => AsyncResult<T, E | TechError>;
+{{/if}}
 
 export type {{serviceType}} = (params: {{serviceParametersType}}) => {{{asyncResultType}}};
 
 // @DomainService
 export const {{serviceName}}Impl =
-    ({{formattedInjectedDependencies}}): {{serviceType}} =>
+    ({{#if aggregateName}}transact: TransactionOn{{repositoryName}}{{#if formattedInjectedDependencies}}, {{/if}}{{/if}}{{formattedInjectedDependencies}}): {{serviceType}} =>
     (parameterObject) => {
+        {{#if aggregateName}}
+        return beginWith(parameterObject).andThen((params) =>
+            transact((repo) =>
+                repo
+                    .get({ id: params.{{idField}} })
+                    .andThen((option) =>
+                        option.toResult(create{{serviceErrorType}}('{{aggregateName}} with id ' + params.{{idField}} + ' not found')),
+                    )
+                    .andThen(({{aggregateNameLower}}) => {
+                        // Placeholder: Implement the domain logic here
+                        return Ok({{aggregateNameLower}});
+                    }),
+            ),
+        );
+        {{else}}
         return beginWith(parameterObject)
-            .andThen((params) => 
+            .andThen((params) =>
                 Ok(undefined)
                 //human dev: implement this domain logic here and return a {{{asyncResultType}}} as in Rust.
                 //human dev: No try-catch inside here – return Ok() or Ok(value) or Err(create{{serviceErrorType}}(explanation)), instead.
                 //human dev: Avoid await, return the promise itself, instead!
             );
+        {{/if}}
     };
+
+// This is how to wire the dependencies into the service implementation:
+{{#if aggregateName}}
+// const x = {{serviceName}}Impl({{repositoryName}}Impl(...), /* other injected dependencies */);
+{{else}}
+// const x = {{serviceName}}Impl(/* injected dependencies */);
+{{/if}}
