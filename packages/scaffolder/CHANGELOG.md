@@ -1,5 +1,18 @@
 # @ddd-components/scaffolder
 
+## 0.9.0
+
+### Minor Changes
+
+- de557dc: feat(scaffolder)!: add aggregate support to domain service generation
+    - Added aggregateName parameter to generateDomainService input schema
+    - Updated domainService.hbs template to conditionally generate transaction-based services
+    - Improved error messages to include aggregate IDs
+    - Fixed return type handling to prevent AsyncResult nesting
+
+- ae2542e: Updated DynamoDB repository template to properly handle transaction failures using AsyncResult instead of throwing exceptions.
+- 9fcc50d: Added write transactions for DynamoDB repositories.
+
 ## 0.8.0
 
 ### Minor Changes
