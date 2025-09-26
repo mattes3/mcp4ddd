@@ -42,8 +42,8 @@ describe('PostgreSQL Repository generator', () => {
         expect(result.files[1]?.path).toBe(
             'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderRepositoryImpl.ts',
         );
-        expect(result.files[1]?.content).toContain(
-            'export function OrderRepositoryImpl(knex: Knex): OrderRepository {',
+        expect(result.files[1]?.content).toMatch(
+            /export const OrderRepositoryImpl = \(\s*knex: Knex,\s*\): TransactionOnRepoProvider<OrderRepository> => \{/,
         );
         expect(result.files[1]?.content).toContain('failed:\\n');
         expect(result.files[1]?.content).not.toContain('failed:\\\\n');
@@ -152,7 +152,7 @@ describe('PostgreSQL Repository generator', () => {
             .parse(resultAsText.structuredContent);
 
         const repositoryContent = result.files[1]?.content;
-        expect(repositoryContent).toContain('async findByUserId({ userId }) {');
-        expect(repositoryContent).toContain('async findPendingOrders({  }) {');
+        expect(repositoryContent).toContain('findByUserId({ userId }) {');
+        expect(repositoryContent).toContain('findPendingOrders({  }) {');
     });
 });
