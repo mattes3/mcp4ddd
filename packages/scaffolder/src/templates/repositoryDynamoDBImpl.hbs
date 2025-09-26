@@ -1,4 +1,4 @@
-import { techError } from '@ddd-components/runtime';
+import { techError, type TechError } from '@ddd-components/runtime';
 import { getLogger } from '@logtape/logtape';
 import { AsyncResult, Err, None, Ok, Some } from 'ts-results-es';
 import { Service } from 'electrodb';
@@ -14,7 +14,7 @@ import { {{repositoryName}} } from '../../domainmodel/{{repositoryName}}.js';
 
 import { configure{{aggregateName}}Entity } from './{{aggregateName}}Entity.js';
 
-type TransactionOnRepoProvider<RepositoryType> = <T>(work: (repo: RepositoryType) => Promise<T>) => Promise<T>;
+type TransactionOnRepoProvider<RepositoryType> = <T>(work: (repo: RepositoryType) => AsyncResult<T, TechError>) => AsyncResult<T, TechError>;
 
 type DynamoDBTransaction = {
   writeOps: ((entities: any) => any)[];
@@ -47,20 +47,30 @@ export const {{repositoryName}}Impl = (
 
     const withTransactionFor =
         <R>(createRepository: (trx: DynamoDBTransaction) => R): TransactionOnRepoProvider<R> =>
-        async (work) => {
+        (work) => {
             const writeOps: any[] = [];
             const trx = { writeOps };
             const repo = createRepository(trx);
-            const result = await work(repo);
 
-            // Execute batched writes
-            if (trx.writeOps.length > 0) {
-                await service.transaction
-                    .write(({ {{aggregateName}} }) => trx.writeOps.map(op => op({ {{aggregateName}} })))
-                    .go();
-            }
-
-            return result;
+            return work(repo).andThen((result) => {
+                return trx.writeOps.length === 0
+                    ? Ok(result)
+                    : // Execute batched writes
+                      new AsyncResult(
+                          service.transaction
+                              .write(({ {{aggregateName}} }) => trx.writeOps.map(op => op({ {{aggregateName}} })))
+                              .go()
+                              .then(() => Ok(result))
+                              .catch((error: Error) => {
+                                  const method = '{{repositoryName}}.withTransactionFor()';
+                                  logger.error(`{ method } failed:\n { error }`, {
+                                      method,
+                                      error,
+                                  });
+                                  return Err(techError(`${method} failed: ${error.message}`));
+                              }),
+                      );
+            });
         };
 
     return withTransactionFor<{{repositoryName}}>((trx) => ({
@@ -79,8 +89,8 @@ export const {{repositoryName}}Impl = (
         get({ id }) {
             return new AsyncResult(
                 entity.get({ id }).go()
-                    .then(result =>
-                        result.data ? Ok(Some(create{{aggregateName}}(dataOf(result.data), timestampsOf(result.data)))) : Ok(None)
+                    .then(({ data }) =>
+                        Ok(data ? Some(create{{aggregateName}}(dataOf(data), timestampsOf(data))) : None)
                     )
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.get()';

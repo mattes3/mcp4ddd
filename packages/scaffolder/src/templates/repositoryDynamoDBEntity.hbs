@@ -78,6 +78,6 @@ export function configure{{aggregateName}}Entity(singleDBTableName: string) {
             },
         },
 
-        { client, singleDBTableName },
+        { client, table: singleDBTableName },
     );
 }
