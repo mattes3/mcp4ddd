@@ -12,12 +12,6 @@ export class {{aggregateName}}Model extends Model {
     static override jsonSchema = {
         type: 'object',
         properties: {
-            {{#each attributes}}
-            {{name}}: {
-                type: '{{jsonSchemaType}}'{{#if format}},
-                format: '{{format}}'{{/if}}
-            },
-            {{/each}}
             createdAt: {
                 type: 'string',
                 format: 'date-time'
@@ -25,14 +19,20 @@ export class {{aggregateName}}Model extends Model {
             updatedAt: {
                 type: 'string',
                 format: 'date-time'
-            }
+            },
+            {{#each attributes}}
+            {{name}}: {
+                type: '{{jsonSchemaType}}'{{#if format}},
+                format: '{{format}}'{{/if}}
+            },
+            {{/each}}
         },
         required: [
+            'createdAt',
+            'updatedAt',
             {{#each attributes}}
             {{#if required}}'{{name}}'{{#unless @last}},{{/unless}}{{/if}}
             {{/each}}
-            'createdAt',
-            'updatedAt'
         ]
     };
 

@@ -35,8 +35,8 @@ export function {{repositoryName}}Impl(knex: Knex): {{repositoryName}} {
 
     return {
         {{#each methods}}
-        async {{name}}({ {{formattedParameterNames}} }) {
-            throw new Error('Method {{name}} not implemented');
+        {{name}}({ {{formattedParameterNames}} }) {
+            return new AsyncResult(Err(techError('Method {{name}} not implemented')));
         },
 
         {{/each}}
