@@ -1,5 +1,12 @@
 # @ddd-components/scaffolder
 
+## 0.7.11
+
+### Patch Changes
+
+- Updated dependencies [11e093f]
+    - @ddd-components/runtime@0.7.9
+
 ## 0.7.10
 
 ### Patch Changes
