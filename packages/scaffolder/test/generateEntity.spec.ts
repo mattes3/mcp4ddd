@@ -13,10 +13,7 @@ describe('Entity generator', () => {
         const params = {
             entityName: 'Order',
             aggregateRoot: true,
-            attributes: [
-                { name: 'id', type: 'UUID', valueObject: false },
-                { name: 'items', type: 'OrderItem[]', valueObject: true },
-            ],
+            attributes: [{ name: 'items', type: 'OrderItem[]', valueObject: true }],
             methods: [{ name: 'close', parameters: [{ name: 'absolute', type: 'boolean' }] }],
             boundedContext: 'stocks',
             layer: 'domain',

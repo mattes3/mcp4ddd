@@ -14,8 +14,9 @@ const inputSchema = z.object({
     attributes: z
         .array(
             z.object({
-                name: z.string().refine((val) => !['createdAt', 'updatedAt'].includes(val), {
-                    message: 'This value is not allowed as timestamps are managed internally!',
+                name: z.string().refine((val) => !['id', 'createdAt', 'updatedAt'].includes(val), {
+                    message:
+                        'This value is not allowed as id is implicit and timestamps are managed internally!',
                 }),
                 type: z.string(),
             }),
@@ -82,6 +83,8 @@ export const generateEntity = {
     }> {
         const { entityName, aggregateRoot, attributes, methods, boundedContext, layer } = params;
 
+        const implicitAttributes = [{ name: 'id', type: `${entityName}Id` }, ...attributes];
+
         const processedMethods = methods.map((method) => ({
             ...method,
             resultType: method.resultType ?? 'void',
@@ -91,7 +94,7 @@ export const generateEntity = {
         const dataForPlaceholders = {
             entityName,
             aggregateRoot,
-            attributes,
+            attributes: implicitAttributes,
             methods: processedMethods,
         };
         const entityContent = Handlebars.compile(entityTemplate)(dataForPlaceholders);

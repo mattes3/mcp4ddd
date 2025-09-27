@@ -66,9 +66,9 @@ setTimeout(() => {
     const entityMessage = buildJsonRpcMessage(2, 'tools/call', {
         name: 'generateEntity',
         arguments: {
-            entityName: 'Invoice',
+            entityName: 'Contract',
             aggregateRoot: true,
-            attributes: [{ name: 'id', type: 'UUID', valueObject: false }],
+            attributes: [],
             methods: [{ name: 'close', parameters: [{ name: 'absolute', type: 'boolean' }] }],
             boundedContext: 'stocks',
             layer: 'domain',
@@ -83,8 +83,14 @@ setTimeout(() => {
             name: 'generateDynamoDBRepository',
             arguments: {
                 boundedContext: 'stocks',
-                aggregateName: 'Invoice',
-                tableName: 'InvoicesTable',
+                aggregateName: 'Contract',
+                attributes: [{ name: 'id', type: 'string', required: true }],
+                indexes: {
+                    primary: {
+                        pk: { field: 'pk', composite: ['id'] },
+                        sk: { field: 'sk', composite: [] },
+                    },
+                },
             },
         });
         child.stdin.write(dynamoMessage);

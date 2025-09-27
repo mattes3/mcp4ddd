@@ -1,3 +1,7 @@
+import type { Branded } from '@ddd-components/runtime';
+
+export type {{entityName}}Id = Branded<string, '{{entityName}}Id'>;
+
 export type {{entityName}}Data = {
 {{#attributes}}
     {{name}}: {{type}};
