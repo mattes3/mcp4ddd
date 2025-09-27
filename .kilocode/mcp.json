@@ -8,7 +8,15 @@
                 "BASIC_ERROR_TYPES_FROM": "@ddd-components/runtime",
                 "DYNAMODB_CONFIG_FROM": "@ddd-components/runtime",
                 "BOUNDED_CONTEXTS_PARENT_FOLDER": "packages"
-            }
+            },
+            "alwaysAllow": [
+                "generateEntity",
+                "generateValueObject",
+                "generateRepository",
+                "generateDomainService",
+                "generateDynamoDBRepository",
+                "generatePostgreSQLRepository"
+            ]
         }
     }
 }
