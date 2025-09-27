@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 0.10.0
+
+### Minor Changes
+
+- 12a56a2: Added automatic typed ID field generation for DDD entities
+
 ## 0.9.0
 
 ### Minor Changes
