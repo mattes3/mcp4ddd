@@ -33,7 +33,7 @@ export const create{{entityName}} = (
     timestamps?: {{entityName}}Timestamps,
 ): {{entityName}} => ({
     ...data,
-    createdAt: timestamps ? new Date(timestamps?.createdAt) : new Date(),
+    createdAt: timestamps ? new Date(timestamps.createdAt) : new Date(),
     updatedAt: timestamps ? new Date(timestamps.updatedAt) : new Date(),
 {{#methods}}
 
