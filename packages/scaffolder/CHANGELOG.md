@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 0.10.1
+
+### Patch Changes
+
+- 01e4aa3: Fixed a typo in the entity template.
+
 ## 0.10.0
 
 ### Minor Changes
