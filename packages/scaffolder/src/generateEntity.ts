@@ -96,6 +96,8 @@ export const generateEntity = {
             aggregateRoot,
             attributes: implicitAttributes,
             methods: processedMethods,
+            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
+            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
         };
         const entityContent = Handlebars.compile(entityTemplate)(dataForPlaceholders);
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);

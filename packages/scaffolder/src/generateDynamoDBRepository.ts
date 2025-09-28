@@ -182,6 +182,8 @@ export const generateDynamoDBRepository = {
             attributes: processedAttributes,
             indexes: defaultIndexes,
             methods: processedMethods,
+            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
+            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
             dynamoDBConfigurationFrom: getEnv('DYNAMODB_CONFIG_FROM', '@ddd-components/runtime'),
         };
 

@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { Model, Transaction } from 'objection';
 import { AsyncResult, Err, None, Ok, Some } from 'ts-results-es';
 
-import { techError } from '@ddd-components/runtime';
+import { techError } from '{{basicErrorTypesFrom}}';
 import { getLogger } from '@logtape/logtape';
 
 // Using .js extensions for ESM compliance with TypeScript's nodenext moduleResolution

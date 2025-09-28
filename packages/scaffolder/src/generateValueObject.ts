@@ -75,6 +75,8 @@ export const generateValueObject = {
             valueObjectName,
             attributes,
             methods: processedMethods,
+            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
+            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
         };
         const valueObjectContent = Handlebars.compile(valueObjectTemplate)(dataForPlaceholders);
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);

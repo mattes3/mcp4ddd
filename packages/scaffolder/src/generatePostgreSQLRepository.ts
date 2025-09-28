@@ -158,6 +158,8 @@ export const generatePostgreSQLRepository = {
             attributes: processedAttributes,
             primaryKey,
             methods: processedMethods,
+            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
+            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
         };
 
         // Compile templates

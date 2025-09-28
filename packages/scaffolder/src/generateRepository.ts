@@ -112,6 +112,7 @@ export const generateRepository = {
             aggregateName,
             repositoryName,
             methods: processedMethods,
+            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
             basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
         };
 
