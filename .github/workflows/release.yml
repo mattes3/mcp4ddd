@@ -78,7 +78,7 @@ jobs:
           body_path: packages/scaffolder/CHANGELOG.md
           files: |
             README.md
-            packages/scaffolder/dist/index.js
+            packages/scaffolder/dist/mcp4ddd.js
           preserve_order: true
           overwrite_files: false
         env:

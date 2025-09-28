@@ -5,8 +5,9 @@
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
-        "build": "tsc -b && esbuild src/index.ts --bundle --minify --outfile=dist/index.js --format=esm --platform=node --loader:.hbs=text",
-        "dev": "pnpm build && pnpm node dist/index.js",
+        "build": "tsc -b && esbuild src/index.ts --bundle --minify --outfile=./dist/mcp4ddd.js --format=esm --platform=node --loader:.hbs=text",
+        "inst": "pnpm build && cp ./dist/mcp4ddd.js ~/bin/",
+        "dev": "pnpm build && pnpm node ./dist/index.js",
         "test": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec test/*.spec.ts",
         "test:watch": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec --watch test/*.spec.ts"
     },

@@ -52,8 +52,11 @@ Configure your MCP client to use the server:
 {
     "mcpServers": {
         "ddd-scaffolder": {
-            "command": "node",
-            "args": ["./path/to/mcp4ddd/index.js"],
+            "command": "/bin/sh",
+            "args": [
+                "-c",
+                "node ~/bin/mcp4ddd.js"
+            ],
             "env": {
                 "BASIC_TYPES_FROM": "@ddd-components/runtime",
                 "BASIC_ERROR_TYPES_FROM": "@ddd-components/runtime",
