@@ -83,7 +83,7 @@ export const {{repositoryName}}Impl = (
 
         add({ item }) {
             trx.writeOps.push((entities) => entities.{{aggregateName}}.put(item).commit({ response: "all_old" }));
-            return new AsyncResult(Ok(undefined));
+            return new AsyncResult(Ok.EMPTY);
         },
 
         get({ id }) {
@@ -106,12 +106,12 @@ export const {{repositoryName}}Impl = (
 
         update({ id, updates }) {
             trx.writeOps.push((entities) => entities.{{aggregateName}}.update({ id }).set(updates).commit({ response: "all_new" }));
-            return new AsyncResult(Ok(undefined));
+            return new AsyncResult(Ok.EMPTY);
         },
 
         remove({ item }) {
             trx.writeOps.push((entities) => entities.{{aggregateName}}.delete({ id: item.id }).commit({ response: "all_old" }));
-            return new AsyncResult(Ok(undefined));
+            return new AsyncResult(Ok.EMPTY);
         },
     }));
 };

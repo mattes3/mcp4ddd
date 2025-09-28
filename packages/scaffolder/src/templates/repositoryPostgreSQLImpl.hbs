@@ -58,7 +58,7 @@ export const {{repositoryName}}Impl = (
             return new AsyncResult(
                 {{aggregateName}}Model.query(trx)
                     .insert(item)
-                    .then(() => Ok(undefined))
+                    .then(() => Ok.EMPTY)
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.add()';
                         logger.error(`{ method } failed:\n { error }`, {
@@ -98,7 +98,7 @@ export const {{repositoryName}}Impl = (
             return new AsyncResult(
                 {{aggregateName}}Model.query(trx)
                     .patchAndFetchById(id, updates)
-                    .then(() => Ok(undefined))
+                    .then(() => Ok.EMPTY)
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.update()';
                         logger.error(`{ method } failed:\n { error }`, {
@@ -116,7 +116,7 @@ export const {{repositoryName}}Impl = (
             return new AsyncResult(
                 {{aggregateName}}Model.query(trx)
                     .deleteById(item.id)
-                    .then(() => Ok(undefined))
+                    .then(() => Ok.EMPTY)
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.remove()';
                         logger.error(`{ method } failed:\n { error }`, {

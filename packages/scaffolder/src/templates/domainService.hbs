@@ -38,7 +38,7 @@ export const {{serviceName}}Impl =
         {{else}}
         return beginWith(parameterObject)
             .andThen((params) =>
-                Ok(undefined)
+                Ok.EMPTY
                 //human dev: implement this domain logic here and return a {{{asyncResultType}}} as in Rust.
                 //human dev: No try-catch inside here – return Ok() or Ok(value) or Err(create{{serviceErrorType}}(explanation)), instead.
                 //human dev: Avoid await, return the promise itself, instead!
