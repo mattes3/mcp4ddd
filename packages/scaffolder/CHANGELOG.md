@@ -1,5 +1,12 @@
 # @ddd-components/scaffolder
 
+## 0.10.2
+
+### Patch Changes
+
+- 78c7f32: Output file is now called mcp4ddd.js, not index.js anymore
+- 4e3b907: Some cosmetic changes to the scaffolder templates
+
 ## 0.10.1
 
 ### Patch Changes
