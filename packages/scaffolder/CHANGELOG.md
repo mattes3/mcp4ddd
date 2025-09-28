@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 0.11.0
+
+### Minor Changes
+
+- 2c6c9d7: Some templates did not use the environment variables of the MCP server's configuration
+
 ## 0.10.2
 
 ### Patch Changes
