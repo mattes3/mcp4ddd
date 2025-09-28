@@ -14,7 +14,9 @@ import { {{repositoryName}} } from '../../domainmodel/{{repositoryName}}.js';
 
 import { configure{{aggregateName}}Entity } from './{{aggregateName}}Entity.js';
 
-type TransactionOnRepoProvider<RepositoryType> = <T>(work: (repo: RepositoryType) => AsyncResult<T, TechError>) => AsyncResult<T, TechError>;
+type TransactionOnRepoProvider<RepositoryType> = <T, E>(
+    work: (trx: RepositoryType) => AsyncResult<T, E>,
+) => AsyncResult<T, E>;
 
 type DynamoDBTransaction = {
   writeOps: ((entities: any) => any)[];

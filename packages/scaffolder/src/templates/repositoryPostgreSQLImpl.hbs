@@ -15,14 +15,14 @@ import { {{repositoryName}} } from '../../domainmodel/{{repositoryName}}.js';
 
 import { {{aggregateName}}Model } from './{{aggregateName}}Model.js';
 
-type TransactionOnRepoProvider<RepositoryType> = <T>(
-    work: (trx: RepositoryType) => Promise<T>,
-) => Promise<T>;
+type TransactionOnRepoProvider<RepositoryType> = <T, E>(
+    work: (trx: RepositoryType) => AsyncResult<T, E>,
+) => AsyncResult<T, E>;
 
 const withTransactionFor =
     <R>(createRepository: (trx: Transaction) => R): TransactionOnRepoProvider<R> =>
-    async (work) =>
-        Model.transaction(async (trx) => work(createRepository(trx)));
+    (work) =>
+        new AsyncResult(Model.transaction((trx) => work(createRepository(trx)).promise));
 
 export const {{repositoryName}}Impl = (
     knex: Knex,
