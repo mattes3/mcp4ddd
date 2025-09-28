@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 0.12.0
+
+### Minor Changes
+
+- 5cdc28c: The transaction function inside the repositories must return AsyncResult<T,E> again.
+
 ## 0.11.0
 
 ### Minor Changes
