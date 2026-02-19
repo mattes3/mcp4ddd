@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 0.13.0
+
+### Minor Changes
+
+- 9fb7441: Simplified the generated PostgreSQL repos
+
 ## 0.12.0
 
 ### Minor Changes
