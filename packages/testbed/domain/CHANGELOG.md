@@ -1,5 +1,12 @@
 # @ddd-components/testbed
 
+## 0.7.11
+
+### Patch Changes
+
+- Updated dependencies [3bf43d7]
+    - @ddd-components/runtime@0.8.1
+
 ## 0.7.10
 
 ### Patch Changes

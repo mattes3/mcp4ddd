@@ -1,5 +1,11 @@
 # @ddd-components/runtime
 
+## 0.8.1
+
+### Patch Changes
+
+- 3bf43d7: Added a nice comment to test the new CI/CD script.
+
 ## 0.8.0
 
 ### Minor Changes
