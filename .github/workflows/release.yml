@@ -64,7 +64,7 @@ jobs:
           publish: pnpm changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+#         no NPM_TOKEN here because GitHub is a "trusted publisher" for npmjs
 
       - name: No changesets found, so get scaffolder version
         if: steps.parse.outputs.scaffolder_has_changesets == 'false'
