@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write  # Required for OIDC (GitHub is now "trusted publisher" for npmjs)
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
