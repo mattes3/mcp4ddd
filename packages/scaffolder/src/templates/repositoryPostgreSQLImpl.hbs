@@ -36,12 +36,12 @@ export const {{repositoryName}}Impl = (
         createdAt,
         updatedAt,
         ...rest
-    }: {{aggregateName}}Data & {{aggregateName}}Timestamps): {{aggregateName}}Data => rest;
+    }: {{aggregateName}}Model): {{aggregateName}}Data => rest;
 
     const timestampsOf = ({
         createdAt,
         updatedAt,
-    }: {{aggregateName}}Data & {{aggregateName}}Timestamps): {{aggregateName}}Timestamps => ({
+    }: {{aggregateName}}Model): {{aggregateName}}Timestamps => ({
         createdAt,
         updatedAt,
     });
