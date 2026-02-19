@@ -1,5 +1,12 @@
 # @ddd-components/scaffolder
 
+## 0.13.1
+
+### Patch Changes
+
+- Updated dependencies [3bf43d7]
+    - @ddd-components/runtime@0.8.1
+
 ## 0.13.0
 
 ### Minor Changes
