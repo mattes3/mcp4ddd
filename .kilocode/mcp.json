@@ -2,7 +2,7 @@
     "mcpServers": {
         "ddd-scaffolder": {
             "command": "node",
-            "args": ["./packages/scaffolder/dist/index.js"],
+            "args": ["./packages/scaffolder/dist/mcp4ddd.js"],
             "env": {
                 "BASIC_TYPES_FROM": "@ddd-components/runtime",
                 "BASIC_ERROR_TYPES_FROM": "@ddd-components/runtime",
@@ -16,7 +16,8 @@
                 "generateDomainService",
                 "generateDynamoDBRepository",
                 "generatePostgreSQLRepository"
-            ]
+            ],
+            "disabled": false
         }
     }
 }
