@@ -7,8 +7,9 @@
     "scripts": {
         "build": "tsc -b && esbuild src/index.ts --bundle --minify --outfile=./dist/mcp4ddd.js --format=esm --platform=node --loader:.hbs=text",
         "inst": "pnpm build && cp ./dist/mcp4ddd.js ~/bin/",
-        "dev": "pnpm build && pnpm node ./dist/index.js",
+        "dev": "pnpm build && pnpm node ./dist/mcp4ddd.js",
         "test": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec test/*.spec.ts",
+        "integrationtest": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec test/*.integrated.ts",
         "test:watch": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec --watch test/*.spec.ts"
     },
     "keywords": [

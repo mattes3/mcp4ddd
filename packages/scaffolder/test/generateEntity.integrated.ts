@@ -14,7 +14,7 @@ function buildJsonRpcMessage(id: number, method: string, params?: any): string {
 }
 
 console.log('Starting MCP server test...');
-const child = spawn('node', ['./dist/index.js'], {
+const child = spawn('node', ['./dist/mcp4ddd.js'], {
     stdio: ['pipe', 'pipe', 'inherit'],
 });
 
