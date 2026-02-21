@@ -5,8 +5,7 @@ import dynamoDBEntityTemplate from './templates/repositoryDynamoDBEntity.hbs';
 import dynamoDBRepositoryTemplate from './templates/repositoryDynamoDBImpl.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
-
-const getEnv = (key: string, defaultValue: string): string => process.env[key] ?? defaultValue;
+import { ScaffolderConfig } from './ScaffolderConfig.js';
 
 const inputSchema = z.object({
     // Required parameters (minimal for usability)
@@ -16,10 +15,6 @@ const inputSchema = z.object({
         .describe('Name of the aggregate that is to be persisted in the repository'),
 
     // Optional parameters with smart defaults
-    layer: z
-        .enum(['domain', 'application'])
-        .default('domain')
-        .describe('The layer where the component should be generated'),
     service: z.string().optional().describe('ElectroDB service name (defaults to boundedContext)'),
     version: z.string().default('1').describe('ElectroDB entity version'),
 
@@ -120,7 +115,7 @@ const outputSchema = z.object({
     ),
 });
 
-export const generateDynamoDBRepository = {
+export const generateDynamoDBRepository = (env: ScaffolderConfig) => ({
     name: 'generateDynamoDBRepository',
 
     config: {
@@ -138,7 +133,6 @@ export const generateDynamoDBRepository = {
         const {
             boundedContext,
             aggregateName,
-            layer = 'domain',
             service = boundedContext,
             version = '1',
             attributes = [],
@@ -176,15 +170,14 @@ export const generateDynamoDBRepository = {
             boundedContext,
             aggregateName,
             repositoryName,
-            layer,
             service,
             version,
             attributes: processedAttributes,
             indexes: defaultIndexes,
             methods: processedMethods,
-            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
-            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
-            dynamoDBConfigurationFrom: getEnv('DYNAMODB_CONFIG_FROM', '@ddd-components/runtime'),
+            basicTypesFrom: env.basicTypesFrom,
+            basicErrorTypesFrom: env.basicErrorTypesFrom,
+            dynamoDBConfigurationFrom: env.dynamoDBConfigurationFrom,
         };
 
         const entityTemplate = Handlebars.compile(dynamoDBEntityTemplate);
@@ -193,18 +186,15 @@ export const generateDynamoDBRepository = {
         const entityContent = entityTemplate(dataForPlaceholders);
         const repositoryContent = repositoryTemplateCompiled(dataForPlaceholders);
 
-        const boundedContextsParentFolder = getEnv(
-            'BOUNDED_CONTEXTS_PARENT_FOLDER',
-            'packages/domainlogic',
-        );
+        const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/adapter/persistence/${aggregateName}Entity.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/adapters/persistence/${aggregateName}Entity.ts`,
                 content: entityContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/adapter/persistence/${repositoryName}Impl.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/adapters/persistence/${repositoryName}Impl.ts`,
                 content: repositoryContent,
             },
         ];
@@ -226,4 +216,4 @@ export const generateDynamoDBRepository = {
             structuredContent,
         };
     },
-};
+});

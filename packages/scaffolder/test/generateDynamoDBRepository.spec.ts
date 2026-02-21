@@ -1,22 +1,19 @@
-import { describe, it, before } from 'node:test';
 import { expect } from 'expect';
+import { describe, it } from 'node:test';
 import { z } from 'zod';
 
-import { generateDynamoDBRepository } from '../src/generateDynamoDBRepository.js';
+import { generateDynamoDBRepository as gddbr } from '../src/generateDynamoDBRepository.js';
+import { testScaffolderConfig } from './testScaffolderConfig.js';
 
 describe('DynamoDB Repository generator', () => {
-    before(() => {
-        // Ensure consistent test behavior by setting the default parent folder
-        process.env['BOUNDED_CONTEXTS_PARENT_FOLDER'] = 'packages/domainlogic';
-    });
+    const generateDynamoDBRepository = gddbr(testScaffolderConfig);
+
     it('creates DynamoDB repository files with minimal parameters', async () => {
         const params = {
             boundedContext: 'stocks',
             aggregateName: 'Order',
             attributes: [],
         };
-
-        process.env['DYNAMODB_CONFIG_FROM'] = '@ddd-components/runtime';
 
         // Validate input with Zod (like MCP would do)
         const parsed = z.object(generateDynamoDBRepository.config.inputSchema).parse(params);
@@ -36,14 +33,14 @@ describe('DynamoDB Repository generator', () => {
         // Assert that we should have usable data
         expect(result.files).toHaveLength(2);
         expect(result.files[0]?.path).toBe(
-            'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderEntity.ts',
+            'packages/stocks/src/adapters/persistence/OrderEntity.ts',
         );
         expect(result.files[0]?.content).toContain(
             'export function configureOrderEntity(singleDBTableName: string) {',
         );
 
         expect(result.files[1]?.path).toBe(
-            'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderRepositoryImpl.ts',
+            'packages/stocks/src/adapters/persistence/OrderRepositoryImpl.ts',
         );
         expect(result.files[1]?.content).toContain('export const OrderRepositoryImpl = (');
         expect(result.files[1]?.content).toContain('singleDBTableName: string,');
@@ -72,29 +69,6 @@ describe('DynamoDB Repository generator', () => {
         expect(result.files[0]?.content).toContain("entity: 'Order'");
         expect(result.files[0]?.content).toContain("service: 'custom-service'");
         expect(result.files[0]?.content).toContain("version: '2.0'");
-    });
-
-    it('generates files in application layer when specified', async () => {
-        const params = {
-            boundedContext: 'stocks',
-            aggregateName: 'Order',
-            tableName: 'OrdersTable',
-            layer: 'application',
-            attributes: [],
-        };
-
-        const parsed = z.object(generateDynamoDBRepository.config.inputSchema).parse(params);
-        const resultAsText = await generateDynamoDBRepository.execute(parsed);
-        const result = z
-            .object(generateDynamoDBRepository.config.outputSchema)
-            .parse(resultAsText.structuredContent);
-
-        expect(result.files[0]?.path).toBe(
-            'packages/domainlogic/stocks/application/src/adapter/persistence/OrderEntity.ts',
-        );
-        expect(result.files[1]?.path).toBe(
-            'packages/domainlogic/stocks/application/src/adapter/persistence/OrderRepositoryImpl.ts',
-        );
     });
 
     it('handles custom attributes and indexes', async () => {

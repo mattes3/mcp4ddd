@@ -3,7 +3,6 @@ Generate a DynamoDB repository for the Order aggregate.
 Repository details:
 - Bounded Context: orders
 - Aggregate Name: Order
-- Layer: domain
 - Entity Name: OrderEntity
 - Service: orders-service
 - Version: 1.0

@@ -5,8 +5,7 @@ import postgresModelTemplate from './templates/repositoryPostgreSQLModel.hbs';
 import postgresRepositoryTemplate from './templates/repositoryPostgreSQLImpl.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
-
-const getEnv = (key: string, defaultValue: string): string => process.env[key] ?? defaultValue;
+import { ScaffolderConfig } from './ScaffolderConfig.js';
 
 const inputSchema = z.object({
     // Required parameters
@@ -16,10 +15,6 @@ const inputSchema = z.object({
         .describe('Name of the aggregate that is to be persisted in the repository'),
 
     // Optional parameters with smart defaults
-    layer: z
-        .enum(['domain', 'application'])
-        .default('domain')
-        .describe('The layer where the component should be generated'),
     tableName: z
         .string()
         .optional()
@@ -76,7 +71,7 @@ const outputSchema = z.object({
     ),
 });
 
-export const generatePostgreSQLRepository = {
+export const generatePostgreSQLRepository = (env: ScaffolderConfig) => ({
     name: 'generatePostgreSQLRepository',
 
     config: {
@@ -94,7 +89,6 @@ export const generatePostgreSQLRepository = {
         const {
             boundedContext,
             aggregateName,
-            layer = 'domain',
             tableName,
             attributes = [],
             primaryKey = 'id',
@@ -153,13 +147,12 @@ export const generatePostgreSQLRepository = {
             aggregateName,
             repositoryName,
             modelName,
-            layer,
             tableName: finalTableName,
             attributes: processedAttributes,
             primaryKey,
             methods: processedMethods,
-            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
-            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
+            basicTypesFrom: env.basicTypesFrom,
+            basicErrorTypesFrom: env.basicErrorTypesFrom,
         };
 
         // Compile templates
@@ -169,18 +162,15 @@ export const generatePostgreSQLRepository = {
         const modelContent = modelTemplate(dataForPlaceholders);
         const repositoryContent = repositoryTemplate(dataForPlaceholders);
 
-        const boundedContextsParentFolder = getEnv(
-            'BOUNDED_CONTEXTS_PARENT_FOLDER',
-            'packages/domainlogic',
-        );
+        const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/adapter/persistence/${modelName}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/adapters/persistence/${modelName}.ts`,
                 content: modelContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/adapter/persistence/${repositoryName}Impl.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/adapters/persistence/${repositoryName}Impl.ts`,
                 content: repositoryContent,
             },
         ];
@@ -202,4 +192,4 @@ export const generatePostgreSQLRepository = {
             structuredContent,
         };
     },
-};
+});

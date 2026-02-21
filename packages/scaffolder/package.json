@@ -5,8 +5,11 @@
     "main": "dist/index.js",
     "type": "module",
     "scripts": {
-        "build": "tsc -b && esbuild src/index.ts --bundle --minify --outfile=./dist/mcp4ddd.js --format=esm --platform=node --loader:.hbs=text",
-        "inst": "pnpm build && cp ./dist/mcp4ddd.js ~/bin/",
+        "build:mcp": "tsc -b && esbuild src/index.ts --bundle --minify --outfile=./dist/mcp4ddd.js --format=esm --platform=node --loader:.hbs=text",
+        "build:openclaw:js": "tsc -b && esbuild src/OpenClawPlugin.ts --bundle --outfile=./dist/openclaw/package/openclaw4ddd.js --format=esm --platform=node --loader:.hbs=text",
+        "build:openclaw:json": "tsx --loader ./test/hbs-loader.mjs src/generateOpenClawJSON.ts >./dist/openclaw/package/openclaw.plugin.json",
+        "build": "pnpm build:mcp && pnpm build:openclaw:js && pnpm build:openclaw:json && bash ./openclaw/openclaw-build.sh",
+        "inst:mcp": "pnpm build && cp ./dist/mcp4ddd.js ~/bin/",
         "dev": "pnpm build && pnpm node ./dist/mcp4ddd.js",
         "test": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec test/*.spec.ts",
         "integrationtest": "tsx --loader ./test/hbs-loader.mjs --test --test-reporter spec test/*.integrated.ts",
@@ -16,6 +19,7 @@
         "ddd",
         "domain-driven-design",
         "mcp",
+        "openclaw",
         "code-generation"
     ],
     "author": "Matthias Bohlen",
@@ -30,15 +34,16 @@
         "electrodb": "^2.15.1",
         "esbuild": "^0.25.9",
         "expect": "^30.1.2",
+        "openclaw": "2026.2.19-2",
         "prettier": "^3.6.2",
-        "tsx": "^4.20.5",
         "typescript": "^5.9.2",
         "vitest": "^3.2.4"
     },
     "dependencies": {
-        "@modelcontextprotocol/sdk": "^1.17.5",
+        "@ddd-components/runtime": "workspace:*",
+        "@modelcontextprotocol/sdk": "^1.26.0",
         "handlebars": "^4.7.8",
-        "zod": "^3.25.76",
-        "@ddd-components/runtime": "workspace:*"
+        "zod": "3.25.76",
+        "zod-to-json-schema": "3.25.1"
     }
 }

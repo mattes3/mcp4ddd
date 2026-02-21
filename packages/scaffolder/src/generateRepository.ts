@@ -5,8 +5,7 @@ import repositoryTemplate from './templates/repository.hbs';
 import testTemplate from './templates/repositoryTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
-
-const getEnv = (key: string, defaultValue: string): string => process.env[key] ?? defaultValue;
+import { ScaffolderConfig } from './ScaffolderConfig.js';
 
 const inputSchema = z.object({
     aggregateName: z
@@ -21,6 +20,18 @@ const inputSchema = z.object({
                     .describe('the names and types of the parameters of the method'),
                 resultType: z
                     .string()
+                    .refine(
+                        (val) =>
+                            !['AsyncResult', 'AsyncOption'].some((substr) => val.includes(substr)),
+                        {
+                            message: [
+                                'This return type is not allowed',
+                                'as asynchronicity is handled internally.',
+                                'Use a simpler data type, it will automatically',
+                                'be wrapped into an asynchronous result.',
+                            ].join(' '),
+                        },
+                    )
                     .optional()
                     .describe('the optional name of the result type of the method'),
             })
@@ -52,7 +63,7 @@ const outputSchema = z.object({
     ),
 });
 
-export const generateRepository = {
+export const generateRepository = (env: ScaffolderConfig) => ({
     name: 'generateRepository',
     config: {
         title: 'Repository generator',
@@ -112,8 +123,8 @@ export const generateRepository = {
             aggregateName,
             repositoryName,
             methods: processedMethods,
-            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
-            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
+            basicTypesFrom: env.basicTypesFrom,
+            basicErrorTypesFrom: env.basicErrorTypesFrom,
         };
 
         Handlebars.registerHelper('angle', (t) => `<${t}>`);
@@ -121,18 +132,15 @@ export const generateRepository = {
         const repositoryContent = Handlebars.compile(repositoryTemplate)(dataForPlaceholders);
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
-        const boundedContextsParentFolder = getEnv(
-            'BOUNDED_CONTEXTS_PARENT_FOLDER',
-            'packages/domainlogic',
-        );
+        const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${repositoryName}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${repositoryName}.ts`,
                 content: repositoryContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${repositoryName}.spec.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${repositoryName}.spec.ts`,
                 content: testContent,
             },
         ];
@@ -153,4 +161,4 @@ export const generateRepository = {
             structuredContent,
         };
     },
-};
+});

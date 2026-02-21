@@ -6,6 +6,7 @@ import domainServiceTemplate from './templates/domainService.hbs';
 import domainServiceParametersTemplate from './templates/domainServiceParameters.hbs';
 import domainServiceErrorsTemplate from './templates/domainServiceErrors.hbs';
 import testTemplate from './templates/domainServiceTests.hbs';
+import { ScaffolderConfig } from './ScaffolderConfig.js';
 
 const inputSchema = z.object({
     serviceName: z.string().describe('the name of the domain service'),
@@ -63,7 +64,7 @@ const outputSchema = z.object({
  * MCP tool for generating domain services in Domain-Driven Design.
  * Generates TypeScript code for domain services including parameters, errors, and tests.
  */
-export const generateDomainService = {
+export const generateDomainService = (env: ScaffolderConfig) => ({
     name: 'generateDomainService',
     config: {
         title: 'Domain Service generator',
@@ -127,9 +128,6 @@ export const generateDomainService = {
         const asyncResultType = `Async${wrappedResultType}`;
         const promiseOfResultType = `Promise<${wrappedResultType}>`;
 
-        const getEnv = (key: string, defaultValue: string): string =>
-            process.env[key] ?? defaultValue;
-
         const dataForPlaceholders = {
             serviceName,
             formattedParameters,
@@ -151,8 +149,8 @@ export const generateDomainService = {
             repositoryName: aggregateName ? `${aggregateName}Repository` : 'Repository',
             aggregateNameLower: (aggregateName || 'Aggregate').toLowerCase(),
             idField: parameters[0]?.name || 'id',
-            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
-            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
+            basicTypesFrom: env.basicTypesFrom,
+            basicErrorTypesFrom: env.basicErrorTypesFrom,
         };
 
         const serviceContent = Handlebars.compile(domainServiceTemplate)(dataForPlaceholders);
@@ -164,26 +162,23 @@ export const generateDomainService = {
         );
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
-        const boundedContextsParentFolder = getEnv(
-            'BOUNDED_CONTEXTS_PARENT_FOLDER',
-            'packages/domainlogic',
-        );
+        const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${serviceErrorType}s.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${serviceErrorType}s.ts`,
                 content: serviceErrorsContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${serviceParametersType}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${serviceParametersType}.ts`,
                 content: serviceParametersContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${serviceName}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${serviceName}.ts`,
                 content: serviceContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${serviceName}.spec.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${serviceName}.spec.ts`,
                 content: testContent,
             },
         ];
@@ -204,4 +199,4 @@ export const generateDomainService = {
             structuredContent,
         };
     },
-};
+});

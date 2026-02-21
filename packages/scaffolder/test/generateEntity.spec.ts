@@ -1,14 +1,13 @@
-import { describe, it, before } from 'node:test';
 import { expect } from 'expect';
+import { describe, it } from 'node:test';
 import { z } from 'zod';
 
-import { generateEntity } from '../src/generateEntity.js';
+import { generateEntity as ge } from '../src/generateEntity.js';
+import { testScaffolderConfig } from './testScaffolderConfig.js';
 
 describe('Entity generator', () => {
-    before(() => {
-        // Ensure consistent test behavior by setting the default parent folder
-        process.env['BOUNDED_CONTEXTS_PARENT_FOLDER'] = 'packages/domainlogic';
-    });
+    const generateEntity = ge(testScaffolderConfig);
+
     it('creates entity and test files', async () => {
         const params = {
             entityName: 'Order',
@@ -37,12 +36,10 @@ describe('Entity generator', () => {
         // Assert that we should have usable data, now!
 
         expect(result.files).toHaveLength(2);
-        expect(result.files[0]?.path).toBe(
-            'packages/domainlogic/stocks/domain/src/domainmodel/Order.ts',
-        );
+        expect(result.files[0]?.path).toBe('packages/stocks/src/domain/Order.ts');
         expect(result.files[0]?.content).toContain('type Order =');
 
-        expect(result.files[1]?.path).toBe('packages/domainlogic/stocks/domain/test/Order.spec.ts');
+        expect(result.files[1]?.path).toBe('packages/stocks/test/domain/Order.spec.ts');
         expect(result.files[1]?.content).toContain('test the method close(absolute: boolean)');
     });
 });

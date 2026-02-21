@@ -5,8 +5,7 @@ import valueObjectTemplate from './templates/valueObject.hbs';
 import testTemplate from './templates/valueObjectTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
-
-const getEnv = (key: string, defaultValue: string): string => process.env[key] ?? defaultValue;
+import { ScaffolderConfig } from './ScaffolderConfig.js';
 
 const inputSchema = z.object({
     valueObjectName: z.string().describe('Name of the value object'),
@@ -51,7 +50,7 @@ const outputSchema = z.object({
     ),
 });
 
-export const generateValueObject = {
+export const generateValueObject = (env: ScaffolderConfig) => ({
     name: 'generateValueObject',
     config: {
         title: 'Value object generator',
@@ -75,24 +74,21 @@ export const generateValueObject = {
             valueObjectName,
             attributes,
             methods: processedMethods,
-            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
-            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
+            basicTypesFrom: env.basicTypesFrom,
+            basicErrorTypesFrom: env.basicErrorTypesFrom,
         };
         const valueObjectContent = Handlebars.compile(valueObjectTemplate)(dataForPlaceholders);
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
-        const boundedContextsParentFolder = getEnv(
-            'BOUNDED_CONTEXTS_PARENT_FOLDER',
-            'packages/domainlogic',
-        );
+        const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${valueObjectName}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${valueObjectName}.ts`,
                 content: valueObjectContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${valueObjectName}.spec.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${valueObjectName}.spec.ts`,
                 content: testContent,
             },
         ];
@@ -113,4 +109,4 @@ export const generateValueObject = {
             structuredContent,
         };
     },
-};
+});

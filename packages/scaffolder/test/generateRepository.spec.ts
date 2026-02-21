@@ -1,14 +1,12 @@
-import { describe, it, before } from 'node:test';
 import { expect } from 'expect';
+import { describe, it } from 'node:test';
 import { z } from 'zod';
 
-import { generateRepository } from '../src/generateRepository.js';
+import { generateRepository as gr } from '../src/generateRepository.js';
+import { testScaffolderConfig } from './testScaffolderConfig.js';
 
 describe('Repository generator', () => {
-    before(() => {
-        // Ensure consistent test behavior by setting the default parent folder
-        process.env['BOUNDED_CONTEXTS_PARENT_FOLDER'] = 'packages/domainlogic';
-    });
+    const generateRepository = gr(testScaffolderConfig);
 
     it('creates repository interface and test files', async () => {
         const params = {
@@ -43,9 +41,7 @@ describe('Repository generator', () => {
         // Assert that we should have usable data, now!
 
         expect(result.files).toHaveLength(2);
-        expect(result.files[0]?.path).toBe(
-            'packages/domainlogic/stocks/domain/src/domainmodel/PersonRepository.ts',
-        );
+        expect(result.files[0]?.path).toBe('packages/stocks/src/domain/PersonRepository.ts');
         expect(result.files[0]?.content).toContain(
             "import type { Person, PersonData } from './Person.js';",
         );
@@ -66,9 +62,7 @@ describe('Repository generator', () => {
             'findByName(params: { name: string }): AsyncResult<Person[], TechError>',
         );
 
-        expect(result.files[1]?.path).toBe(
-            'packages/domainlogic/stocks/domain/test/PersonRepository.spec.ts',
-        );
+        expect(result.files[1]?.path).toBe('packages/stocks/test/domain/PersonRepository.spec.ts');
         expect(result.files[1]?.content).toContain("describe('PersonRepository'");
         expect(result.files[1]?.content).toContain(
             '// test the method add(item: PersonData): AsyncResult<void, TechError>',

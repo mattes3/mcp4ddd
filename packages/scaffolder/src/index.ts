@@ -7,53 +7,36 @@ import { generateEntity } from './generateEntity.js';
 import { generatePostgreSQLRepository } from './generatePostgreSQLRepository.js';
 import { generateRepository } from './generateRepository.js';
 import { generateValueObject } from './generateValueObject.js';
+import {
+    ScaffolderConfig,
+    scaffolderConfigSchema,
+    scaffolderMetadata,
+} from './ScaffolderConfig.js';
+import { McpTool } from './McpTool.js';
 
 async function main() {
-    const server = new McpServer({
-        name: 'ddd-scaffolder',
-        version: '1.0.0',
+    const server = new McpServer(scaffolderMetadata);
+
+    const env: ScaffolderConfig = scaffolderConfigSchema.parse({
+        basicTypesFrom: process.env['BASIC_TYPES_FROM'],
+        basicErrorTypesFrom: process.env['BASIC_ERROR_TYPES_FROM'],
+        boundedContextsParentFolder: process.env['BOUNDED_CONTEXTS_PARENT_FOLDER'],
+        dynamoDBConfigurationFrom: process.env['DYNAMODB_CONFIG_FROM'],
     });
 
-    server.registerTool(generateEntity.name, generateEntity.config, generateEntity.execute);
+    const registerTool = (mcpToolFactory: (env: ScaffolderConfig) => McpTool) => {
+        const { name, config, execute } = mcpToolFactory(env);
+        return server.registerTool(name, config, execute);
+    };
 
-    server.registerTool(
-        generateValueObject.name,
-        generateValueObject.config,
-        generateValueObject.execute,
-    );
-
-    server.registerTool(
-        generateRepository.name,
-        generateRepository.config,
-        generateRepository.execute,
-    );
-
-    server.registerTool(
-        generateDomainService.name,
-        generateDomainService.config,
-        generateDomainService.execute,
-    );
-
-    server.registerTool(
-        generateDynamoDBRepository.name,
-        generateDynamoDBRepository.config,
-        generateDynamoDBRepository.execute,
-    );
-
-    server.registerTool(
-        generatePostgreSQLRepository.name,
-        generatePostgreSQLRepository.config,
-        generatePostgreSQLRepository.execute,
-    );
+    registerTool(generateEntity);
+    registerTool(generateValueObject);
+    registerTool(generateRepository);
+    registerTool(generateDomainService);
+    registerTool(generatePostgreSQLRepository);
+    registerTool(generateDynamoDBRepository);
 
     const transport = new StdioServerTransport();
-
-    const env = {
-        BASIC_TYPES_FROM: process.env['BASIC_TYPES_FROM'],
-        BASIC_ERROR_TYPES_FROM: process.env['BASIC_ERROR_TYPES_FROM'],
-        BOUNDED_CONTEXTS_PARENT_FOLDER: process.env['BOUNDED_CONTEXTS_PARENT_FOLDER'],
-        DYNAMODB_CONFIG_FROM: process.env['DYNAMODB_CONFIG_FROM'],
-    };
 
     return server
         .connect(transport)

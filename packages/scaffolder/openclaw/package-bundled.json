@@ -1,0 +1,11 @@
+{
+    "name": "@ddd-components/ddd-scaffolder",
+    "version": "1.0.0",
+    "description": "OpenClaw plugin that generates code based on the Domain-Driven Design methodology.",
+    "type": "module",
+    "openclaw": {
+        "extensions": ["./openclaw4ddd.js"]
+    },
+    "author": "Matthias Bohlen",
+    "license": "MIT"
+}

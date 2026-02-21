@@ -3,7 +3,6 @@ Generate a PostgreSQL repository for the Product aggregate in the "inventory" bo
 Repository details:
 - Bounded Context: inventory
 - Aggregate Name: Product
-- Layer: domain
 - Table Name: products
 - Attributes:
   - id: string (required)

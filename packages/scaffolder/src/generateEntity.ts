@@ -5,8 +5,7 @@ import entityTemplate from './templates/entity.hbs';
 import testTemplate from './templates/entityTests.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
-
-const getEnv = (key: string, defaultValue: string): string => process.env[key] ?? defaultValue;
+import { ScaffolderConfig } from './ScaffolderConfig.js';
 
 const inputSchema = z.object({
     entityName: z.string().describe('Name of the entity'),
@@ -62,7 +61,7 @@ const outputSchema = z.object({
     ),
 });
 
-export const generateEntity = {
+export const generateEntity = (env: ScaffolderConfig) => ({
     name: 'generateEntity',
     config: {
         title: 'Entity generator',
@@ -96,24 +95,21 @@ export const generateEntity = {
             aggregateRoot,
             attributes: implicitAttributes,
             methods: processedMethods,
-            basicTypesFrom: getEnv('BASIC_TYPES_FROM', '@ddd-components/runtime'),
-            basicErrorTypesFrom: getEnv('BASIC_ERROR_TYPES_FROM', '@ddd-components/runtime'),
+            basicTypesFrom: env.basicTypesFrom,
+            basicErrorTypesFrom: env.basicErrorTypesFrom,
         };
         const entityContent = Handlebars.compile(entityTemplate)(dataForPlaceholders);
         const testContent = Handlebars.compile(testTemplate)(dataForPlaceholders);
 
-        const boundedContextsParentFolder = getEnv(
-            'BOUNDED_CONTEXTS_PARENT_FOLDER',
-            'packages/domainlogic',
-        );
+        const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/src/domainmodel/${entityName}.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${entityName}.ts`,
                 content: entityContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/${layer}/test/${entityName}.spec.ts`,
+                path: `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${entityName}.spec.ts`,
                 content: testContent,
             },
         ];
@@ -134,4 +130,4 @@ export const generateEntity = {
             structuredContent,
         };
     },
-};
+});

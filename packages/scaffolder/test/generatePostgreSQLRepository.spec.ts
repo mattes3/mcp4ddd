@@ -1,14 +1,12 @@
-import { describe, it, before } from 'node:test';
 import { expect } from 'expect';
+import { describe, it } from 'node:test';
 import { z } from 'zod';
 
-import { generatePostgreSQLRepository } from '../src/generatePostgreSQLRepository.js';
+import { generatePostgreSQLRepository as gpsr } from '../src/generatePostgreSQLRepository.js';
+import { testScaffolderConfig } from './testScaffolderConfig.js';
 
 describe('PostgreSQL Repository generator', () => {
-    before(() => {
-        // Ensure consistent test behavior by setting the default parent folder
-        process.env['BOUNDED_CONTEXTS_PARENT_FOLDER'] = 'packages/domainlogic';
-    });
+    const generatePostgreSQLRepository = gpsr(testScaffolderConfig);
 
     it('creates PostgreSQL repository files with minimal parameters', async () => {
         const params = {
@@ -35,12 +33,12 @@ describe('PostgreSQL Repository generator', () => {
         // Assert that we should have usable data
         expect(result.files).toHaveLength(2);
         expect(result.files[0]?.path).toBe(
-            'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderModel.ts',
+            'packages/stocks/src/adapters/persistence/OrderModel.ts',
         );
         expect(result.files[0]?.content).toContain('export class OrderModel extends Model {');
 
         expect(result.files[1]?.path).toBe(
-            'packages/domainlogic/stocks/domain/src/adapter/persistence/OrderRepositoryImpl.ts',
+            'packages/stocks/src/adapters/persistence/OrderRepositoryImpl.ts',
         );
         expect(result.files[1]?.content).toMatch(
             /export const OrderRepositoryImpl = \(\s*knex: Knex,\s*\): TransactionOnRepoProvider<OrderRepository> => \{/,
@@ -64,28 +62,6 @@ describe('PostgreSQL Repository generator', () => {
             .parse(resultAsText.structuredContent);
 
         expect(result.files[0]?.content).toContain("tableName = 'orders'");
-    });
-
-    it('generates files in application layer when specified', async () => {
-        const params = {
-            boundedContext: 'stocks',
-            aggregateName: 'Order',
-            layer: 'application',
-            attributes: [],
-        };
-
-        const parsed = z.object(generatePostgreSQLRepository.config.inputSchema).parse(params);
-        const resultAsText = await generatePostgreSQLRepository.execute(parsed);
-        const result = z
-            .object(generatePostgreSQLRepository.config.outputSchema)
-            .parse(resultAsText.structuredContent);
-
-        expect(result.files[0]?.path).toBe(
-            'packages/domainlogic/stocks/application/src/adapter/persistence/OrderModel.ts',
-        );
-        expect(result.files[1]?.path).toBe(
-            'packages/domainlogic/stocks/application/src/adapter/persistence/OrderRepositoryImpl.ts',
-        );
     });
 
     it('handles custom attributes with different types', async () => {

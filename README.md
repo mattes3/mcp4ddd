@@ -61,7 +61,7 @@ Configure your MCP client to use the server:
                 "BASIC_TYPES_FROM": "@ddd-components/runtime",
                 "BASIC_ERROR_TYPES_FROM": "@ddd-components/runtime",
                 "DYNAMODB_CONFIG_FROM": "@ddd-components/runtime",
-                "BOUNDED_CONTEXTS_PARENT_FOLDER": "packages/domainlogic"
+                "BOUNDED_CONTEXTS_PARENT_FOLDER": "packages"
             }
         }
     }
@@ -107,7 +107,7 @@ The MCP server supports several environment variables to customize its behavior:
 
 | Variable Name | Default Value | Meaning |
 |---------------|---------------|---------|
-| `BOUNDED_CONTEXTS_PARENT_FOLDER` | `packages/domainlogic` | Configures the parent folder for generated bounded contexts |
+| `BOUNDED_CONTEXTS_PARENT_FOLDER` | `packages` | Configures the parent folder for generated bounded contexts |
 | `BASIC_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic types used in domain services |
 | `BASIC_ERROR_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic error types used in domain services |
 | `DYNAMODB_CONFIG_FROM` | `@ddd-components/runtime` | Specifies the import path for DynamoDB configuration used in repository implementations |
