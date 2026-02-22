@@ -1,5 +1,11 @@
 # @ddd-components/runtime
 
+## 0.8.2
+
+### Patch Changes
+
+- d1a56ee: First version with Kysely as a query builder for PostgreSQL
+
 ## 0.8.1
 
 ### Patch Changes
