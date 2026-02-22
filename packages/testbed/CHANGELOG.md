@@ -1,5 +1,13 @@
 # @ddd-components/testbed
 
+## 1.0.1
+
+### Patch Changes
+
+- afd5a6b: Updated the documentation so readers know that there is a plugin for OpenClaw now as well.
+- Updated dependencies [afd5a6b]
+    - @ddd-components/runtime@0.8.3
+
 ## 1.0.0
 
 ### Major Changes
