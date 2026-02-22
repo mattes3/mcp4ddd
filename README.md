@@ -29,7 +29,7 @@ mcp4ddd ships in two forms: an **MCP server** and an **OpenClaw plugin**. Both e
 The generated code depends on a very small runtime library that you will find in the NPM package `@ddd-components/runtime`.
 
 ### Installing the MCP Server
-Download the latest release from [GitHub Releases](https://github.com/mattes3/mcp4ddd/releases) and take the file `index.js`. You need to have NodeJS installed on your machine to be able to run it.
+Download the latest release from [GitHub Releases](https://github.com/mattes3/mcp4ddd/releases) and take the file `mcp4ddd.js`. You need to have NodeJS installed on your machine to be able to run it.
 
 ### Installing the OpenClaw Plugin
 Download `ddd-scaffolder.zip` from the [latest GitHub Release](https://github.com/mattes3/mcp4ddd/releases) and install it with:

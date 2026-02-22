@@ -47,7 +47,7 @@ mcp4ddd/
 ### Build Process
 1. TypeScript compilation using project references
 2. Bundling with esbuild to create single executable
-3. Output: `dist/index.js` (ESM format)
+3. Output: `dist/mcp4ddd.js` (ESM format)
 
 ### Testing Setup
 - Uses `node:test` for test execution
