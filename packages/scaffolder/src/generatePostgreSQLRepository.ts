@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars';
 import { z } from 'zod';
 
-import postgresModelTemplate from './templates/repositoryPostgreSQLModel.hbs';
+import postgresTypesTemplate from './templates/repositoryPostgreSQLTypes.hbs';
 import postgresRepositoryTemplate from './templates/repositoryPostgreSQLImpl.hbs';
 
 import { fieldSchema } from './FieldSchema.js';
@@ -77,7 +77,7 @@ export const generatePostgreSQLRepository = (env: ScaffolderConfig) => ({
     config: {
         title: 'PostgreSQL Repository generator',
         description:
-            'Generates a PostgreSQL repository implementation using Objection.js for an aggregate.',
+            'Generates a PostgreSQL repository implementation using Kysely for an aggregate.',
         inputSchema: inputSchema.shape,
         outputSchema: outputSchema.shape,
     },
@@ -96,37 +96,43 @@ export const generatePostgreSQLRepository = (env: ScaffolderConfig) => ({
         } = params;
 
         const repositoryName = `${aggregateName}Repository`;
-        const modelName = `${aggregateName}Model`;
-        const finalTableName = tableName || aggregateName.toLowerCase();
+        const typesName = `${aggregateName}Types`;
+        // Convert PascalCase aggregate name to snake_case table name, e.g. "OrderItem" → "order_item"
+        const toSnakeCase = (s: string) =>
+            s
+                .replace(/([A-Z])/g, '_$1')
+                .toLowerCase()
+                .replace(/^_/, '');
+        const finalTableName = tableName || toSnakeCase(aggregateName);
 
-        // Process attributes for Objection jsonSchema (exclude timestamp fields)
+        // Map attribute types to TypeScript types for Kysely table interface columns.
+        // `date` values are stored as ISO strings in PostgreSQL (text/timestamptz columns).
         const processedAttributes = attributes
             .filter((attr) => !['createdAt', 'updatedAt'].includes(attr.name))
             .map((attr) => {
-                let jsonSchemaType: string;
-                let format: string | undefined;
+                let tsType: string;
 
                 switch (attr.type) {
                     case 'string':
-                        jsonSchemaType = 'string';
+                        tsType = 'string';
                         break;
                     case 'number':
-                        jsonSchemaType = 'number';
+                        tsType = 'number';
                         break;
                     case 'boolean':
-                        jsonSchemaType = 'boolean';
+                        tsType = 'boolean';
                         break;
+
+                    // You can specify a different type for each operation (select, insert and
+                    // update) using the `ColumnType<SelectType, InsertType, UpdateType>`
+                    // wrapper. Here we define a column that is selected as
+                    // a `Date`, and provided as a `Date | string` in inserts and updates.
                     case 'date':
-                        jsonSchemaType = 'string';
-                        format = 'date-time';
+                        tsType = 'ColumnType<Date, Date | string, Date | string>';
                         break;
                 }
 
-                return {
-                    ...attr,
-                    jsonSchemaType,
-                    format,
-                };
+                return { ...attr, tsType };
             });
 
         // Process methods
@@ -146,28 +152,30 @@ export const generatePostgreSQLRepository = (env: ScaffolderConfig) => ({
             boundedContext,
             aggregateName,
             repositoryName,
-            modelName,
+            typesName,
             tableName: finalTableName,
             attributes: processedAttributes,
             primaryKey,
+            tsTypeDate: 'Generated<Date>',
+            tsTypeSelectable: `Selectable<${aggregateName}Table>`,
             methods: processedMethods,
             basicTypesFrom: env.basicTypesFrom,
             basicErrorTypesFrom: env.basicErrorTypesFrom,
         };
 
         // Compile templates
-        const modelTemplate = Handlebars.compile(postgresModelTemplate);
+        const typesTemplate = Handlebars.compile(postgresTypesTemplate);
         const repositoryTemplate = Handlebars.compile(postgresRepositoryTemplate);
 
-        const modelContent = modelTemplate(dataForPlaceholders);
+        const typesContent = typesTemplate(dataForPlaceholders);
         const repositoryContent = repositoryTemplate(dataForPlaceholders);
 
         const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/src/adapters/persistence/${modelName}.ts`,
-                content: modelContent,
+                path: `${boundedContextsParentFolder}/${boundedContext}/src/adapters/persistence/${typesName}.ts`,
+                content: typesContent,
             },
             {
                 path: `${boundedContextsParentFolder}/${boundedContext}/src/adapters/persistence/${repositoryName}Impl.ts`,
@@ -177,7 +185,7 @@ export const generatePostgreSQLRepository = (env: ScaffolderConfig) => ({
 
         const contentSummary = [
             `Prepared ${files.length} files for PostgreSQL repository ${repositoryName}.`,
-            `Generated Objection Model class and repository implementation.`,
+            `Generated Kysely table types and repository implementation.`,
             'Assistant alert: Write the code to the named output files,',
             'exactly as the generator produced it.',
             'The generator itself does not write the code to disk.',

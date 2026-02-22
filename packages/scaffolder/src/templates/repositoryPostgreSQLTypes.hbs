@@ -1,0 +1,26 @@
+import type { ColumnType, Generated, Selectable } from 'kysely';
+ 
+/**
+ * Kysely table row type for the {{tableName}} table.
+ * Each column maps to its PostgreSQL storage type.
+ * Nullable columns are marked with `| null`.
+ */
+export interface {{aggregateName}}Table {
+    id: string;
+    createdAt: {{{tsTypeDate}}};
+    updatedAt: {{{tsTypeDate}}};
+
+    {{#each attributes}}
+    {{name}}: {{{tsType}}}{{#unless required}} | null{{/unless}};
+    {{/each}}
+}
+
+export type SelectedFrom{{aggregateName}}Table = {{{tsTypeSelectable}}};
+
+/**
+ * Kysely Database interface — maps table names to their row types.
+ * Pass this as the generic parameter to `new Kysely<Database>({...})`.
+ */
+export interface Database {
+    {{tableName}}: {{aggregateName}}Table;
+}

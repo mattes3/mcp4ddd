@@ -1,7 +1,7 @@
 packages:
     - 'packages/runtime'
     - 'packages/scaffolder'
-    - 'packages/testbed/domain'
+    - 'packages/testbed'
 
 onlyBuiltDependencies:
     - esbuild

@@ -94,7 +94,7 @@ import { beginWith, singleError, techError, validationError } from '@ddd-compone
 - `generateRepository`: Creates repository interfaces
 - `generateDomainService`: Generates domain services with dependency injection and optional transaction-aware repository support
 - `generateDynamoDBRepository`: Generates DynamoDB repository implementations using ElectroDB
-- `generatePostgreSQLRepository`: Generates PostgreSQL repository implementations using Objection.js
+- `generatePostgreSQLRepository`: Generates PostgreSQL repository implementations using Kysely
 
 ### Runtime Exports
 - `BasicErrorTypes`: Error type definitions

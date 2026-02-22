@@ -1,47 +1,43 @@
-import { Knex } from 'knex';
-import { Model, Transaction } from 'objection';
+import { Kysely, Transaction } from 'kysely';
 import { AsyncResult, Err, None, Ok, Some } from 'ts-results-es';
 
 import { techError } from '{{basicErrorTypesFrom}}';
 import { getLogger } from '@logtape/logtape';
 
-// Using .js extensions for ESM compliance with TypeScript's nodenext moduleResolution
 import {
     create{{aggregateName}},
     {{aggregateName}}Data,
     {{aggregateName}}Timestamps,
-} from '../../domainmodel/{{aggregateName}}.js';
-import { {{repositoryName}} } from '../../domainmodel/{{repositoryName}}.js';
+} from '../../domain/{{aggregateName}}.js';
+import { {{repositoryName}} } from '../../domain/{{repositoryName}}.js';
 
-import { {{aggregateName}}Model } from './{{aggregateName}}Model.js';
+import { Database } from './{{aggregateName}}Types.js';
 
 type TransactionOnRepoProvider<RepositoryType> = <T, E>(
     work: (trx: RepositoryType) => AsyncResult<T, E>,
 ) => AsyncResult<T, E>;
 
-const withTransactionFor =
-    <R>(createRepository: (trx: Transaction) => R): TransactionOnRepoProvider<R> =>
-    (work) =>
-        new AsyncResult(Model.transaction((trx) => work(createRepository(trx)).promise));
-
 export const {{repositoryName}}Impl = (
-    knex: Knex,
+    db: Kysely<Database>,
 ): TransactionOnRepoProvider<{{repositoryName}}> => {
-    // Initialize knex for Objection models
-    {{aggregateName}}Model.knex(knex);
-
     const logger = getLogger(['YOUR_APP_NAME', 'MODULE_NAME']);
+
+    // `withTransactionFor` lives inside the factory so it closes over `db`.
+    const withTransactionFor =
+        <R>(createRepository: (trx: Transaction<Database>) => R): TransactionOnRepoProvider<R> =>
+        (work) =>
+            new AsyncResult(db.transaction().execute((trx) => work(createRepository(trx)).promise));
 
     const dataOf = ({
         createdAt,
         updatedAt,
         ...rest
-    }: {{aggregateName}}Model): {{aggregateName}}Data => rest;
+    }: SelectedFrom{{aggregateName}}Table): {{aggregateName}}Data => rest as {{aggregateName}}Data;
 
     const timestampsOf = ({
         createdAt,
         updatedAt,
-    }: {{aggregateName}}Model): {{aggregateName}}Timestamps => ({
+    }: SelectedFrom{{aggregateName}}Table): {{aggregateName}}Timestamps => ({
         createdAt,
         updatedAt,
     });
@@ -56,8 +52,10 @@ export const {{repositoryName}}Impl = (
 
         add({ item }) {
             return new AsyncResult(
-                {{aggregateName}}Model.query(trx)
-                    .insert(item)
+                trx
+                    .insertInto('{{tableName}}')
+                    .values(item)
+                    .execute()
                     .then(() => Ok.EMPTY)
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.add()';
@@ -73,8 +71,11 @@ export const {{repositoryName}}Impl = (
 
         get({ id }) {
             return new AsyncResult(
-                {{aggregateName}}Model.query(trx)
-                    .findById(id)
+                trx
+                    .selectFrom('{{tableName}}')
+                    .selectAll()
+                    .where('id', '=', id)
+                    .executeTakeFirst()
                     .then((result) =>
                         Ok(
                             result
@@ -96,8 +97,11 @@ export const {{repositoryName}}Impl = (
 
         update({ id, updates }) {
             return new AsyncResult(
-                {{aggregateName}}Model.query(trx)
-                    .patchAndFetchById(id, updates)
+                trx
+                    .updateTable('{{tableName}}')
+                    .set(updates)
+                    .where('id', '=', id)
+                    .execute()
                     .then(() => Ok.EMPTY)
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.update()';
@@ -114,8 +118,10 @@ export const {{repositoryName}}Impl = (
 
         remove({ item }) {
             return new AsyncResult(
-                {{aggregateName}}Model.query(trx)
-                    .deleteById(item.id)
+                trx
+                    .deleteFrom('{{tableName}}')
+                    .where('id', '=', item.id)
+                    .execute()
                     .then(() => Ok.EMPTY)
                     .catch((error: Error) => {
                         const method = '{{repositoryName}}.remove()';

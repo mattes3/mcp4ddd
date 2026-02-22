@@ -33,15 +33,16 @@ describe('PostgreSQL Repository generator', () => {
         // Assert that we should have usable data
         expect(result.files).toHaveLength(2);
         expect(result.files[0]?.path).toBe(
-            'packages/stocks/src/adapters/persistence/OrderModel.ts',
+            'packages/stocks/src/adapters/persistence/OrderTypes.ts',
         );
-        expect(result.files[0]?.content).toContain('export class OrderModel extends Model {');
+        expect(result.files[0]?.content).toContain('export interface OrderTable {');
+        expect(result.files[0]?.content).toContain('export interface Database {');
 
         expect(result.files[1]?.path).toBe(
             'packages/stocks/src/adapters/persistence/OrderRepositoryImpl.ts',
         );
         expect(result.files[1]?.content).toMatch(
-            /export const OrderRepositoryImpl = \(\s*knex: Knex,\s*\): TransactionOnRepoProvider<OrderRepository> => \{/,
+            /export const OrderRepositoryImpl = \(\s*db: Kysely<Database>,\s*\): TransactionOnRepoProvider<OrderRepository> => \{/,
         );
         expect(result.files[1]?.content).toContain('failed:\\n');
         expect(result.files[1]?.content).not.toContain('failed:\\\\n');
@@ -61,7 +62,25 @@ describe('PostgreSQL Repository generator', () => {
             .object(generatePostgreSQLRepository.config.outputSchema)
             .parse(resultAsText.structuredContent);
 
-        expect(result.files[0]?.content).toContain("tableName = 'orders'");
+        expect(result.files[0]?.content).toContain('orders: OrderTable;');
+    });
+
+    it('converts PascalCase aggregate name to snake_case table name by default', async () => {
+        const params = {
+            boundedContext: 'stocks',
+            aggregateName: 'OrderItem',
+            attributes: [],
+        };
+
+        const parsed = z.object(generatePostgreSQLRepository.config.inputSchema).parse(params);
+        const resultAsText = await generatePostgreSQLRepository.execute(parsed);
+        const result = z
+            .object(generatePostgreSQLRepository.config.outputSchema)
+            .parse(resultAsText.structuredContent);
+
+        // Default table name must be snake_case, not "orderitem"
+        expect(result.files[0]?.content).toContain('order_item: OrderItemTable;');
+        expect(result.files[1]?.content).toContain("insertInto('order_item')");
     });
 
     it('handles custom attributes with different types', async () => {
@@ -73,7 +92,7 @@ describe('PostgreSQL Repository generator', () => {
                 { name: 'userId', type: 'string', required: true },
                 { name: 'total', type: 'number', required: true },
                 { name: 'isActive', type: 'boolean', required: false },
-                { name: 'createdAt', type: 'date', required: true },
+                { name: 'placedAt', type: 'date', required: true },
             ],
         };
 
@@ -83,23 +102,17 @@ describe('PostgreSQL Repository generator', () => {
             .object(generatePostgreSQLRepository.config.outputSchema)
             .parse(resultAsText.structuredContent);
 
-        const modelContent = result.files[0]?.content;
-        expect(modelContent).toContain('id: {');
-        expect(modelContent).toContain("type: 'string'");
-        expect(modelContent).toContain('userId: {');
-        expect(modelContent).toContain('total: {');
-        expect(modelContent).toContain("type: 'number'");
-        expect(modelContent).toContain('isActive: {');
-        expect(modelContent).toContain("type: 'boolean'");
-        expect(modelContent).toContain('createdAt: {');
-        expect(modelContent).toContain("format: 'date-time'");
-        // Required fields only
-        expect(modelContent).toContain("'id'");
-        expect(modelContent).toContain("'userId'");
-        expect(modelContent).toContain("'total'");
-        expect(modelContent).toContain("'createdAt'");
-        // isActive is not required, so should not be in required array
-        expect(modelContent).not.toContain("'isActive'");
+        const typesContent = result.files[0]?.content;
+        // Required fields — shown with their TS type, no null
+        expect(typesContent).toContain('id: string;');
+        expect(typesContent).toContain('userId: string;');
+        expect(typesContent).toContain('total: number;');
+        expect(typesContent).toContain('placedAt: string;');
+        // Optional field — nullable column
+        expect(typesContent).toContain('isActive: boolean | null;');
+        // Automatic timestamps always present
+        expect(typesContent).toContain('createdAt: Generated<Date>;');
+        expect(typesContent).toContain('updatedAt: Generated<Date>;');
     });
 
     it('generates custom repository methods when provided', async () => {

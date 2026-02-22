@@ -15,4 +15,4 @@ Repository details:
   - findByPriceRange(min: number, max: number): Product[]
   - updateStock(id: string, quantity: number): void
 
-The repository should use Objection.js for database operations and provide efficient querying for product management.
+The repository should provide efficient querying for product management.
