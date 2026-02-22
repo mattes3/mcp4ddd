@@ -7,7 +7,7 @@ mcp4ddd
 1.0.0
 
 ## Description
-A monorepo containing an MCP server that generates code based on the Domain-Driven Design methodology, along with shared runtime utilities and a testbed for safe experimentation.
+A monorepo containing an MCP server **and an OpenClaw plugin** that generate code based on the Domain-Driven Design methodology, along with shared runtime utilities and a testbed for safe experimentation.
 
 ## Author
 Matthias Bohlen
@@ -23,8 +23,11 @@ This project provides an MCP (Model Context Protocol) server that scaffolds Doma
 - Generate value objects
 - Generate repository interfaces
 - Generate domain services (with optional transaction-aware repository support)
+- Generate DynamoDB repository implementations
+- Generate PostgreSQL repository implementations
 - Automatic test file generation
 - Zod schema validation for inputs
+- Available as both an **MCP server** (for Claude Desktop and compatible clients) and an **OpenClaw plugin**
 
 ## Target Users
 Developers implementing Domain-Driven Design in TypeScript projects who want to quickly scaffold DDD components with consistent patterns.

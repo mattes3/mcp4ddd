@@ -81,6 +81,7 @@ jobs:
           files: |
             README.md
             packages/scaffolder/dist/mcp4ddd.js
+            packages/scaffolder/dist/ddd-scaffolder.zip
           preserve_order: true
           overwrite_files: false
         env:
