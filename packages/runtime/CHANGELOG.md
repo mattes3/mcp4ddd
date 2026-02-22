@@ -1,5 +1,11 @@
 # @ddd-components/runtime
 
+## 0.8.3
+
+### Patch Changes
+
+- afd5a6b: Updated the documentation so readers know that there is a plugin for OpenClaw now as well.
+
 ## 0.8.2
 
 ### Patch Changes
