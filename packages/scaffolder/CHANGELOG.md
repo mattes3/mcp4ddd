@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 2.0.0
+
+### Major Changes
+
+- f47b845: Feature: Optional aggregate name parameter so generated code will be in aggregate-related output folders
+
 ## 1.0.2
 
 ### Patch Changes
