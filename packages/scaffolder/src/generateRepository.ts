@@ -134,13 +134,17 @@ export const generateRepository = (env: ScaffolderConfig) => ({
 
         const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
+        const packageName = aggregateName.toLowerCase();
+        const parentSrcPath = `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${packageName}`;
+        const parentTestPath = `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${packageName}`;
+
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${repositoryName}.ts`,
+                path: `${parentSrcPath}/${repositoryName}.ts`,
                 content: repositoryContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${repositoryName}.spec.ts`,
+                path: `${parentTestPath}/${repositoryName}.spec.ts`,
                 content: testContent,
             },
         ];

@@ -33,7 +33,6 @@ const inputSchema = z.object({
     boundedContext: z.string().describe('The bounded context name (e.g., "stocks", "accounts")'),
     layer: z
         .enum(['domain', 'application'])
-        .default('domain')
         .describe('The layer where the component should be generated'),
     aggregateName: z
         .string()
@@ -145,8 +144,8 @@ export const generateDomainService = (env: ScaffolderConfig) => ({
             wrappedResultType,
             asyncResultType,
             promiseOfResultType,
-            aggregateName: aggregateName || 'Aggregate',
-            repositoryName: aggregateName ? `${aggregateName}Repository` : 'Repository',
+            aggregateName: aggregateName,
+            repositoryName: aggregateName ? `${aggregateName}Repository` : undefined,
             aggregateNameLower: (aggregateName || 'Aggregate').toLowerCase(),
             idField: parameters[0]?.name || 'id',
             basicTypesFrom: env.basicTypesFrom,
@@ -164,21 +163,25 @@ export const generateDomainService = (env: ScaffolderConfig) => ({
 
         const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
+        const packageName = aggregateName ? aggregateName.toLowerCase() : '.';
+        const parentSrcPath = `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${packageName}`;
+        const parentTestPath = `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${packageName}`;
+
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${serviceErrorType}s.ts`,
+                path: `${parentSrcPath}/${serviceErrorType}s.ts`,
                 content: serviceErrorsContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${serviceParametersType}.ts`,
+                path: `${parentSrcPath}/${serviceParametersType}.ts`,
                 content: serviceParametersContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${serviceName}.ts`,
+                path: `${parentSrcPath}/${serviceName}.ts`,
                 content: serviceContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${serviceName}.spec.ts`,
+                path: `${parentTestPath}/${serviceName}.spec.ts`,
                 content: testContent,
             },
         ];

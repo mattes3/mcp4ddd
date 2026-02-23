@@ -29,6 +29,13 @@ const inputSchema = z.object({
         .enum(['domain', 'application'])
         .default('domain')
         .describe('The layer where the component should be generated'),
+    aggregateName: z
+        .string()
+        .optional()
+        .describe(
+            "name of the generated value object's aggregate root (leave empty " +
+                'if the generated value object will not be part of an aggregate)',
+        ),
 });
 
 const outputSchema = z.object({
@@ -62,7 +69,8 @@ export const generateValueObject = (env: ScaffolderConfig) => ({
         content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { valueObjectName, attributes, methods, boundedContext, layer } = params;
+        const { valueObjectName, attributes, methods, boundedContext, layer, aggregateName } =
+            params;
 
         const processedMethods = methods.map((method) => ({
             ...method,
@@ -82,13 +90,17 @@ export const generateValueObject = (env: ScaffolderConfig) => ({
 
         const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
+        const packageName = aggregateName ? aggregateName.toLowerCase() : '.';
+        const parentSrcPath = `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${packageName}`;
+        const parentTestPath = `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${packageName}`;
+
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${valueObjectName}.ts`,
+                path: `${parentSrcPath}/${valueObjectName}.ts`,
                 content: valueObjectContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${valueObjectName}.spec.ts`,
+                path: `${parentTestPath}/${valueObjectName}.spec.ts`,
                 content: testContent,
             },
         ];

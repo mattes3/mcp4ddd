@@ -40,6 +40,12 @@ const inputSchema = z.object({
         .enum(['domain', 'application'])
         .default('domain')
         .describe('The layer where the component should be generated'),
+    aggregateName: z
+        .string()
+        .optional()
+        .describe(
+            "name of the generated entity's aggregate root (leave empty if the generated entity shall be the root itself)",
+        ),
 });
 
 const outputSchema = z.object({
@@ -80,7 +86,15 @@ export const generateEntity = (env: ScaffolderConfig) => ({
         content: Array<{ type: 'text'; text: string }>;
         structuredContent: z.infer<typeof outputSchema>;
     }> {
-        const { entityName, aggregateRoot, attributes, methods, boundedContext, layer } = params;
+        const {
+            entityName,
+            aggregateRoot,
+            aggregateName,
+            attributes,
+            methods,
+            boundedContext,
+            layer,
+        } = params;
 
         const implicitAttributes = [{ name: 'id', type: `${entityName}Id` }, ...attributes];
 
@@ -103,13 +117,17 @@ export const generateEntity = (env: ScaffolderConfig) => ({
 
         const boundedContextsParentFolder = env.boundedContextsParentFolder;
 
+        const packageName = aggregateName ? aggregateName.toLowerCase() : entityName.toLowerCase();
+        const parentSrcPath = `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${packageName}`;
+        const parentTestPath = `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${packageName}`;
+
         const files = [
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/src/${layer}/${entityName}.ts`,
+                path: `${parentSrcPath}/${entityName}.ts`,
                 content: entityContent,
             },
             {
-                path: `${boundedContextsParentFolder}/${boundedContext}/test/${layer}/${entityName}.spec.ts`,
+                path: `${parentTestPath}/${entityName}.spec.ts`,
                 content: testContent,
             },
         ];
