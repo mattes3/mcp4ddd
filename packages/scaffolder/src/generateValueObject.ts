@@ -27,7 +27,6 @@ const inputSchema = z.object({
     boundedContext: z.string().describe('The bounded context name (e.g., "stocks", "accounts")'),
     layer: z
         .enum(['domain', 'application'])
-        .default('domain')
         .describe('The layer where the component should be generated'),
     aggregateName: z
         .string()
