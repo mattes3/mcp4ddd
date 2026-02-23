@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 1.0.2
+
+### Patch Changes
+
+- a3a323c: Cleaned up some minor style issues in the generated code.
+
 ## 1.0.1
 
 ### Patch Changes
