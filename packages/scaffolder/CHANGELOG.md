@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 2.0.1
+
+### Patch Changes
+
+- e1f0fc3: Removed a default value so that the AI assistant needs to indicate the architectural layer ("domain" or "application") explicitly.
+
 ## 2.0.0
 
 ### Major Changes
