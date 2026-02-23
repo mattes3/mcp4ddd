@@ -6,15 +6,15 @@ import { getLogger } from '@logtape/logtape';
 
 import {
     create{{aggregateName}},
-    {{aggregateName}}Data,
-    {{aggregateName}}Timestamps,
+    type {{aggregateName}}Data,
+    type {{aggregateName}}Timestamps,
 } from '../../domain/{{aggregateName}}.js';
-import { {{repositoryName}} } from '../../domain/{{repositoryName}}.js';
+import { type {{repositoryName}} } from '../../domain/{{repositoryName}}.js';
 
-import { Database } from './{{aggregateName}}Types.js';
+import { type Database, type SelectedFrom{{aggregateName}}Table } from './{{aggregateName}}Types.js';
 
 type TransactionOnRepoProvider<RepositoryType> = <T, E>(
-    work: (trx: RepositoryType) => AsyncResult<T, E>,
+    work: (repository: RepositoryType) => AsyncResult<T, E>,
 ) => AsyncResult<T, E>;
 
 export const {{repositoryName}}Impl = (

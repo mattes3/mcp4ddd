@@ -3,7 +3,6 @@ import { AsyncResult, type Result, Ok, Err } from 'ts-results-es';
 import { beginWith, safeAsync } from '{{basicTypesFrom}}';
 import { techError, type TechError } from '{{basicErrorTypesFrom}}';
 
-// Using .js extensions for ESM compliance with TypeScript's nodenext moduleResolution
 import { type {{serviceParametersType}} } from './{{serviceParametersType}}.js';
 import { type {{serviceErrorType}}, create{{serviceErrorType}} } from './{{serviceErrorType}}s.js';
 {{#if aggregateName}}
