@@ -22,16 +22,14 @@ export const {{serviceName}}Impl =
     (parameterObject) => {
         {{#if aggregateName}}
         return beginWith(parameterObject).andThen((params) =>
-            transact((repo) =>
-                repo
-                    .get({ id: params.{{idField}} })
-                    .andThen((option) =>
-                        option.toResult(create{{serviceErrorType}}('{{aggregateName}} with id ' + params.{{idField}} + ' not found')),
-                    )
-                    .andThen(({{aggregateNameLower}}) => {
-                        // Placeholder: Implement the domain logic here
-                        return Ok({{aggregateNameLower}});
-                    }),
+            transact((repo) => repo.get({ id: params.{{idField}} }))
+                .andThen((option) =>
+                    option.toResult(create{{serviceErrorType}}('{{aggregateName}} with id ' + params.{{idField}} + ' not found')),
+                )
+                .andThen(({{aggregateNameLower}}) => {
+                    // Placeholder: Implement the domain logic here
+                    return Ok({{aggregateNameLower}});
+                }),
             ),
         );
         {{else}}
