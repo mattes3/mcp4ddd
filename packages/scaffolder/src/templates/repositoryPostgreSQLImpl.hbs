@@ -8,13 +8,13 @@ import {
     create{{aggregateName}},
     type {{aggregateName}}Data,
     type {{aggregateName}}Timestamps,
-} from '../../domain/{{aggregateName}}.js';
-import { type {{repositoryName}} } from '../../domain/{{repositoryName}}.js';
+} from '../../domain/{{aggregatePackageName}}/{{aggregateName}}.js';
+import { type {{repositoryName}} } from '../../domain/{{aggregatePackageName}}/{{repositoryName}}.js';
 
 import { type Database, type SelectedFrom{{aggregateName}}Table } from './{{aggregateName}}Types.js';
 
 export const {{repositoryName}}Impl = (db: Kysely<Database>): WithUnitOfWork<{{repositoryName}}> => {
-    const logger = getLogger(['YOUR_APP_NAME', 'MODULE_NAME']);
+    const logger = getLogger(['{{boundedContext}}', '{{aggregatePackageName}}', 'persistence']);
 
     const dataOf = ({ createdAt, updatedAt, ...rest }: SelectedFrom{{aggregateName}}Table): {{aggregateName}}Data =>
         rest as {{aggregateName}}Data;

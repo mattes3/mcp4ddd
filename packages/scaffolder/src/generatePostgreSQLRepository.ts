@@ -148,8 +148,11 @@ export const generatePostgreSQLRepository = (env: ScaffolderConfig) => ({
             })),
         }));
 
+        const aggregatePackageName = aggregateName.toLowerCase();
+
         const dataForPlaceholders = {
             boundedContext,
+            aggregatePackageName,
             aggregateName,
             repositoryName,
             typesName,
