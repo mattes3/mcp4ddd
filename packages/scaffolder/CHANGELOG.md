@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 2.2.0
+
+### Minor Changes
+
+- 14294bf: Fixed the generated path names in imports
+
 ## 2.1.0
 
 ### Minor Changes
