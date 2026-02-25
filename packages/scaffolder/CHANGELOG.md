@@ -1,5 +1,16 @@
 # @ddd-components/scaffolder
 
+## 2.1.0
+
+### Minor Changes
+
+- 8497cd2: Support the Unit of Work pattern
+- 9cce4b6: Updated PostgreSQL repository implementation template to use `WithUnitOfWork` and `withUnitOfWork`. Generated repositories now use `db.startTransaction()` with explicit commit/rollback, access Kysely via `trx.kyselyTrx`, and strip function-valued properties via a `withoutFunctions` helper before inserting or updating rows.
+
+### Patch Changes
+
+- 7efa009: Refactored the domain service template to chain `.andThen()` calls directly on the `transact(...)` result instead of nesting them inside the `transact` callback. Generated code now follows a flatter, more readable `AsyncResult` chain when an aggregate is involved.
+
 ## 2.0.1
 
 ### Patch Changes
