@@ -45,12 +45,13 @@ describe('Entity generator', () => {
             attributes: [],
             methods: [],
             boundedContext: 'OrderManagement',
+            layer: 'application',
         });
 
         expect(entity?.content).toHaveLength(1);
         if (entity?.content[0]?.type === 'text') {
             expect(entity?.content[0]?.text).toContain(
-                'packages/OrderManagement/src/domain/Order.ts',
+                'packages/OrderManagement/src/application/order/Order.ts',
             );
         } else {
             expect(false).toBeTruthy();

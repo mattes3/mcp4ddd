@@ -42,7 +42,7 @@ describe('PostgreSQL Repository generator', () => {
             'packages/stocks/src/adapters/persistence/OrderRepositoryImpl.ts',
         );
         expect(result.files[1]?.content).toMatch(
-            /export const OrderRepositoryImpl = \(\s*db: Kysely<Database>,\s*\): TransactionOnRepoProvider<OrderRepository> => \{/,
+            /export const OrderRepositoryImpl = \(db: Kysely<Database>\): WithUnitOfWork<OrderRepository> => \{/,
         );
         expect(result.files[1]?.content).toContain('failed:\\n');
         expect(result.files[1]?.content).not.toContain('failed:\\\\n');
@@ -107,7 +107,7 @@ describe('PostgreSQL Repository generator', () => {
         expect(typesContent).toContain('id: string;');
         expect(typesContent).toContain('userId: string;');
         expect(typesContent).toContain('total: number;');
-        expect(typesContent).toContain('placedAt: string;');
+        expect(typesContent).toContain('placedAt: ColumnType<Date, Date | string, Date | string>;');
         // Optional field — nullable column
         expect(typesContent).toContain('isActive: boolean | null;');
         // Automatic timestamps always present

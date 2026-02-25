@@ -41,7 +41,7 @@ describe('Repository generator', () => {
         // Assert that we should have usable data, now!
 
         expect(result.files).toHaveLength(2);
-        expect(result.files[0]?.path).toBe('packages/stocks/src/domain/PersonRepository.ts');
+        expect(result.files[0]?.path).toBe('packages/stocks/src/domain/person/PersonRepository.ts');
         expect(result.files[0]?.content).toContain(
             "import type { Person, PersonData } from './Person.js';",
         );
@@ -62,7 +62,9 @@ describe('Repository generator', () => {
             'findByName(params: { name: string }): AsyncResult<Person[], TechError>',
         );
 
-        expect(result.files[1]?.path).toBe('packages/stocks/test/domain/PersonRepository.spec.ts');
+        expect(result.files[1]?.path).toBe(
+            'packages/stocks/test/domain/person/PersonRepository.spec.ts',
+        );
         expect(result.files[1]?.content).toContain("describe('PersonRepository'");
         expect(result.files[1]?.content).toContain(
             '// test the method add(item: PersonData): AsyncResult<void, TechError>',

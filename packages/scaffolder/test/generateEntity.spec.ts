@@ -36,10 +36,10 @@ describe('Entity generator', () => {
         // Assert that we should have usable data, now!
 
         expect(result.files).toHaveLength(2);
-        expect(result.files[0]?.path).toBe('packages/stocks/src/domain/Order.ts');
+        expect(result.files[0]?.path).toBe('packages/stocks/src/domain/order/Order.ts');
         expect(result.files[0]?.content).toContain('type Order =');
 
-        expect(result.files[1]?.path).toBe('packages/stocks/test/domain/Order.spec.ts');
+        expect(result.files[1]?.path).toBe('packages/stocks/test/domain/order/Order.spec.ts');
         expect(result.files[1]?.content).toContain('test the method close(absolute: boolean)');
     });
 });

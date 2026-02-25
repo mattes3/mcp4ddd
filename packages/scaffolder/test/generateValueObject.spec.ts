@@ -40,11 +40,11 @@ describe('value object generator', () => {
         // Assert that we should have usable data, now!
 
         expect(result.files).toHaveLength(2);
-        expect(result.files[0]?.path).toBe('packages/stocks/src/domain/Address.ts');
+        expect(result.files[0]?.path).toBe('packages/stocks/src/domain/./Address.ts');
         expect(result.files[0]?.content).toContain('type Address =');
         expect(result.files[0]?.content).toContain('houseNumber: string;');
 
-        expect(result.files[1]?.path).toBe('packages/stocks/test/domain/Address.spec.ts');
+        expect(result.files[1]?.path).toBe('packages/stocks/test/domain/./Address.spec.ts');
         expect(result.files[1]?.content).toContain('test the method validate(strictly: boolean)');
     });
 });

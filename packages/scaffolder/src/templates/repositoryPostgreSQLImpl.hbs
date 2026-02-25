@@ -1,7 +1,7 @@
-import { Kysely, Transaction } from 'kysely';
+import { Kysely } from 'kysely';
 import { AsyncResult, Err, None, Ok, Some } from 'ts-results-es';
 
-import { techError } from '{{basicErrorTypesFrom}}';
+import { techError, type WithUnitOfWork, withUnitOfWork } from '{{basicErrorTypesFrom}}';
 import { getLogger } from '@logtape/logtape';
 
 import {
@@ -13,36 +13,35 @@ import { type {{repositoryName}} } from '../../domain/{{repositoryName}}.js';
 
 import { type Database, type SelectedFrom{{aggregateName}}Table } from './{{aggregateName}}Types.js';
 
-type TransactionOnRepoProvider<RepositoryType> = <T, E>(
-    work: (repository: RepositoryType) => AsyncResult<T, E>,
-) => AsyncResult<T, E>;
-
-export const {{repositoryName}}Impl = (
-    db: Kysely<Database>,
-): TransactionOnRepoProvider<{{repositoryName}}> => {
+export const {{repositoryName}}Impl = (db: Kysely<Database>): WithUnitOfWork<{{repositoryName}}> => {
     const logger = getLogger(['YOUR_APP_NAME', 'MODULE_NAME']);
 
-    // `withTransactionFor` lives inside the factory so it closes over `db`.
-    const withTransactionFor =
-        <R>(createRepository: (trx: Transaction<Database>) => R): TransactionOnRepoProvider<R> =>
-        (work) =>
-            new AsyncResult(db.transaction().execute((trx) => work(createRepository(trx)).promise));
+    const dataOf = ({ createdAt, updatedAt, ...rest }: SelectedFrom{{aggregateName}}Table): {{aggregateName}}Data =>
+        rest as {{aggregateName}}Data;
 
-    const dataOf = ({
-        createdAt,
-        updatedAt,
-        ...rest
-    }: SelectedFrom{{aggregateName}}Table): {{aggregateName}}Data => rest as {{aggregateName}}Data;
-
-    const timestampsOf = ({
-        createdAt,
-        updatedAt,
-    }: SelectedFrom{{aggregateName}}Table): {{aggregateName}}Timestamps => ({
+    const timestampsOf = ({ createdAt, updatedAt }: SelectedFrom{{aggregateName}}Table): {{aggregateName}}Timestamps => ({
         createdAt,
         updatedAt,
     });
 
-    return withTransactionFor<{{repositoryName}}>((trx) => ({
+    // strips the functions from an object because Kysely would otherwise call them!
+    const withoutFunctions = <T extends object>(obj: T) =>
+        Object.fromEntries(Object.entries(obj).filter(([, v]) => typeof v !== 'function')) as {
+            [K in keyof T as T[K] extends Function ? never : K]: T[K];
+        };
+
+    async function createKyselyTransaction() {
+        return db
+            .startTransaction()
+            .execute()
+            .then((trx) => ({
+                commit: () => trx.commit().execute(),
+                rollback: () => trx.rollback().execute(),
+                kyselyTrx: trx,
+            }));
+    }
+
+    return withUnitOfWork(createKyselyTransaction, (trx) => ({
         {{#each methods}}
         {{name}}({ {{formattedParameterNames}} }) {
             return new AsyncResult(Err(techError('Method {{name}} not implemented')));
@@ -52,9 +51,9 @@ export const {{repositoryName}}Impl = (
 
         add({ item }) {
             return new AsyncResult(
-                trx
+                trx.kyselyTrx
                     .insertInto('{{tableName}}')
-                    .values(item)
+                    .values(withoutFunctions(item))
                     .execute()
                     .then(() => Ok.EMPTY)
                     .catch((error: Error) => {
@@ -64,14 +63,16 @@ export const {{repositoryName}}Impl = (
                             error,
                             item,
                         });
-                        return Err(techError(`${method} failed for ID ${item.id}: ${error.message}`));
+                        return Err(
+                            techError(`${method} failed for ID ${item.id}: ${error.message}`),
+                        );
                     }),
             );
         },
 
         get({ id }) {
             return new AsyncResult(
-                trx
+                trx.kyselyTrx
                     .selectFrom('{{tableName}}')
                     .selectAll()
                     .where('id', '=', id)
@@ -97,9 +98,9 @@ export const {{repositoryName}}Impl = (
 
         update({ id, updates }) {
             return new AsyncResult(
-                trx
+                trx.kyselyTrx
                     .updateTable('{{tableName}}')
-                    .set(updates)
+                    .set(withoutFunctions(updates))
                     .where('id', '=', id)
                     .execute()
                     .then(() => Ok.EMPTY)
@@ -118,7 +119,7 @@ export const {{repositoryName}}Impl = (
 
         remove({ item }) {
             return new AsyncResult(
-                trx
+                trx.kyselyTrx
                     .deleteFrom('{{tableName}}')
                     .where('id', '=', item.id)
                     .execute()
@@ -130,7 +131,9 @@ export const {{repositoryName}}Impl = (
                             error,
                             id: item.id,
                         });
-                        return Err(techError(`${method} failed for ID ${item.id}: ${error.message}`));
+                        return Err(
+                            techError(`${method} failed for ID ${item.id}: ${error.message}`),
+                        );
                     }),
             );
         },
