@@ -137,5 +137,5 @@ export const {{repositoryName}}Impl = (db: Kysely<Database>): WithUnitOfWork<{{r
                     }),
             );
         },
-    }));
+    }) satisfies {{repositoryName}});
 };
