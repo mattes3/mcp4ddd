@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 2.3.0
+
+### Minor Changes
+
+- 9deee2e: Better type safety in Postgres repositories
+
 ## 2.2.0
 
 ### Minor Changes
