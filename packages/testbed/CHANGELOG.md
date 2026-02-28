@@ -1,5 +1,12 @@
 # @ddd-components/testbed
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies [ec40839]
+    - @ddd-components/runtime@0.9.0
+
 ## 1.0.1
 
 ### Patch Changes
