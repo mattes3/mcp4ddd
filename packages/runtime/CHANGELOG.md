@@ -1,5 +1,11 @@
 # @ddd-components/runtime
 
+## 0.9.0
+
+### Minor Changes
+
+- ec40839: Renamed beginWith() to pure() to use established functional programming terminology. Added pureAsync() to have an async version of pure() as well.
+
 ## 0.8.3
 
 ### Patch Changes

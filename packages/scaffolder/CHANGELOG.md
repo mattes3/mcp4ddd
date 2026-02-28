@@ -1,5 +1,16 @@
 # @ddd-components/scaffolder
 
+## 2.4.0
+
+### Minor Changes
+
+- ec40839: Renamed beginWith() to pure() to use established functional programming terminology. Added pureAsync() to have an async version of pure() as well.
+
+### Patch Changes
+
+- Updated dependencies [ec40839]
+    - @ddd-components/runtime@0.9.0
+
 ## 2.3.0
 
 ### Minor Changes

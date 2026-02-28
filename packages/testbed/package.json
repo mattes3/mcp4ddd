@@ -1,6 +1,6 @@
 {
     "name": "@ddd-components/testbed",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Testbed for experimenting with DDD component generation",
     "main": "dist/index.js",
     "type": "module",
