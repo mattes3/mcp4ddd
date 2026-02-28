@@ -1,6 +1,6 @@
 import { AsyncResult, type Result, Ok, Err } from 'ts-results-es';
 
-import { beginWith, safeAsync } from '{{basicTypesFrom}}';
+import { pure } from '{{basicTypesFrom}}';
 import { techError, type TechError } from '{{basicErrorTypesFrom}}';
 
 import { type {{serviceParametersType}} } from './{{serviceParametersType}}.js';
@@ -21,7 +21,7 @@ export const {{serviceName}}Impl =
     ({{#if aggregateName}}transact: TransactionOn{{repositoryName}}{{#if formattedInjectedDependencies}}, {{/if}}{{/if}}{{formattedInjectedDependencies}}): {{serviceType}} =>
     (parameterObject) => {
         {{#if aggregateName}}
-        return beginWith(parameterObject).andThen((params) =>
+        return pure(parameterObject).andThen((params) =>
             transact((repo) => repo.get({ id: params.{{idField}} }))
                 .andThen((option) =>
                     option.toResult(create{{serviceErrorType}}('{{aggregateName}} with id ' + params.{{idField}} + ' not found')),
@@ -33,7 +33,7 @@ export const {{serviceName}}Impl =
             ),
         );
         {{else}}
-        return beginWith(parameterObject)
+        return pure(parameterObject)
             .andThen((params) =>
                 Ok.EMPTY
                 //human dev: implement this domain logic here and return a {{{asyncResultType}}} as in Rust.
