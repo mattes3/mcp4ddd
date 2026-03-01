@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 2.5.0
+
+### Minor Changes
+
+- 7d9ea97: Removed redundant type declaration.
+
 ## 2.4.0
 
 ### Minor Changes
