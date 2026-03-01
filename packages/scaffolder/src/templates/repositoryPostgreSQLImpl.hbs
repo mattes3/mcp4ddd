@@ -1,7 +1,8 @@
 import { Kysely } from 'kysely';
 import { AsyncResult, Err, None, Ok, Some } from 'ts-results-es';
 
-import { techError, type WithUnitOfWork, withUnitOfWork } from '{{basicErrorTypesFrom}}';
+import { techError } from '{{basicErrorTypesFrom}}';
+import { type WithUnitOfWork, withUnitOfWork } from '{{basicTypesFrom}}';
 import { getLogger } from '@logtape/logtape';
 
 import {

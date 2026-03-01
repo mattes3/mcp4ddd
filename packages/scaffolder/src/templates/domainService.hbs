@@ -6,19 +6,16 @@ import { techError, type TechError } from '{{basicErrorTypesFrom}}';
 import { type {{serviceParametersType}} } from './{{serviceParametersType}}.js';
 import { type {{serviceErrorType}}, create{{serviceErrorType}} } from './{{serviceErrorType}}s.js';
 {{#if aggregateName}}
+import { type WithUnitOfWork } from '{{basicTypesFrom}}';
 import { type {{aggregateName}} } from './{{aggregateName}}.js';
 import { type {{repositoryName}} } from './{{repositoryName}}.js';
-
-type TransactionOn{{repositoryName}} = <T, E>(
-    work: (repo: {{repositoryName}}) => AsyncResult<T, E>,
-) => AsyncResult<T, E | TechError>;
 {{/if}}
 
 export type {{serviceType}} = (params: {{serviceParametersType}}) => {{{asyncResultType}}};
 
 // @DomainService
 export const {{serviceName}}Impl =
-    ({{#if aggregateName}}transact: TransactionOn{{repositoryName}}{{#if formattedInjectedDependencies}}, {{/if}}{{/if}}{{formattedInjectedDependencies}}): {{serviceType}} =>
+    ({{#if aggregateName}}transact: WithUnitOfWork<{{repositoryName}}>{{#if formattedInjectedDependencies}}, {{/if}}{{/if}}{{formattedInjectedDependencies}}): {{serviceType}} =>
     (parameterObject) => {
         {{#if aggregateName}}
         return pure(parameterObject).andThen((params) =>
