@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 3.0.0
+
+### Major Changes
+
+- bab1623: One tool is now called `generateService` because it can generate domain AND application services. Your agent should notice this.
+
 ## 2.5.0
 
 ### Minor Changes
