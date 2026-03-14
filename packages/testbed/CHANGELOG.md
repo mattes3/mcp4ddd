@@ -1,5 +1,11 @@
 # @ddd-components/testbed
 
+## 1.1.0
+
+### Minor Changes
+
+- 6406aaa: Updated docs to show the fact that the tool can generate both domain and application services.
+
 ## 1.0.2
 
 ### Patch Changes

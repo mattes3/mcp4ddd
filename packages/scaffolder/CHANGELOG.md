@@ -1,5 +1,11 @@
 # @ddd-components/scaffolder
 
+## 3.1.0
+
+### Minor Changes
+
+- 6406aaa: Updated docs to show the fact that the tool can generate both domain and application services.
+
 ## 3.0.0
 
 ### Major Changes
