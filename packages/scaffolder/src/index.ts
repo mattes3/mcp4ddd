@@ -1,7 +1,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 
-import { generateDomainService } from './generateDomainService.js';
+import { generateService } from './generateService.js';
 import { generateDynamoDBRepository } from './generateDynamoDBRepository.js';
 import { generateEntity } from './generateEntity.js';
 import { generatePostgreSQLRepository } from './generatePostgreSQLRepository.js';
@@ -32,7 +32,7 @@ async function main() {
     registerTool(generateEntity);
     registerTool(generateValueObject);
     registerTool(generateRepository);
-    registerTool(generateDomainService);
+    registerTool(generateService);
     registerTool(generatePostgreSQLRepository);
     registerTool(generateDynamoDBRepository);
 

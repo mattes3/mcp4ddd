@@ -118,7 +118,7 @@ import { beginWith, singleError, techError, validationError } from '@ddd-compone
 - `generateEntity`: Creates DDD entities with optional aggregate root
 - `generateValueObject`: Generates immutable value objects
 - `generateRepository`: Creates repository interfaces
-- `generateDomainService`: Generates domain services with dependency injection and optional transaction-aware repository support
+- `generateService`: Generates domain services with dependency injection and optional transaction-aware repository support
 - `generateDynamoDBRepository`: Generates DynamoDB repository implementations using ElectroDB
 - `generatePostgreSQLRepository`: Generates PostgreSQL repository implementations using Kysely
 

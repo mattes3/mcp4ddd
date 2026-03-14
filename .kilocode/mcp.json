@@ -13,7 +13,7 @@
                 "generateEntity",
                 "generateValueObject",
                 "generateRepository",
-                "generateDomainService",
+                "generateService",
                 "generateDynamoDBRepository",
                 "generatePostgreSQLRepository"
             ],

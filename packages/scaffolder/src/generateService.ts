@@ -63,8 +63,8 @@ const outputSchema = z.object({
  * MCP tool for generating domain services in Domain-Driven Design.
  * Generates TypeScript code for domain services including parameters, errors, and tests.
  */
-export const generateDomainService = (env: ScaffolderConfig) => ({
-    name: 'generateDomainService',
+export const generateService = (env: ScaffolderConfig) => ({
+    name: 'generateService',
     config: {
         title: 'Domain Service generator',
         description: 'Generates a domain service as a function with optional injected dependencies',

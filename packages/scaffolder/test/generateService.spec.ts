@@ -2,11 +2,11 @@ import { expect } from 'expect';
 import { describe, it } from 'node:test';
 import { z } from 'zod';
 
-import { generateDomainService as gds } from '../src/generateDomainService.js';
+import { generateService as gds } from '../src/generateService.js';
 import { testScaffolderConfig } from './testScaffolderConfig.js';
 
 describe('domain service generator', () => {
-    const generateDomainService = gds(testScaffolderConfig);
+    const generateService = gds(testScaffolderConfig);
 
     it('creates domain service and test files', async () => {
         const params = {
@@ -23,10 +23,10 @@ describe('domain service generator', () => {
         };
 
         // Validate input with Zod (like MCP would do)
-        const parsed = z.object(generateDomainService.config.inputSchema).parse(params);
+        const parsed = z.object(generateService.config.inputSchema).parse(params);
 
         // invoke the tool
-        const resultAsText = await generateDomainService.execute(parsed);
+        const resultAsText = await generateService.execute(parsed);
 
         // assert that it has generated text output
         expect(resultAsText.content[0]?.type).toEqual('text');
@@ -34,7 +34,7 @@ describe('domain service generator', () => {
 
         // Validate output with Zod (like MCP would do)
         const result = z
-            .object(generateDomainService.config.outputSchema)
+            .object(generateService.config.outputSchema)
             .parse(resultAsText.structuredContent);
 
         // Assert that we should have usable data, now!

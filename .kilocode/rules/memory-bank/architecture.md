@@ -119,7 +119,7 @@ MCP Client <-> MCP Server (@ddd-components/scaffolder)
     +-> generateEntity
     +-> generateValueObject
     +-> generateRepository
-    +-> generateDomainService
+    +-> generateService
     +-> generateDynamoDBRepository
     +-> generatePostgreSQLRepository
         |

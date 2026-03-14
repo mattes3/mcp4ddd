@@ -8,7 +8,7 @@ import {
     scaffolderMetadata,
 } from './ScaffolderConfig.js';
 
-import { generateDomainService } from './generateDomainService.js';
+import { generateService } from './generateService.js';
 import { generateDynamoDBRepository } from './generateDynamoDBRepository.js';
 import { generateEntity } from './generateEntity.js';
 import { generatePostgreSQLRepository } from './generatePostgreSQLRepository.js';
@@ -104,7 +104,7 @@ const pluginDescriptor = {
             registerTool(generateEntity);
             registerTool(generateValueObject);
             registerTool(generateRepository);
-            registerTool(generateDomainService);
+            registerTool(generateService);
             registerTool(generatePostgreSQLRepository);
             registerTool(generateDynamoDBRepository);
         } catch (error) {
