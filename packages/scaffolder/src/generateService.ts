@@ -9,8 +9,8 @@ import testTemplate from './templates/domainServiceTests.hbs';
 import { ScaffolderConfig } from './ScaffolderConfig.js';
 
 const inputSchema = z.object({
-    serviceName: z.string().describe('the name of the domain service'),
-    parameters: z.array(fieldSchema).describe('the parameters of the domain service'),
+    serviceName: z.string().describe('the name of the service'),
+    parameters: z.array(fieldSchema).describe('the parameters of the service'),
     returns: z
         .string()
         .refine((val) => !['AsyncResult', 'AsyncOption'].some((substr) => val.includes(substr)), {
@@ -21,7 +21,7 @@ const inputSchema = z.object({
                 'be wrapped into an asynchronous one.',
             ].join(' '),
         })
-        .describe('the result type of what the domain service returns'),
+        .describe('the result type of what the service returns'),
     injectedDependencies: z
         .array(fieldSchema)
         .describe(
@@ -60,14 +60,14 @@ const outputSchema = z.object({
 });
 
 /**
- * MCP tool for generating domain services in Domain-Driven Design.
- * Generates TypeScript code for domain services including parameters, errors, and tests.
+ * MCP tool for generating services in Domain-Driven Design.
+ * Generates TypeScript code for services including parameters, errors, and tests.
  */
 export const generateService = (env: ScaffolderConfig) => ({
     name: 'generateService',
     config: {
-        title: 'Domain Service generator',
-        description: 'Generates a domain service as a function with optional injected dependencies',
+        title: 'Service generator',
+        description: 'Generates a service as a function with optional injected dependencies',
         inputSchema: inputSchema.shape,
         outputSchema: outputSchema.shape,
     },
@@ -187,7 +187,7 @@ export const generateService = (env: ScaffolderConfig) => ({
         ];
 
         const contentSummary = [
-            `Prepared ${files.length} files for the domain service "${serviceName}".`,
+            `Prepared ${files.length} files for the service "${serviceName}".`,
             'Assistant alert: Write the code to the named output files,',
             'exactly as the generator produced it.',
             'The generator itself does not write the code to disk.',

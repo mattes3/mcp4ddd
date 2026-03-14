@@ -44,7 +44,7 @@
 
 ### Patch Changes
 
-- 7efa009: Refactored the domain service template to chain `.andThen()` calls directly on the `transact(...)` result instead of nesting them inside the `transact` callback. Generated code now follows a flatter, more readable `AsyncResult` chain when an aggregate is involved.
+- 7efa009: Refactored the service template to chain `.andThen()` calls directly on the `transact(...)` result instead of nesting them inside the `transact` callback. Generated code now follows a flatter, more readable `AsyncResult` chain when an aggregate is involved.
 
 ## 2.0.1
 
@@ -131,7 +131,7 @@
 
 ### Minor Changes
 
-- de557dc: feat(scaffolder)!: add aggregate support to domain service generation
+- de557dc: feat(scaffolder)!: add aggregate support to service generation
     - Added aggregateName parameter to generateService input schema
     - Updated domainService.hbs template to conditionally generate transaction-based services
     - Improved error messages to include aggregate IDs

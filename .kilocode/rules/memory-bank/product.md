@@ -2,7 +2,7 @@
 
 ## Why This Project Exists
 
-Domain-Driven Design (DDD) is a powerful approach for building complex software systems, but implementing DDD patterns consistently across a team can be challenging and time-consuming. Developers often spend significant time writing boilerplate code for entities, value objects, repositories, and domain services, which can lead to inconsistencies and reduced productivity.
+Domain-Driven Design (DDD) is a powerful approach for building complex software systems, but implementing DDD patterns consistently across a team can be challenging and time-consuming. Developers often spend significant time writing boilerplate code for entities, value objects, repositories, and services, which can lead to inconsistencies and reduced productivity.
 
 mcp4ddd addresses this problem by providing an MCP server that automates the generation of DDD components, ensuring consistency and allowing developers to focus on business logic rather than repetitive scaffolding.
 
@@ -21,7 +21,7 @@ The system operates as an MCP server that provides four main tools:
 1. **Entity Generator**: Creates DDD entities with optional aggregate root designation
 2. **Value Object Generator**: Generates immutable value objects with validation
 3. **Repository Generator**: Creates repository interfaces for data persistence
-4. **Domain Service Generator**: Generates domain services with dependency injection and optional transaction-aware repository support
+4. **Service Generator**: Generates services with dependency injection and optional transaction-aware repository support
 
 Each tool:
 - Accepts structured input via Zod schemas

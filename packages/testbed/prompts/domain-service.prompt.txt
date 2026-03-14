@@ -1,4 +1,4 @@
-Generate a domain service for transferring money between accounts.
+Generate a service for transferring money between accounts.
 
 Service details:
 - Name: transferMoney

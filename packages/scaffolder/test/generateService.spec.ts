@@ -5,10 +5,10 @@ import { z } from 'zod';
 import { generateService as gds } from '../src/generateService.js';
 import { testScaffolderConfig } from './testScaffolderConfig.js';
 
-describe('domain service generator', () => {
+describe('service generator', () => {
     const generateService = gds(testScaffolderConfig);
 
-    it('creates domain service and test files', async () => {
+    it('creates service and test files', async () => {
         const params = {
             serviceName: 'transferMoney',
             injectedDependencies: [{ name: 'dummy', type: 'Dependency' }],

@@ -9,13 +9,13 @@ A monorepo containing an MCP server **and an OpenClaw plugin** that generate cod
 Matthias Bohlen wrote it so that students of his [Domain-Driven Design classes](https://mbohlen.de/domain-driven-design-cpsa-a/?utm_source=ddd-scaffolder) get a jumpstart with DDD.
 
 ## Core Purpose
-This project provides an MCP (Model Context Protocol) server that scaffolds Domain-Driven Design (DDD) components including entities, value objects, repositories, and domain services. It uses Handlebars templates to generate TypeScript code with proper DDD patterns.
+This project provides an MCP (Model Context Protocol) server that scaffolds Domain-Driven Design (DDD) components including entities, value objects, repositories, and services. It uses Handlebars templates to generate TypeScript code with proper DDD patterns.
 
 ## Key Features
 - Generate DDD entities (optionally as aggregate roots)
 - Generate value objects
 - Generate repository interfaces
-- Generate domain services (with optional transaction-aware repository support)
+- Generate services (with optional transaction-aware repository support)
 - Generate DynamoDB repository implementations
 - Generate PostgreSQL repository implementations
 - Automatic test file generation
@@ -118,7 +118,7 @@ import { beginWith, singleError, techError, validationError } from '@ddd-compone
 - `generateEntity`: Creates DDD entities with optional aggregate root
 - `generateValueObject`: Generates immutable value objects
 - `generateRepository`: Creates repository interfaces
-- `generateService`: Generates domain services with dependency injection and optional transaction-aware repository support
+- `generateService`: Generates services with dependency injection and optional transaction-aware repository support
 - `generateDynamoDBRepository`: Generates DynamoDB repository implementations using ElectroDB
 - `generatePostgreSQLRepository`: Generates PostgreSQL repository implementations using Kysely
 
@@ -134,8 +134,8 @@ The MCP server supports several environment variables to customize its behavior:
 | Variable Name | Default Value | Meaning |
 |---------------|---------------|---------|
 | `BOUNDED_CONTEXTS_PARENT_FOLDER` | `packages` | Configures the parent folder for generated bounded contexts |
-| `BASIC_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic types used in domain services |
-| `BASIC_ERROR_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic error types used in domain services |
+| `BASIC_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic types used in services |
+| `BASIC_ERROR_TYPES_FROM` | `@ddd-components/runtime` | Specifies the import path for basic error types used in services |
 | `DYNAMODB_CONFIG_FROM` | `@ddd-components/runtime` | Specifies the import path for DynamoDB configuration used in repository implementations |
 
 ## Contributing

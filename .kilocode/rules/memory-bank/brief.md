@@ -16,13 +16,13 @@ Matthias Bohlen
 MIT
 
 ## Core Purpose
-This project provides an MCP (Model Context Protocol) server that scaffolds Domain-Driven Design (DDD) components including entities, value objects, repositories, and domain services. It uses Handlebars templates to generate TypeScript code with proper DDD patterns.
+This project provides an MCP (Model Context Protocol) server that scaffolds Domain-Driven Design (DDD) components including entities, value objects, repositories, and services. It uses Handlebars templates to generate TypeScript code with proper DDD patterns.
 
 ## Key Features
 - Generate DDD entities (optionally as aggregate roots)
 - Generate value objects
 - Generate repository interfaces
-- Generate domain services (with optional transaction-aware repository support)
+- Generate services (with optional transaction-aware repository support)
 - Generate DynamoDB repository implementations
 - Generate PostgreSQL repository implementations
 - Automatic test file generation
