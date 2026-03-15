@@ -71,13 +71,14 @@ After installing `ddd-scaffolder.zip`, configure the plugin in OpenClaw's plugin
 These settings correspond exactly to the environment variables used by the MCP server (see [Environment Variables](#environment-variables) below).
 
 ### MCP Server
-The MCP server provides tools for generating DDD components. It can be integrated with MCP clients like Claude Desktop.
+The MCP server provides tools for generating DDD components. It can be integrated with MCP clients like Claude Code or Kilocode.
 
 Configure your MCP client to use the server:
 ```json
 {
     "mcpServers": {
         "ddd-scaffolder": {
+            "type": "stdio",
             "command": "/bin/sh",
             "args": [
                 "-c",
